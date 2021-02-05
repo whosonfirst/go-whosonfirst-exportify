@@ -16,13 +16,16 @@ go build -mod vendor -o bin/exportify cmd/exportify/main.go
 ### exportify
 
 ```
-> ./bin/exportify -h
+$> ./bin/exportify -h
 Exportify one or more Who's On First IDs.
+
 Usage:
 	 ./bin/exportify [options] wof-id-(N) wof-id-(N)
+
 For example:
 	./bin/exportify -s . -i 1234
 	./bin/exportify -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678
+
 Valid options are:
   -exporter-uri string
     	A valid whosonfirst/go-whosonfirst-export URI. (default "whosonfirst://")

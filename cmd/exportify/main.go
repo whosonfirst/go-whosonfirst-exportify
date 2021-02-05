@@ -30,11 +30,11 @@ func main() {
 
 	flag.Usage = func() {
 
-		fmt.Fprintf(os.Stderr, "Exportify one or more Who's On First IDs.\n")
-		fmt.Fprintf(os.Stderr, "Usage:\n\t %s [options] wof-id-(N) wof-id-(N)\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Exportify one or more Who's On First IDs.\n\n")
+		fmt.Fprintf(os.Stderr, "Usage:\n\t %s [options] wof-id-(N) wof-id-(N)\n\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "For example:\n")
 		fmt.Fprintf(os.Stderr, "\t%s -s . -i 1234\n", os.Args[0])
-		fmt.Fprintf(os.Stderr, "\t%s -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "\t%s -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678\n\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "Valid options are:\n")
 		flag.PrintDefaults()
 	}
