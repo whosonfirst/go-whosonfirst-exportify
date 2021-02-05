@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"flag"
-	_ "github.com/tidwall/gjson"
-	_ "github.com/tidwall/sjson"
+	"github.com/sfomuseum/go-flags/multi"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
 	"github.com/whosonfirst/go-whosonfirst-index"
 	_ "github.com/whosonfirst/go-whosonfirst-index/fs"
@@ -20,6 +21,15 @@ func main() {
 	indexer_uri := flag.String("indexer-uri", "repo://", "A valid whosonfirst/go-whosonfirst-index URI.")
 	exporter_uri := flag.String("exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export URI.")
 	writer_uri := flag.String("writer-uri", "null://", "A valid whosonfirst/go-writer URI.")
+
+	var str_properties multi.KeyValueString
+	flag.Var(&str_properties, "string-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.")
+
+	var int_properties multi.KeyValueInt64
+	flag.Var(&str_properties, "int-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.")
+
+	var float_properties multi.KeyValueFloat64
+	flag.Var(&str_properties, "float-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
 
 	flag.Parse()
 
@@ -53,7 +63,98 @@ func main() {
 
 		changed := false
 
-		//
+		for _, p := range str_properties {
+
+			path := p.Key
+			new_value := p.Value
+
+			update := true
+
+			old_rsp := gjson.GetBytes(body, path)
+
+			if old_rsp.Exists() {
+
+				old_value := old_rsp.String()
+
+				if old_value == new_value {
+					update = false
+				}
+			}
+
+			if update {
+
+				new_body, err := sjson.SetBytes(body, path, new_value)
+
+				if err != nil {
+					return nil
+				}
+
+				body = new_body
+				changed = true
+			}
+		}
+
+		for _, p := range int_properties {
+
+			path := p.Key
+			new_value := p.Value
+
+			update := true
+
+			old_rsp := gjson.GetBytes(body, path)
+
+			if old_rsp.Exists() {
+
+				old_value := old_rsp.Int()
+
+				if old_value == new_value {
+					update = false
+				}
+			}
+
+			if update {
+
+				new_body, err := sjson.SetBytes(body, path, new_value)
+
+				if err != nil {
+					return nil
+				}
+
+				body = new_body
+				changed = true
+			}
+		}
+
+		for _, p := range float_properties {
+
+			path := p.Key
+			new_value := p.Value
+
+			update := true
+
+			old_rsp := gjson.GetBytes(body, path)
+
+			if old_rsp.Exists() {
+
+				old_value := old_rsp.Float()
+
+				if old_value == new_value {
+					update = false
+				}
+			}
+
+			if update {
+
+				new_body, err := sjson.SetBytes(body, path, new_value)
+
+				if err != nil {
+					return nil
+				}
+
+				body = new_body
+				changed = true
+			}
+		}
 
 		if !changed {
 			return nil
