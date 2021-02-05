@@ -11,34 +11,70 @@ import (
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
 	"log"
+	"os"
 	"path/filepath"
 )
 
 func main() {
 
-	source := flag.String("s", "", "...")
-	id := flag.String("i", "", "...")
+	source := flag.String("s", "", "A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.")
+	id := flag.String("i", "", "A valid Who's On First ID.")
 
-	reader_uri := flag.String("reader-uri", "", "...")
-	writer_uri := flag.String("writer-uri", "", "...")
+	reader_uri := flag.String("reader-uri", "", "A valid whosonfirst/go-reader URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.")
+	writer_uri := flag.String("writer-uri", "", "A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.")
 
-	exporter_uri := flag.String("exporter-uri", "whosonfirst://", "...")
+	exporter_uri := flag.String("exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export URI.")
 
 	var ids multi.MultiInt64
-	flag.Var(&ids, "id", "...")
+	flag.Var(&ids, "id", "One or more Who's On First IDs. If left empty the value of the -i flag will be used.")
+
+	flag.Usage = func() {
+
+		fmt.Fprintf(os.Stderr, "Exportify one or more Who's On First IDs.\n")
+		fmt.Fprintf(os.Stderr, "Usage:\n\t %s [options] wof-id-(N) wof-id-(N)\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "For example:\n")
+		fmt.Fprintf(os.Stderr, "\t%s -s . -i 1234\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "\t%s -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Valid options are:\n")
+		flag.PrintDefaults()
+	}
 
 	flag.Parse()
 
-	if *source != "" {
+	if *reader_uri == "" || *writer_uri == "" {
 
-		abs_source, err := filepath.Abs(*source)
+		var path string
 
-		if err != nil {
-			log.Fatalf("Failed to derive absolute path for '%s', %v", *source, err)
+		if *source == "" {
+
+			cwd, err := os.Getwd()
+
+			if err != nil {
+				log.Fatalf("Failed to determine current working directory, %v", err)
+			}
+
+			path = cwd
+
+		} else {
+
+			abs_source, err := filepath.Abs(*source)
+
+			if err != nil {
+				log.Fatalf("Failed to derive absolute path for '%s', %v", *source, err)
+			}
+
+			path = abs_source
 		}
 
-		*reader_uri = fmt.Sprintf("fs://%s/data", abs_source)
-		*writer_uri = *reader_uri
+		abs_path := fmt.Sprintf("fs://%s/data", path)
+
+		if *reader_uri == "" {
+			*reader_uri = abs_path
+		}
+
+		if *writer_uri == "" {
+			*writer_uri = abs_path
+		}
 	}
 
 	if *id != "" {
