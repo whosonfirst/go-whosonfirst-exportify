@@ -60,6 +60,17 @@ $> ./bin/deprecate-and-supersede \
 2021/02/09 13:49:58 1477856003 replaced by 1729791935
 ```
 
+#### Notes
+
+This tool will:
+
+* Copy all the properties from the source WOF record in to the new WOF record.
+* Create a new `wof:id` property for the new WOF record.
+* Update the `wof:superseded_by` and `wof:supersedes` properties for the old and new WOF records respectively.
+* Set the `mz:is_current` property to be "0" for the old WOF record.
+* Set the `edtf:deprecate` property to be the current "YYYY-MM-DD" for the old WOF record.
+* Assign or update any properties defined by the `-{string|int|float}-properties` flags for the new WOF record.
+
 ### ensure-properties
 
 ```
