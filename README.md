@@ -13,6 +13,8 @@ $> make cli
 go build -mod vendor -o bin/exportify cmd/exportify/main.go
 ```
 
+As of this writing these tools may contain duplicate, or at least common, code that would be well-served from being moved in to a package or library. That hasn't happened yet.
+
 ### deprecate-and-supersede
 
 ```
