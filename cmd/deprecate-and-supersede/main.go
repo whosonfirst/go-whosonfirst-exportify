@@ -15,6 +15,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 func main() {
@@ -28,20 +29,20 @@ func main() {
 	exporter_uri := flag.String("exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export URI.")
 
 	var str_properties multi.KeyValueString
-	flag.Var(&str_properties, "string-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.")
+	flag.Var(&str_properties, "string-property", "One or more {KEY}={VALUE} properties to append to the new record where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.")
 
 	var int_properties multi.KeyValueInt64
-	flag.Var(&str_properties, "int-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.")
+	flag.Var(&str_properties, "int-property", "One or more {KEY}={VALUE} properties to append to the new record where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.")
 
 	var float_properties multi.KeyValueFloat64
-	flag.Var(&str_properties, "float-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
+	flag.Var(&str_properties, "float-property", "One or more {KEY}={VALUE} properties to append to the new record where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
 
 	var ids multi.MultiInt64
 	flag.Var(&ids, "id", "One or more Who's On First IDs. If left empty the value of the -i flag will be used.")
 
 	flag.Usage = func() {
 
-		fmt.Fprintf(os.Stderr, "Exportify one or more Who's On First IDs.\n\n")
+		fmt.Fprintf(os.Stderr, "Deprecate and supersede one or more Who's On First IDs.\n\n")
 		fmt.Fprintf(os.Stderr, "Usage:\n\t %s [options] wof-id-(N) wof-id-(N)\n\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "For example:\n")
 		fmt.Fprintf(os.Stderr, "\t%s -s . -i 1234\n", os.Args[0])
@@ -130,7 +131,7 @@ func main() {
 	for _, p := range float_properties {
 		props = append(props, p)
 	}
-	
+
 	for _, old_id := range ids {
 
 		new_id, err := replaceId(ctx, r, wr, ex, old_id, props...)
@@ -151,13 +152,17 @@ func replaceId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export
 		return -1, err
 	}
 
-	old_body, err = sjson.DeleteBytes(old_body, "properties.wof:id")
+	// Create the new record
+
+	new_body := old_body
+
+	new_body, err = sjson.DeleteBytes(new_body, "properties.wof:id")
 
 	if err != nil {
 		return -1, err
 	}
 
-	new_body, err := ex.Export(ctx, old_body)
+	new_body, err = ex.Export(ctx, new_body)
 
 	if err != nil {
 		return -1, err
@@ -192,6 +197,15 @@ func replaceId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export
 	}
 
 	// Update the old record
+
+	now := time.Now()
+	deprecated := now.Format("2006-01-02")
+
+	old_body, err = sjson.SetBytes(old_body, "properties.edtf:deprecated", deprecated)
+
+	if err != nil {
+		return -1, err
+	}
 
 	old_body, err = sjson.SetBytes(old_body, "properties.mz:is_current", 0)
 

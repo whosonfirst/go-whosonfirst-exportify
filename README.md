@@ -13,6 +13,51 @@ $> make cli
 go build -mod vendor -o bin/exportify cmd/exportify/main.go
 ```
 
+### deprecate-and-supersede
+
+```
+> ./bin/deprecate-and-supersede -h
+Deprecate and supersede one or more Who's On First IDs.
+
+Usage:
+	 ./bin/deprecate-and-supersede [options] wof-id-(N) wof-id-(N)
+
+For example:
+	./bin/deprecate-and-supersede -s . -i 1234
+	./bin/deprecate-and-supersede -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678
+
+Valid options are:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export URI. (default "whosonfirst://")
+  -float-property value
+    	One or more {KEY}={VALUE} properties to append to the new record where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.
+  -i string
+    	A valid Who's On First ID.
+  -id value
+    	One or more Who's On First IDs. If left empty the value of the -i flag will be used.
+  -int-property value
+    	One or more {KEY}={VALUE} properties to append to the new record where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.
+  -reader-uri string
+    	A valid whosonfirst/go-reader URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
+  -s string
+    	A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.
+  -string-property value
+    	One or more {KEY}={VALUE} properties to append to the new record where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
+```
+
+For example:
+
+```
+$> ./bin/deprecate-and-supersede \
+	-s /usr/local/data/sfomuseum-data-architecture \
+	-i 1477856003 \
+	-string-property 'properties.wof:placetype=arcade'
+	
+2021/02/09 13:49:58 1477856003 replaced by 1729791935
+```
+
 ### ensure-properties
 
 ```
