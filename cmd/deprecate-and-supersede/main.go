@@ -117,9 +117,23 @@ func main() {
 		log.Fatalf("Failed to create writer for '%s', %v", *writer_uri, err)
 	}
 
+	props := make([]multi.KeyValueFlag, 0)
+
+	for _, p := range str_properties {
+		props = append(props, p)
+	}
+
+	for _, p := range int_properties {
+		props = append(props, p)
+	}
+
+	for _, p := range float_properties {
+		props = append(props, p)
+	}
+	
 	for _, old_id := range ids {
 
-		new_id, err := replaceId(ctx, r, wr, ex, old_id)
+		new_id, err := replaceId(ctx, r, wr, ex, old_id, props...)
 
 		if err != nil {
 			log.Fatalf("Failed to export record for '%d', %v", old_id, err)
@@ -129,7 +143,7 @@ func main() {
 	}
 }
 
-func replaceId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, old_id int64) (int64, error) {
+func replaceId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, old_id int64, props ...multi.KeyValueFlag) (int64, error) {
 
 	old_body, err := wof_reader.LoadBytesFromID(ctx, r, old_id)
 
@@ -165,36 +179,12 @@ func replaceId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export
 		return -1, err
 	}
 
-	for _, p := range str_properties {
+	for _, p := range props {
 
-		path := p.Key
-		new_value := p.Value
+		path := p.Key()
+		new_value := p.Value()
 
-		new_body, err = sjson.SetBytes(body, path, new_value)
-
-		if err != nil {
-			return -1, err
-		}
-	}
-
-	for _, p := range int_properties {
-
-		path := p.Key
-		new_value := p.Value
-
-		new_body, err = sjson.SetBytes(body, path, new_value)
-
-		if err != nil {
-			return -1, err
-		}
-	}
-
-	for _, p := range float_properties {
-
-		path := p.Key
-		new_value := p.Value
-
-		new_body, err = sjson.SetBytes(body, path, new_value)
+		new_body, err = sjson.SetBytes(new_body, path, new_value)
 
 		if err != nil {
 			return -1, err

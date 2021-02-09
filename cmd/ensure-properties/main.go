@@ -65,8 +65,8 @@ func main() {
 
 		for _, p := range str_properties {
 
-			path := p.Key
-			new_value := p.Value
+			path := p.Key()
+			new_value := p.Value()
 
 			update := true
 
@@ -96,8 +96,8 @@ func main() {
 
 		for _, p := range int_properties {
 
-			path := p.Key
-			new_value := p.Value
+			path := p.Key()
+			new_value := p.Value()
 
 			update := true
 
@@ -127,8 +127,8 @@ func main() {
 
 		for _, p := range float_properties {
 
-			path := p.Key
-			new_value := p.Value
+			path := p.Key()
+			new_value := p.Value()
 
 			update := true
 
