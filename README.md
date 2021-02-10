@@ -87,6 +87,10 @@ Usage of ./bin/ensure-properties:
     	A valid whosonfirst/go-whosonfirst-index URI. (default "repo://")
   -int-property value
     	One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.
+  -query value
+    	One or more {PATH}={REGEXP} parameters for filtering records.
+  -query-mode string
+    	Specify how query filtering should be evaluated. Valid modes are: ALL, ANY (default "ALL")
   -string-property value
     	One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.
   -writer-uri string
@@ -106,38 +110,31 @@ $> ./bin/ensure-properties \
 2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/140/3/1729771403.geojson
 2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/141/1/1729771411.geojson
 2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/141/5/1729771415.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/142/1/1729771421.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/141/3/1729771413.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/142/3/1729771423.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/142/7/1729771427.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/142/9/1729771429.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/143/1/1729771431.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/143/3/1729771433.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/143/5/1729771435.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/141/9/1729771419.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/141/7/1729771417.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/145/1/1729771451.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/143/9/1729771439.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/146/3/1729771463.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/143/7/1729771437.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/144/1/1729771441.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/145/3/1729771453.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/144/5/1729771445.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/146/5/1729771465.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/146/7/1729771467.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/145/5/1729771455.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/144/7/1729771447.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/145/7/1729771457.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/146/9/1729771469.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/144/9/1729771449.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/145/9/1729771459.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/148/3/1729771483.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/147/1/1729771471.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/148/1/1729771481.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/147/3/1729771473.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/147/5/1729771475.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/148/5/1729771485.geojson
-2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/147/7/1729771477.geojson
+...and so on
+```
+
+#### Inline queries
+
+For example
+
+```
+$> ./bin/ensure-properties \
+	-writer-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
+	-query 'properties.mz:is_current=1' \
+	-query 'properties.sfomuseum:placetype=gallery' \
+	-int-property 'properties.sfo:level=2' \
+	/usr/local/data/sfomuseum-data-architecture/
+
+2021/02/10 14:51:59 Updated /usr/local/data/sfomuseum-data-architecture/data/147/785/566/1/1477855661.geojson
+2021/02/10 14:51:59 Updated /usr/local/data/sfomuseum-data-architecture/data/147/785/566/3/1477855663.geojson
+2021/02/10 14:51:59 Updated /usr/local/data/sfomuseum-data-architecture/data/147/785/582/1/1477855821.geojson
+2021/02/10 14:51:59 Updated /usr/local/data/sfomuseum-data-architecture/data/147/785/582/3/1477855823.geojson
+2021/02/10 14:51:59 Updated /usr/local/data/sfomuseum-data-architecture/data/147/785/583/1/1477855831.geojson
+2021/02/10 14:51:59 Updated /usr/local/data/sfomuseum-data-architecture/data/147/785/593/9/1477855939.geojson
+2021/02/10 14:51:59 Updated /usr/local/data/sfomuseum-data-architecture/data/147/785/594/1/1477855941.geojson
+2021/02/10 14:51:59 Updated /usr/local/data/sfomuseum-data-architecture/data/147/785/594/3/1477855943.geojson
+2021/02/10 14:51:59 Updated /usr/local/data/sfomuseum-data-architecture/data/147/785/594/5/1477855945.geojson
+...and so on
 ```
 
 ### exportify
