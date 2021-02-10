@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
+	"github.com/aaronland/go-json-query"	
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -14,6 +16,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"strings"
 )
 
 func main() {
@@ -31,6 +34,14 @@ func main() {
 	var float_properties multi.KeyValueFloat64
 	flag.Var(&str_properties, "float-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
 
+	var queries query.QueryFlags
+	flag.Var(&queries, "query", "One or more {PATH}={REGEXP} parameters for filtering records.")
+
+	valid_query_modes := strings.Join([]string{query.QUERYSET_MODE_ALL, query.QUERYSET_MODE_ANY}, ", ")
+	desc_query_modes := fmt.Sprintf("Specify how query filtering should be evaluated. Valid modes are: %s", valid_query_modes)
+
+	query_mode := flag.String("query-mode", query.QUERYSET_MODE_ALL, desc_query_modes)
+	
 	flag.Parse()
 
 	ctx := context.Background()
@@ -47,6 +58,16 @@ func main() {
 		log.Fatalf("Failed to create writer for '%s', %v", *writer_uri, err)
 	}
 
+	var qs *query.QuerySet
+
+	if len(queries) > 0 {
+
+		qs = &query.QuerySet{
+			Queries: queries,
+			Mode:    *query_mode,
+		}
+	}
+	
 	cb := func(ctx context.Context, fh io.Reader, args ...interface{}) error {
 
 		path, err := index.PathForContext(ctx)
@@ -61,6 +82,20 @@ func main() {
 			return err
 		}
 
+		if qs != nil {
+
+			matches, err := query.Matches(ctx, qs, body)
+
+			if err != nil {
+				return err
+			}
+
+			if !matches {
+				return nil
+			}
+
+		}
+		
 		changed := false
 
 		for _, p := range str_properties {

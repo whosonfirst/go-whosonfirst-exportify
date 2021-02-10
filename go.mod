@@ -3,6 +3,7 @@ module github.com/whosonfirst/go-whosonfirst-exportify
 go 1.12
 
 require (
+	github.com/aaronland/go-json-query v0.0.2
 	github.com/sfomuseum/go-flags v0.7.0
 	github.com/tidwall/gjson v1.6.8
 	github.com/tidwall/sjson v1.1.5
