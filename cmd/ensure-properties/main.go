@@ -4,7 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/aaronland/go-json-query"	
+	"github.com/aaronland/go-json-query"
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -29,10 +29,10 @@ func main() {
 	flag.Var(&str_properties, "string-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.")
 
 	var int_properties multi.KeyValueInt64
-	flag.Var(&str_properties, "int-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.")
+	flag.Var(&int_properties, "int-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.")
 
 	var float_properties multi.KeyValueFloat64
-	flag.Var(&str_properties, "float-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
+	flag.Var(&float_properties, "float-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
 
 	var queries query.QueryFlags
 	flag.Var(&queries, "query", "One or more {PATH}={REGEXP} parameters for filtering records.")
@@ -41,7 +41,7 @@ func main() {
 	desc_query_modes := fmt.Sprintf("Specify how query filtering should be evaluated. Valid modes are: %s", valid_query_modes)
 
 	query_mode := flag.String("query-mode", query.QUERYSET_MODE_ALL, desc_query_modes)
-	
+
 	flag.Parse()
 
 	ctx := context.Background()
@@ -67,7 +67,7 @@ func main() {
 			Mode:    *query_mode,
 		}
 	}
-	
+
 	cb := func(ctx context.Context, fh io.Reader, args ...interface{}) error {
 
 		path, err := index.PathForContext(ctx)
@@ -95,7 +95,7 @@ func main() {
 			}
 
 		}
-		
+
 		changed := false
 
 		for _, p := range str_properties {
