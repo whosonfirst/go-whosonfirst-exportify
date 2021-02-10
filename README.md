@@ -9,8 +9,11 @@ This is work in progress. Documentation is incomplete.
 ## Tools
 
 ```
-$> make cli
+> make cli
 go build -mod vendor -o bin/exportify cmd/exportify/main.go
+go build -mod vendor -o bin/ensure-properties cmd/ensure-properties/main.go
+go build -mod vendor -o bin/deprecate-and-supersede cmd/deprecate-and-supersede/main.go
+go build -mod vendor -o bin/merge-feature-collection cmd/merge-feature-collection/main.go
 ```
 
 As of this writing these tools may contain duplicate, or at least common, code that would be well-served from being moved in to a package or library. That hasn't happened yet.
@@ -163,6 +166,40 @@ Valid options are:
     	A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.
   -writer-uri string
     	A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
+```
+
+### merge-feature-collection
+
+```
+$> ./bin/merge-feature-collection -h
+Upate one or more Who's On First records with matching entries in a GeoJSON FeatureCollection file.
+
+Usage:
+	 ./bin/merge-feature-collection [options] path(N) path(N)
+
+For example:
+	./bin/merge-feature-collection -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -writer-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -path geometry -path 'properties.example:property' /usr/local/data/updates.geojson
+
+Valid options are:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export URI (default "whosonfirst://")
+  -path value
+    	One or more valid tidwall/gjson paths. These will be copied from the source GeoJSON feature to the corresponding WOF record.
+  -reader-uri string
+    	A valid whosonfirst/go-reader URI
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI
+```
+
+For example:
+
+```
+$> bin/merge-feature-collection \
+	-reader-uri fs:///usr/local/data/sfomuseum-data-publicart/data \
+	-writer-uri fs:///usr/local/data/sfomuseum-data-publicart/data \
+	-path 'geometry' \
+	-path 'properties.sfo:level' \
+	/usr/local/sfomuseum/go-sfomuseum-gis/data/publicart-hotel.geojson
 ```
 
 ## See also
