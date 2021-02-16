@@ -9,7 +9,8 @@ This is work in progress. Documentation is incomplete.
 ## Tools
 
 ```
-> make cli
+$> make cli
+go build -mod vendor -o bin/assign-parent cmd/assign-parent/main.go
 go build -mod vendor -o bin/exportify cmd/exportify/main.go
 go build -mod vendor -o bin/ensure-properties cmd/ensure-properties/main.go
 go build -mod vendor -o bin/deprecate-and-supersede cmd/deprecate-and-supersede/main.go
@@ -17,6 +18,40 @@ go build -mod vendor -o bin/merge-feature-collection cmd/merge-feature-collectio
 ```
 
 As of this writing these tools may contain duplicate, or at least common, code that would be well-served from being moved in to a package or library. That hasn't happened yet.
+
+### assign-parent
+
+```
+$> ./bin/assign-parent -h
+Assign the parent ID and its hierarchy to one or more WOF records
+
+Usage:
+	 ./bin/assign-parent [options] wof-id-(N) wof-id-(N)
+
+For example:
+Valid options are:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export URI. (default "whosonfirst://")
+  -id value
+    	One or more valid Who's On First ID.
+  -parent-id int
+    	A valid Who's On First ID.
+  -parent-reader-uri string
+    	A valid whosonfirst/go-reader URI. If empty the value of the -reader-uri flag will be assumed.
+  -reader-uri string
+    	A valid whosonfirst/go-reader URI.
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI. If empty the value of the -reader-uri flag will be assumed.
+```
+
+For example:
+
+```
+$> ./bin/assign-parent \
+	-reader-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
+	-parent-id 1477855937 \
+	-id 1477855939 -id 1477855941 -id 1477855943 -id 1477855945 -id 1477855947 -id 1477855949 1477855955
+```
 
 ### deprecate-and-supersede
 
