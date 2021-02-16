@@ -265,6 +265,35 @@ In the example above we are:
 * Specifying that the lookup key is `properties.sfomuseum:map_id` - this value will be mapped to the corresponding record's `wof:id` property
 * Using the lookup key property in the data being merged to determine which WOF record (read by the `-reader-uri` flag) should be updated
 
+### supersede-with-parent
+
+Supersede one or more WOF records with a known parent ID (and hierarchy).
+
+```
+$> ./bin/supersede-with-parent -h
+Supersede one or more WOF records with a known parent ID (and hierarchy)
+
+Usage:
+	 ./bin/supersede-with-parent [options]
+
+For example:
+	./bin/supersede-with-parent -reader-uri fs:///usr/local/data/sfomuseum-data-architecture/data -parent-id 1477855937 -id 1477855955
+
+Valid options are:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export URI. (default "whosonfirst://")
+  -id value
+    	One or more valid Who's On First ID.
+  -parent-id int
+    	A valid Who's On First ID.
+  -parent-reader-uri string
+    	A valid whosonfirst/go-reader URI. If empty the value of the -reader-uri flag will be assumed.
+  -reader-uri string
+    	A valid whosonfirst/go-reader URI.
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI. If empty the value of the -reader-uri flag will be assumed.
+```	
+
 ## See also
 
 * https://github.com/whosonfirst/go-whosonfirst-export

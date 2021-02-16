@@ -30,11 +30,11 @@ func main() {
 
 	flag.Usage = func() {
 
-		fmt.Fprintf(os.Stderr, "Assign the parent ID and its hierarchy to one or more WOF records\n\n")
-		fmt.Fprintf(os.Stderr, "Usage:\n\t %s [options] wof-id-(N) wof-id-(N)\n\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Supersede one or more WOF records with a known parent ID (and hierarchy)\n\n")
+		fmt.Fprintf(os.Stderr, "Usage:\n\t %s [options]\n\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "For example:\n")
-		// fmt.Fprintf(os.Stderr, "\t%s -reader-uri fs:///usr/local/data/sfomuseum-data-architecture/data -parent-id 1477855937 -id 1477855955\n", os.Args[0])
-		fmt.Fprintf(os.Stderr, "Valid options are:\n")
+		fmt.Fprintf(os.Stderr, "\t%s -reader-uri fs:///usr/local/data/sfomuseum-data-architecture/data -parent-id 1477855937 -id 1477855955\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "\nValid options are:\n")
 		flag.PrintDefaults()
 	}
 
@@ -90,9 +90,30 @@ func main() {
 
 	parent_hierarchy := hier_rsp.Value()
 
-	to_update := map[string]interface{}{
-		"properties.wof:parent_id": *parent_id,
-		"properties.wof:hierarchy": parent_hierarchy,
+	inception_rsp := gjson.GetBytes(parent_f, "properties.edtf:inception")
+
+	if !inception_rsp.Exists() {
+		log.Fatalf("Parent (%d) is missing properties.edtf:inception", *parent_id)
+	}
+
+	cessation_rsp := gjson.GetBytes(parent_f, "properties.edtf:cessation")
+
+	if !cessation_rsp.Exists() {
+		log.Fatalf("Parent (%d) is missing properties.edtf:cessation", *parent_id)
+	}
+
+	inception := inception_rsp.String()
+	cessation := cessation_rsp.String()
+
+	to_update_old := map[string]interface{}{
+		"properties.edtf:cessation": inception,
+	}
+
+	to_update_new := map[string]interface{}{
+		"properties.wof:parent_id":  *parent_id,
+		"properties.wof:hierarchy":  parent_hierarchy,
+		"properties.edtf:inception": inception,
+		"properties.edtf:cessation": cessation,
 	}
 
 	// Okay, go
@@ -111,10 +132,27 @@ func main() {
 			log.Fatalf("Failed to supersede record %d, %v", id, err)
 		}
 
-		new_f, err = exportify.AssignProperties(ctx, new_f, to_update)
+		old_f, err = exportify.AssignProperties(ctx, old_f, to_update_old)
 
 		if err != nil {
 			log.Fatalf("Failed to assign properties for new record, ")
+		}
+
+		name_rsp := gjson.GetBytes(new_f, "properties.wof:name")
+
+		if !name_rsp.Exists() {
+			log.Fatalf("Failed to retrieve wof:name for new record")
+		}
+
+		name := name_rsp.String()
+		label := fmt.Sprintf("%s (%s)", name, inception)
+
+		to_update_new["properties.wof:label"] = label
+
+		new_f, err = exportify.AssignProperties(ctx, new_f, to_update_new)
+
+		if err != nil {
+			log.Fatalf("Failed to assign updated properties for new record, ")
 		}
 
 		err = exportify.ExportWithWriter(ctx, ex, wr, old_f)
