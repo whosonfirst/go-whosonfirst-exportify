@@ -4,17 +4,23 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/aaronland/go-json-query"
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-reader"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
+	"github.com/whosonfirst/go-whosonfirst-index"
+	_ "github.com/whosonfirst/go-whosonfirst-index/fs"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
+	"sync"
 )
 
 func open(ctx context.Context, path string) ([]byte, error) {
@@ -35,6 +41,21 @@ func main() {
 	reader_uri := flag.String("reader-uri", "", "A valid whosonfirst/go-reader URI")
 	writer_uri := flag.String("writer-uri", "", "A valid whosonfirst/go-writer URI")
 
+	lookup_key := flag.String("lookup-key", "", "...")
+
+	lookup_mode := flag.String("lookup-mode", "repo://", "...")
+
+	var lookup_sources multi.MultiString
+	flag.Var(&lookup_sources, "lookup-source", "...")
+
+	var queries query.QueryFlags
+	flag.Var(&queries, "query", "One or more {PATH}={REGEXP} parameters for filtering records.")
+
+	valid_query_modes := strings.Join([]string{query.QUERYSET_MODE_ALL, query.QUERYSET_MODE_ANY}, ", ")
+	desc_query_modes := fmt.Sprintf("Specify how query filtering should be evaluated. Valid modes are: %s", valid_query_modes)
+
+	query_mode := flag.String("query-mode", query.QUERYSET_MODE_ALL, desc_query_modes)
+
 	exporter_uri := flag.String("exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export URI")
 
 	var to_append multi.MultiString
@@ -53,6 +74,84 @@ func main() {
 	flag.Parse()
 
 	ctx := context.Background()
+
+	lookup_map := make(map[string]int64)
+	lookup_mu := new(sync.RWMutex)
+
+	if *lookup_key != "" {
+
+		var qs *query.QuerySet
+
+		if len(queries) > 0 {
+
+			qs = &query.QuerySet{
+				Queries: queries,
+				Mode:    *query_mode,
+			}
+		}
+
+		lookup_cb := func(ctx context.Context, fh io.Reader, args ...interface{}) error {
+
+			body, err := ioutil.ReadAll(fh)
+
+			if err != nil {
+				return err
+			}
+
+			if qs != nil {
+
+				matches, err := query.Matches(ctx, qs, body)
+
+				if err != nil {
+					return err
+				}
+
+				if !matches {
+					return nil
+				}
+			}
+
+			id_rsp := gjson.GetBytes(body, "properties.wof:id")
+
+			if !id_rsp.Exists() {
+				return fmt.Errorf("Missing wof:id property for updated feature '%s'", "PATH")
+			}
+
+			wof_id := id_rsp.Int()
+
+			key_rsp := gjson.GetBytes(body, *lookup_key)
+
+			if !key_rsp.Exists() {
+				return fmt.Errorf("Missing '%s' property for updated feature '%s'", *lookup_key, "PATH")
+			}
+
+			key := key_rsp.String()
+
+			lookup_mu.Lock()
+			defer lookup_mu.Unlock()
+
+			v, exists := lookup_map[key]
+
+			if exists {
+				return fmt.Errorf("Lookup key '%s' has already been set with value '%d'", key, v)
+			}
+
+			lookup_map[key] = wof_id
+			return nil
+		}
+
+		lookup_idx, err := index.NewIndexer(*lookup_mode, lookup_cb)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = lookup_idx.Index(ctx, lookup_sources...)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
 	ex, err := export.NewExporter(ctx, *exporter_uri)
 
@@ -97,7 +196,8 @@ func main() {
 			wof_f, err := wof_reader.LoadBytesFromID(ctx, r, wof_id)
 
 			if err != nil {
-				log.Fatalf("Failed to load '%d', %v", wof_id, err)
+				log.Printf("Failed to load '%d', %v. Skipping", wof_id, err)
+				continue
 			}
 
 			for _, path := range to_append {
