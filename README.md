@@ -180,6 +180,16 @@ For example:
 Valid options are:
   -exporter-uri string
     	A valid whosonfirst/go-whosonfirst-export URI (default "whosonfirst://")
+  -include value
+    	One or more {PATH}={REGEXP} parameters for filtering records when building a lookup map.
+  -include-mode string
+    	Specify how query filtering should be evaluated. Valid modes are: ALL, ANY (default "ALL")
+  -lookup-key string
+    	A valid tidwall/gjson path to use for specifying an alternative (to 'properties.wof:id') lookup key. The value of this key will be mapped to the record's 'wof:id' property.
+  -lookup-mode string
+    	A valid whosonfirst/go-whosonfirst-index URI. (default "repo://")
+  -lookup-source value
+    	One or more valid whosonfirst/go-whosonfirst-index sources.
   -path value
     	One or more valid tidwall/gjson paths. These will be copied from the source GeoJSON feature to the corresponding WOF record.
   -reader-uri string
@@ -198,6 +208,27 @@ $> bin/merge-feature-collection \
 	-path 'properties.sfo:level' \
 	/usr/local/sfomuseum/go-sfomuseum-gis/data/publicart-hotel.geojson
 ```
+
+Here's a more complex example:
+
+```
+$> ./bin/merge-feature-collection \
+	-include 'properties.sfomuseum:placetype=gallery' \
+	-include 'properties.mz:is_current=1' \
+	-lookup-key 'properties.sfomuseum:map_id' \
+	-lookup-source /usr/local/data/sfomuseum-data-architecture/ \
+	-path geometry \
+	-reader-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
+	-writer-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
+	/usr/local/sfomuseum/go-sfomuseum-gis/data/galleries-3.geojson
+```
+
+In the example above we are:
+
+* Building a lookup map using records in the `/usr/local/data/sfomuseum-data-architecture/` directory. This lookup map will track a specific value in both the source data and the data being merged to its corresponding WOF ID.
+* Only including records with `sfomuseum:placetype=gallery` and `mz:is_current=1` properties.
+* Specifying that the lookup key is `properties.sfomuseum:map_id` - this value will be mapped to the corresponding record's `wof:id` property
+* Using the lookup key property in the data being merged to determine which WOF record (read by the `-reader-uri` flag) should be updated
 
 ## See also
 
