@@ -87,6 +87,24 @@ func SupersedeRecord(ctx context.Context, ex export.Exporter, old_body []byte) (
 	return old_body, new_body, nil
 }
 
+func EnsureProperties(ctx context.Context, body []byte, to_ensure map[string]interface{}) ([]byte, error) {
+
+	to_assign := make(map[string]interface{})
+
+	for path, v := range to_ensure {
+
+		rsp := gjson.GetBytes(body, path)
+
+		if rsp.Exists() {
+			continue
+		}
+
+		to_assign[path] = v
+	}
+
+	return AssignProperties(ctx, body, to_assign)
+}
+
 func AssignProperties(ctx context.Context, body []byte, to_assign map[string]interface{}) ([]byte, error) {
 
 	var err error
