@@ -102,3 +102,19 @@ func AssignProperties(ctx context.Context, body []byte, to_assign map[string]int
 
 	return body, nil
 }
+
+func RemoveProperties(ctx context.Context, body []byte, to_remove []string) ([]byte, error) {
+
+	var err error
+
+	for _, path := range to_remove {
+
+		body, err = sjson.DeleteBytes(body, path)
+
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return body, nil
+}
