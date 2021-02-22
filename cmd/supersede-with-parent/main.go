@@ -126,13 +126,13 @@ func main() {
 			log.Fatalf("Failed to load '%d', %v", id, err)
 		}
 
-		old_f, new_f, err := exportify.SupersedeRecord(ctx, ex, f)
+		old_f, new_f, err := export.SupersedeRecord(ctx, ex, f)
 
 		if err != nil {
 			log.Fatalf("Failed to supersede record %d, %v", id, err)
 		}
 
-		old_f, err = exportify.AssignProperties(ctx, old_f, to_update_old)
+		old_f, err = export.AssignProperties(ctx, old_f, to_update_old)
 
 		if err != nil {
 			log.Fatalf("Failed to assign properties for new record, ")
@@ -149,7 +149,7 @@ func main() {
 
 		to_update_new["properties.wof:label"] = label
 
-		new_f, err = exportify.AssignProperties(ctx, new_f, to_update_new)
+		new_f, err = export.AssignProperties(ctx, new_f, to_update_new)
 
 		if err != nil {
 			log.Fatalf("Failed to assign updated properties for new record, ")
