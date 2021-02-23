@@ -10,8 +10,7 @@ import (
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-reader"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	"github.com/whosonfirst/go-whosonfirst-index"
-	_ "github.com/whosonfirst/go-whosonfirst-index/fs"
+	"github.com/whosonfirst/go-whosonfirst-iterate/iterator"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
@@ -43,7 +42,7 @@ func main() {
 
 	lookup_key := flag.String("lookup-key", "", "A valid tidwall/gjson path to use for specifying an alternative (to 'properties.wof:id') lookup key. The value of this key will be mapped to the record's 'wof:id' property.")
 
-	lookup_mode := flag.String("lookup-mode", "repo://", "A valid whosonfirst/go-whosonfirst-index URI.")
+	lookup_iterator_uri := flag.String("lookup-iterator-uri", "repo://", "A valid whosonfirst/go-whosonfirst-index URI.")
 
 	var lookup_sources multi.MultiString
 	flag.Var(&lookup_sources, "lookup-source", "One or more valid whosonfirst/go-whosonfirst-index sources.")
@@ -90,7 +89,7 @@ func main() {
 			}
 		}
 
-		lookup_cb := func(ctx context.Context, fh io.Reader, args ...interface{}) error {
+		lookup_cb := func(ctx context.Context, fh io.ReadSeeker, args ...interface{}) error {
 
 			body, err := ioutil.ReadAll(fh)
 
@@ -134,20 +133,20 @@ func main() {
 			v, exists := lookup_map[key]
 
 			if exists {
-				return fmt.Errorf("Lookup key '%s' has already been set with value '%d'", key, v)
+				return fmt.Errorf("Lookup key '%s' has already been set with value '%d' (trying to assign '%d')", key, v, wof_id)
 			}
 
 			lookup_map[key] = wof_id
 			return nil
 		}
 
-		lookup_idx, err := index.NewIndexer(*lookup_mode, lookup_cb)
+		lookup_iter, err := iterator.NewIterator(ctx, *lookup_iterator_uri, lookup_cb)
 
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		err = lookup_idx.Index(ctx, lookup_sources...)
+		err = lookup_iter.IterateURIs(ctx, lookup_sources...)
 
 		if err != nil {
 			log.Fatal(err)

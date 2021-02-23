@@ -3,25 +3,22 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
-	"github.com/aaronland/go-json-query"
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	"github.com/whosonfirst/go-whosonfirst-index"
-	_ "github.com/whosonfirst/go-whosonfirst-index/fs"
+	"github.com/whosonfirst/go-whosonfirst-iterate/iterator"
+	"github.com/whosonfirst/go-whosonfirst-iterate/emitter"	
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
 	"io"
 	"io/ioutil"
 	"log"
-	"strings"
 )
 
 func main() {
 
-	indexer_uri := flag.String("indexer-uri", "repo://", "A valid whosonfirst/go-whosonfirst-index URI.")
+	iterator_uri := flag.String("indexer-uri", "repo://", "A valid whosonfirst/go-whosonfirst-iterate/emitter URI.")
 	exporter_uri := flag.String("exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export URI.")
 	writer_uri := flag.String("writer-uri", "null://", "A valid whosonfirst/go-writer URI.")
 
@@ -33,14 +30,6 @@ func main() {
 
 	var float_properties multi.KeyValueFloat64
 	flag.Var(&float_properties, "float-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
-
-	var queries query.QueryFlags
-	flag.Var(&queries, "query", "One or more {PATH}={REGEXP} parameters for filtering records.")
-
-	valid_query_modes := strings.Join([]string{query.QUERYSET_MODE_ALL, query.QUERYSET_MODE_ANY}, ", ")
-	desc_query_modes := fmt.Sprintf("Specify how query filtering should be evaluated. Valid modes are: %s", valid_query_modes)
-
-	query_mode := flag.String("query-mode", query.QUERYSET_MODE_ALL, desc_query_modes)
 
 	flag.Parse()
 
@@ -58,19 +47,9 @@ func main() {
 		log.Fatalf("Failed to create writer for '%s', %v", *writer_uri, err)
 	}
 
-	var qs *query.QuerySet
+	cb := func(ctx context.Context, fh io.ReadSeeker, args ...interface{}) error {
 
-	if len(queries) > 0 {
-
-		qs = &query.QuerySet{
-			Queries: queries,
-			Mode:    *query_mode,
-		}
-	}
-
-	cb := func(ctx context.Context, fh io.Reader, args ...interface{}) error {
-
-		path, err := index.PathForContext(ctx)
+		path, err := emitter.PathForContext(ctx)
 
 		if err != nil {
 			return err
@@ -80,20 +59,6 @@ func main() {
 
 		if err != nil {
 			return err
-		}
-
-		if qs != nil {
-
-			matches, err := query.Matches(ctx, qs, body)
-
-			if err != nil {
-				return err
-			}
-
-			if !matches {
-				return nil
-			}
-
 		}
 
 		changed := false
@@ -211,7 +176,7 @@ func main() {
 		return nil
 	}
 
-	i, err := index.NewIndexer(*indexer_uri, cb)
+	iter, err := iterator.NewIterator(ctx, *iterator_uri, cb)
 
 	if err != nil {
 		log.Fatal(err)
@@ -222,7 +187,7 @@ func main() {
 
 	paths := flag.Args()
 
-	err = i.Index(ctx, paths...)
+	err = iter.IterateURIs(ctx, paths...)
 
 	if err != nil {
 		log.Fatal(err)
