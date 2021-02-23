@@ -19,6 +19,63 @@ go build -mod vendor -o bin/merge-feature-collection cmd/merge-feature-collectio
 
 As of this writing these tools may contain duplicate, or at least common, code that would be well-served from being moved in to a package or library. That hasn't happened yet.
 
+### as-featurecollection
+
+Export one or more WOF records as a GeoJSON FeatureCollection
+
+```
+$> ./bin/as-featurecollection -h
+Export one or more WOF records as a GeoJSON FeatureCollection
+
+Usage:
+	 ./bin/as-featurecollection [options] path-(N) path-(N)
+
+For example:
+	./bin/as-featurecollection -iterator-uri 'repo://?include=properties.mz:is_current=1' /usr/local/data/sfomuseum-data-publicart/
+Valid options are:
+  -iterator-uri string
+    	A valid whosonfirst/go-whosonfirst-iterator/emitter URI. Supported emitter URI schemes are: directory://,featurecollection://,file://,filelist://,geojsonl://,repo:// (default "repo://")
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI. Supported writer URI schemes are: file://, fs://, io://, null://, stdout:// (default "stdout://")
+```
+
+For example:
+
+```
+$> ./bin/as-featurecollection \
+	-iterator-uri 'repo://?include=properties.mz:is_current=1' \
+	/usr/local/data/sfomuseum-data-publicart/ \
+| jq '.features[]["properties"]["wof:parent_id"]' \
+| sort \
+| uniq
+
+1477855657
+1477855669
+1477855979
+1477855987
+1477856005
+1729791967
+1729792389
+1729792391
+1729792433
+1729792437
+1729792459
+1729792483
+1729792489
+1729792551
+1729792577
+1729792581
+1729792643
+1729792645
+1729792679
+1729792685
+1729792689
+1729792691
+1729792693
+1729792695
+1729792699
+```
+
 ### assign-parent
 
 ```

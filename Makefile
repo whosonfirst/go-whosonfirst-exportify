@@ -5,3 +5,4 @@ cli:
 	go build -mod vendor -o bin/deprecate-and-supersede cmd/deprecate-and-supersede/main.go
 	go build -mod vendor -o bin/merge-feature-collection cmd/merge-feature-collection/main.go
 	go build -mod vendor -o bin/supersede-with-parent cmd/supersede-with-parent/main.go
+	go build -mod vendor -o bin/as-featurecollection cmd/as-featurecollection/main.go
