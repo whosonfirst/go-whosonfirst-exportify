@@ -107,11 +107,15 @@ github.com/tidwall/sjson v1.1.4/go.mod h1:wXpKXu8CtDjKAZ+3DrKY5ROCorDFahq8l0tey/
 github.com/tidwall/sjson v1.1.5 h1:wsUceI/XDyZk3J1FUvuuYlK62zJv2HO2Pzb8A5EWdUE=
 github.com/tidwall/sjson v1.1.5/go.mod h1:VuJzsZnTowhSxWdOgsAnb886i4AjEyTkk7tNtsL7EYE=
 github.com/whosonfirst/algnhsa v0.1.0/go.mod h1:swLBXxaVTv3s6dJLhekdQCuCTshUew+xHjptRC21RG0=
+github.com/whosonfirst/go-ioutil v0.0.1 h1:cCrEYen6NDvHfjzV2q4u/VB21u2kTOwDnUGRlMI8Z9o=
+github.com/whosonfirst/go-ioutil v0.0.1/go.mod h1:2dS1vWdAIkiHDvDF8fYyjv6k2NISmwaIjJJeEDBEdvg=
 github.com/whosonfirst/go-reader v0.2.0/go.mod h1:qUhz3OWefOUX/G1nzCEUzJskDjkF+l9oKPOM3K2fAJI=
 github.com/whosonfirst/go-reader v0.2.1 h1:URhO7a2rDZizElGPy7lrWDpV1c4ceInYMGNQPXsQFiM=
 github.com/whosonfirst/go-reader v0.2.1/go.mod h1:qUhz3OWefOUX/G1nzCEUzJskDjkF+l9oKPOM3K2fAJI=
 github.com/whosonfirst/go-reader v0.4.0 h1:9RQEVL+UYUbIuzj4oxSR9bd/sNIQ53/1jePNhpuYZKo=
 github.com/whosonfirst/go-reader v0.4.0/go.mod h1:ffg8ww1158rNNqStFx64EGmDL5m5WZPsoMqR6wohOWE=
+github.com/whosonfirst/go-reader v0.5.0 h1:nx+ai0F6JXouw+7Dln34dmYglw+3sQ6sG4JZGOJ/sqA=
+github.com/whosonfirst/go-reader v0.5.0/go.mod h1:4ou/wZUss2CDZp27QK5ySDc8p98GVWvUiqqmwEprjgk=
 github.com/whosonfirst/go-whosonfirst-cli v0.1.0/go.mod h1:Edy+amD+fMq1QS1yxB3u8maA8I93q/LG7JRNh+fsdfc=
 github.com/whosonfirst/go-whosonfirst-crawl v0.2.1 h1:nNG7r7/4MaII/NM8Df2oqgfgVNBDoIKlseleoX1vw1Q=
 github.com/whosonfirst/go-whosonfirst-crawl v0.2.1/go.mod h1:MTD1TCgAkXlAtysPU98ylrz9Y5+ZCfRrsrBnRyiH/t8=
@@ -156,6 +160,8 @@ github.com/whosonfirst/go-whosonfirst-writer v0.1.0 h1:zwFouhGaKH3ofOVdOF+e6dr0N
 github.com/whosonfirst/go-whosonfirst-writer v0.1.0/go.mod h1:jvDxfYqj9i0hwfCSHC95ZJcoV393d3zCD8QZ+ohtaQA=
 github.com/whosonfirst/go-whosonfirst-writer v0.2.0 h1:CdMImh5Qf1eUpnLgJ2AurfuX7eI9SL5PDI8/ms4QsuA=
 github.com/whosonfirst/go-whosonfirst-writer v0.2.0/go.mod h1:oqnbcTIKP3HRXwSMhDRllDUNQNG5Ikz7stMCzBy1yEY=
+github.com/whosonfirst/go-whosonfirst-writer v0.2.1 h1:X0kkpd0HAA4x7l5Wyv93XETAWXGeFZsffgDBooR9ED0=
+github.com/whosonfirst/go-whosonfirst-writer v0.2.1/go.mod h1:j23YqUdEM05vibfy6dbZHgJacpndY3rSR2Jk96QulQI=
 github.com/whosonfirst/go-writer v0.2.0 h1:3RCym51cVwbhTpAZ7XKoWsXcodbEbKGDWYUpHoXyEOQ=
 github.com/whosonfirst/go-writer v0.2.0/go.mod h1:NGPaud/M3Q6IKLDj2X0PbKKpfWRF9Zneups/BMCG0+0=
 github.com/whosonfirst/go-writer v0.3.0/go.mod h1:kFzhremCFtnkJdmviwJEPLFYKQ5+vq6ocJPxt1bHPFY=
