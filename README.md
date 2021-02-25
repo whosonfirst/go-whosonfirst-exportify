@@ -1,10 +1,17 @@
 # go-whosonfirst-exportify
 
-Tools (written in Go) for exporting Who's On First records.
+Tools (written in Go) for exporting Who's On First (WOF) records.
 
 ## Important
 
 This is work in progress. Documentation is incomplete.
+
+## go-whosonfirst-exportify versus go-whosonfirst-export
+
+* `go-whosonfirst-export` is an abstract package library containing only those dependencies necessary for exporting WOF records.
+* `go-whosonfirst-exportify` defines a variety of _applications_ that perform operations relating to, or involving, exporting WOF records. These applications use `go-whosonfirst-export`.
+
+At some point the various application might get separated out in to their own packages but for now they are all bundled together which means this package has, potentially, a lot of dependencies.
 
 ## Tools
 
