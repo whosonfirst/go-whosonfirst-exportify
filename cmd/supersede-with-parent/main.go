@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/sfomuseum/go-flags/multi"
-	"github.com/tidwall/gjson"
 	"github.com/whosonfirst/go-reader"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
 	"github.com/whosonfirst/go-whosonfirst-exportify"
@@ -78,46 +77,6 @@ func main() {
 
 	parent_f, err := wof_reader.LoadBytesFromID(ctx, parent_r, *parent_id)
 
-	if err != nil {
-		log.Fatalf("Failed to load '%d', %v", *parent_id, err)
-	}
-
-	hier_rsp := gjson.GetBytes(parent_f, "properties.wof:hierarchy")
-
-	if !hier_rsp.Exists() {
-		log.Fatalf("Parent (%d) is missing properties.wof:hierarchy", *parent_id)
-	}
-
-	parent_hierarchy := hier_rsp.Value()
-
-	inception_rsp := gjson.GetBytes(parent_f, "properties.edtf:inception")
-
-	if !inception_rsp.Exists() {
-		log.Fatalf("Parent (%d) is missing properties.edtf:inception", *parent_id)
-	}
-
-	cessation_rsp := gjson.GetBytes(parent_f, "properties.edtf:cessation")
-
-	if !cessation_rsp.Exists() {
-		log.Fatalf("Parent (%d) is missing properties.edtf:cessation", *parent_id)
-	}
-
-	inception := inception_rsp.String()
-	cessation := cessation_rsp.String()
-
-	to_update_old := map[string]interface{}{
-		"properties.edtf:cessation": inception,
-	}
-
-	to_update_new := map[string]interface{}{
-		"properties.wof:parent_id":  *parent_id,
-		"properties.wof:hierarchy":  parent_hierarchy,
-		"properties.edtf:inception": inception,
-		"properties.edtf:cessation": cessation,
-	}
-
-	// Okay, go
-
 	for _, id := range ids {
 
 		f, err := wof_reader.LoadBytesFromID(ctx, r, id)
@@ -126,33 +85,10 @@ func main() {
 			log.Fatalf("Failed to load '%d', %v", id, err)
 		}
 
-		old_f, new_f, err := export.SupersedeRecord(ctx, ex, f)
+		old_f, new_f, err := export.SupersedeRecordWithParent(ctx, ex, f, parent_f)
 
 		if err != nil {
 			log.Fatalf("Failed to supersede record %d, %v", id, err)
-		}
-
-		old_f, err = export.AssignProperties(ctx, old_f, to_update_old)
-
-		if err != nil {
-			log.Fatalf("Failed to assign properties for new record, ")
-		}
-
-		name_rsp := gjson.GetBytes(new_f, "properties.wof:name")
-
-		if !name_rsp.Exists() {
-			log.Fatalf("Failed to retrieve wof:name for new record")
-		}
-
-		name := name_rsp.String()
-		label := fmt.Sprintf("%s (%s)", name, inception)
-
-		to_update_new["properties.wof:label"] = label
-
-		new_f, err = export.AssignProperties(ctx, new_f, to_update_new)
-
-		if err != nil {
-			log.Fatalf("Failed to assign updated properties for new record, ")
 		}
 
 		err = exportify.ExportWithWriter(ctx, ex, wr, old_f)

@@ -127,6 +127,8 @@ github.com/whosonfirst/go-whosonfirst-export/v2 v2.1.0 h1:5l3x4LmvW4rI6K4GeEclbZ
 github.com/whosonfirst/go-whosonfirst-export/v2 v2.1.0/go.mod h1:hLZ4MkFDW5hy1hskAkWp41ix49f0/euccCMFO1d29m0=
 github.com/whosonfirst/go-whosonfirst-export/v2 v2.1.1 h1:dpwYf5FI7G0a1moGqrImExiCJ4J/MqC9traeUz4LLzM=
 github.com/whosonfirst/go-whosonfirst-export/v2 v2.1.1/go.mod h1:hLZ4MkFDW5hy1hskAkWp41ix49f0/euccCMFO1d29m0=
+github.com/whosonfirst/go-whosonfirst-export/v2 v2.2.0 h1:KTrFzBgRgcadipfXFzKCaKv9r/aNn8O1ce76sZ6HuEQ=
+github.com/whosonfirst/go-whosonfirst-export/v2 v2.2.0/go.mod h1:hLZ4MkFDW5hy1hskAkWp41ix49f0/euccCMFO1d29m0=
 github.com/whosonfirst/go-whosonfirst-flags v0.1.0 h1:llb2wtsI2y+gHZCmWaamMCx4YDRE8ZXQRRYqC7qB4so=
 github.com/whosonfirst/go-whosonfirst-flags v0.1.0/go.mod h1:bovMiQphaVhqemXFmNVf9Ts0tqnWtzHRFMUSKX+zTE8=
 github.com/whosonfirst/go-whosonfirst-format v0.3.0 h1:PEhduZdcTBYynvIQPARBTkEQ8csJnipLgILq/F98o/0=
