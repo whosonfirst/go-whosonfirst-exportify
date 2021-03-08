@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/aaronland/go-json-query"
@@ -228,21 +230,43 @@ func main() {
 				continue
 			}
 
+			changed := false
+			
 			for _, path := range to_append {
 
 				v := qgis_f.Get(path)
 
 				if !v.Exists() {
-					log.Fatalf("Missing '%s' path in updated feature for '%d'", path, wof_id)
+					log.Printf("Missing '%s' path in updated feature for '%d', skipping", path, wof_id)
+					continue
 				}
 
+				wof_v := gjson.GetBytes(wof_f, path)
+
+				if wof_v.Exists(){
+
+					enc_old, _ := json.Marshal(wof_v.Value())					
+					enc_new, _ := json.Marshal(v.Value())
+
+					if bytes.Equal(enc_old, enc_new){
+						continue
+					}
+				}
+				
 				wof_f, err = sjson.SetBytes(wof_f, path, v.Value())
 
 				if err != nil {
 					log.Fatalf("Failed to set '%s' for '%d', %v", path, wof_id, err)
 				}
+
+				changed = true
 			}
 
+			if !changed {
+				log.Printf("Nothing changed for %d, skipping\n", wof_id)
+				continue
+			}
+			
 			wof_f, err = ex.Export(ctx, wof_f)
 
 			if err != nil {
