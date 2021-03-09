@@ -154,10 +154,11 @@ func main() {
 			log.Fatal(err)
 		}
 
+		/*
 		for k, v := range lookup_map {
 			log.Println(k, v)
 		}
-
+		*/
 	}
 
 	ex, err := export.NewExporter(ctx, *exporter_uri)
