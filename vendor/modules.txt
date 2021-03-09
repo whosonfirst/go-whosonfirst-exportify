@@ -28,6 +28,7 @@ github.com/natefinch/atomic
 # github.com/paulmach/go.geojson v1.4.0
 github.com/paulmach/go.geojson
 # github.com/paulmach/orb v0.2.1
+## explicit
 github.com/paulmach/orb
 github.com/paulmach/orb/geojson
 github.com/paulmach/orb/internal/length

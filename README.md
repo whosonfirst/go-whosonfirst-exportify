@@ -38,6 +38,8 @@ Usage:
 	 ./bin/as-featurecollection [options] path-(N) path-(N)
 
 For example:
+  -as-multipoints
+    	Output geometries as a MultiPoint array
 	./bin/as-featurecollection -iterator-uri 'repo://?include=properties.mz:is_current=1' /usr/local/data/sfomuseum-data-publicart/
 Valid options are:
   -iterator-uri string

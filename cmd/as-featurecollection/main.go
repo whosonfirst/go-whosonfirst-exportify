@@ -5,12 +5,16 @@ import (
 )
 
 import (
+	"bytes"
 	"context"
 	"flag"
 	"fmt"
 	"github.com/whosonfirst/go-whosonfirst-iterate/emitter"
 	"github.com/whosonfirst/go-whosonfirst-iterate/iterator"
 	"github.com/whosonfirst/go-writer"
+	"github.com/paulmach/orb"	
+	"github.com/paulmach/orb/geojson"
+	"github.com/paulmach/orb/planar"	
 	"io"
 	"log"
 	"net/url"
@@ -42,6 +46,8 @@ func main() {
 	iterator_uri := flag.String("iterator-uri", "repo://", emitter_desc)
 	writer_uri := flag.String("writer-uri", "stdout://", writer_desc)
 
+	as_multipoints := flag.Bool("as-multipoints", false, "Output geometries as a MultiPoint array")
+	
 	flag.Usage = func() {
 
 		fmt.Fprintf(os.Stderr, "Export one or more WOF records as a GeoJSON FeatureCollection\n\n")
@@ -80,6 +86,69 @@ func main() {
 	defer wr.Close(ctx)
 
 	iter_cb := func(ctx context.Context, fh io.ReadSeeker, args ...interface{}) error {
+
+		if *as_multipoints {
+
+			body, err := io.ReadAll(fh)
+
+			if err != nil {
+				return err
+			}
+
+			f, err := geojson.UnmarshalFeature(body)
+
+			if err != nil {
+				return err
+			}
+
+			geom := f.Geometry
+
+			f.Geometry = geom
+			
+			switch geom.GeoJSONType() {
+			case "Point":
+				
+				points := []orb.Point{
+					geom.(orb.Point),
+				}
+				
+				geom = orb.MultiPoint(points)
+				
+			case "MultiPoint":
+				// pass
+			case "MultiPolygon":
+				
+				points := make([]orb.Point, 0)
+				
+				for _, poly := range geom.(orb.MultiPolygon) {
+					pt, _ := planar.CentroidArea(poly)
+					points = append(points, pt)
+				}
+				
+				geom = orb.MultiPoint(points)
+				
+			case "Polygon":
+				
+				pt, _ := planar.CentroidArea(geom)
+				points := []orb.Point{pt}
+				
+				geom = orb.MultiPoint(points)
+				
+			default:
+				return fmt.Errorf("Unsupported geometry type %s", geom.GeoJSONType)
+			}
+			
+			f.Geometry = geom
+			
+			body, err = f.MarshalJSON()
+
+			if err != nil {
+				return err
+			}
+
+			fh = bytes.NewReader(body)
+		}
+		
 		_, err := wr.Write(ctx, "", fh)
 		return err
 	}
