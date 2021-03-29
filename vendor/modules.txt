@@ -43,17 +43,17 @@ github.com/sfomuseum/go-edtf/level2
 github.com/sfomuseum/go-edtf/parser
 github.com/sfomuseum/go-edtf/re
 github.com/sfomuseum/go-edtf/tests
-# github.com/sfomuseum/go-flags v0.7.0
+# github.com/sfomuseum/go-flags v0.8.2
 ## explicit
 github.com/sfomuseum/go-flags/multi
 # github.com/skelterjohn/geom v0.0.0-20180103142417-96f3e8a219c5
 github.com/skelterjohn/geom
-# github.com/tidwall/gjson v1.6.8
+# github.com/tidwall/gjson v1.7.4
 ## explicit
 github.com/tidwall/gjson
 # github.com/tidwall/match v1.0.3
 github.com/tidwall/match
-# github.com/tidwall/pretty v1.0.2
+# github.com/tidwall/pretty v1.1.0
 github.com/tidwall/pretty
 # github.com/tidwall/sjson v1.1.5
 ## explicit
@@ -111,7 +111,7 @@ github.com/whosonfirst/go-whosonfirst-writer
 # github.com/whosonfirst/go-writer v0.4.1
 ## explicit
 github.com/whosonfirst/go-writer
-# github.com/whosonfirst/go-writer-featurecollection v0.0.1
+# github.com/whosonfirst/go-writer-featurecollection v0.0.2
 ## explicit
 github.com/whosonfirst/go-writer-featurecollection
 # github.com/whosonfirst/walk v0.0.1

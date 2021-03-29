@@ -103,7 +103,13 @@ func (fc *FeatureCollectionWriter) WriterURI(ctx context.Context, str_uri string
 
 func (fc *FeatureCollectionWriter) Close(ctx context.Context) error {
 
-	sr := strings.NewReader("]}")
+	body := `]}`
+
+	if atomic.LoadInt64(&fc.count) == 0 {
+		body = `{"type":"FeatureCollection", "features":[]}`
+	}
+
+	sr := strings.NewReader(body)
 	_, err := fc.writer.Write(ctx, "", sr)
 
 	if err != nil {

@@ -1,5 +1,6 @@
 # go-writer-featurecollection
 
+GeoJSON FeatureCollection output handler for the go-writer Writer interface. 
 
 ## Important
 
