@@ -147,6 +147,8 @@ func main() {
 		}
 	}
 
+	// PIP stuff goes here
+
 	new_body, err := ex.Export(ctx, body)
 
 	if err != nil {

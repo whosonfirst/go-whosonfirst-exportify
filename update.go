@@ -111,5 +111,52 @@ func UpdateFeature(ctx context.Context, body []byte, opts *UpdateFeatureOptions)
 		}
 	}
 
+	// Instinctively this just feels like a bad idea since there's
+	// basically no input validation happening here
+	// (20210430/thisisaaronland)
+
+	/*
+
+		for _, p := range opts.JSONProperties {
+
+			path := p.Key()
+			new_value := p.Value().(string)
+
+			var json_value interface{}
+
+			err := json.Unmarshal([]byte(new_value), &json_value)
+
+			if err != nil {
+				return nil, false, err
+			}
+
+			update := true
+
+			old_rsp := gjson.GetBytes(body, path)
+
+			if old_rsp.Exists() {
+
+				old_value := old_rsp.String()
+
+				if old_value == new_value {
+					update = false
+				}
+			}
+
+			if update {
+
+				new_body, err := sjson.SetBytes(body, path, json_value)
+
+				if err != nil {
+					return nil, false, err
+				}
+
+				body = new_body
+				changed = true
+			}
+		}
+
+	*/
+
 	return body, changed, nil
 }
