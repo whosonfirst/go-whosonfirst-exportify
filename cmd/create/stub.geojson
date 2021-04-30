@@ -1,0 +1,13 @@
+{
+	"type":"Feature",
+	"properties":{
+		"src:geom": "unknown",
+		"wof:country":"XY",	
+		"wof:id": -1,
+		"wof:name": "Untitled record",
+		"wof:parent_id": -1,
+		"wof:placetype": "custom",		
+		"wof:repo": "whosonfirst-data-admin-XY"
+ 	},
+	"geometry": {"type":"Point", "coordinates": [0.0, 0.0]}
+}	    

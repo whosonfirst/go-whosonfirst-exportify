@@ -155,9 +155,9 @@ func main() {
 		}
 
 		/*
-		for k, v := range lookup_map {
-			log.Println(k, v)
-		}
+			for k, v := range lookup_map {
+				log.Println(k, v)
+			}
 		*/
 	}
 
@@ -232,7 +232,7 @@ func main() {
 			}
 
 			changed := false
-			
+
 			for _, path := range to_append {
 
 				v := qgis_f.Get(path)
@@ -244,16 +244,16 @@ func main() {
 
 				wof_v := gjson.GetBytes(wof_f, path)
 
-				if wof_v.Exists(){
+				if wof_v.Exists() {
 
-					enc_old, _ := json.Marshal(wof_v.Value())					
+					enc_old, _ := json.Marshal(wof_v.Value())
 					enc_new, _ := json.Marshal(v.Value())
 
-					if bytes.Equal(enc_old, enc_new){
+					if bytes.Equal(enc_old, enc_new) {
 						continue
 					}
 				}
-				
+
 				wof_f, err = sjson.SetBytes(wof_f, path, v.Value())
 
 				if err != nil {
@@ -267,7 +267,7 @@ func main() {
 				log.Printf("Nothing changed for %d, skipping\n", wof_id)
 				continue
 			}
-			
+
 			wof_f, err = ex.Export(ctx, wof_f)
 
 			if err != nil {
