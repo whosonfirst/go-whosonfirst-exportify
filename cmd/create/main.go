@@ -14,6 +14,8 @@ import (
 	"github.com/whosonfirst/go-whosonfirst-spatial-hierarchy"	
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	"github.com/whosonfirst/go-whosonfirst-spatial/database"
+	"github.com/whosonfirst/go-whosonfirst-spatial/filter"	
 	"github.com/whosonfirst/go-writer"
 	"log"
 	"os"
@@ -33,6 +35,8 @@ func main() {
 	writer_uri := fs.String("writer-uri", "", "A valid whosonfirst/go-writer URI. If empty the value of the -s fs will be used in combination with the fs:// scheme.")
 
 	exporter_uri := fs.String("exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export URI.")
+
+	spatial_database_uri := fs.String("spatial-database-uri", "", "A valid whosonfirst/go-whosonfirst-spatial/database URI.")	
 
 	var str_properties multi.KeyValueString
 	fs.Var(&str_properties, "string-property", "One or more {KEY}={VALUE} fss where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.")
@@ -150,11 +154,33 @@ func main() {
 		}
 	}
 
-	// PIP stuff goes here
-	// https://github.com/whosonfirst/go-whosonfirst-spatial-hierarchy/blob/main/tool.go
+	// START OF pip/hierarchy stuff
+	
+	spatial_db, err := database.NewSpatialDatabase(ctx, *spatial_database_uri)
 
-	var t *hierarchy.PointInPolygonHierarchyTool
-	log.Println(t)
+	if err != nil {
+		log.Fatalf("Failed to create new spatial database for '%s', %v", *spatial_database_uri, err)
+	}
+
+	resolver, err := hierarchy.NewPointInPolygonHierarchyResolver(ctx, spatial_db, nil)
+
+	if err != nil {
+		log.Fatalf("Failed to create new hierarchy resolver, %v", err)
+	}
+	
+	log.Println(resolver)
+
+	inputs := &filter.SPRInputs{}
+	
+	rsp, err := resolver.PointInPolygon(ctx, inputs, body)
+
+	if err != nil {
+		log.Fatalf("Failed to do point in polygon operation, %v", err)
+	}
+
+	log.Println(rsp)
+	
+	// END OF pip/hierarchy stuff
 	
 	new_body, err := ex.Export(ctx, body)
 

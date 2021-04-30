@@ -111,12 +111,13 @@ github.com/whosonfirst/go-whosonfirst-reader
 github.com/whosonfirst/go-whosonfirst-sources
 github.com/whosonfirst/go-whosonfirst-sources/sources
 # github.com/whosonfirst/go-whosonfirst-spatial v0.0.56
+## explicit
 github.com/whosonfirst/go-whosonfirst-spatial
 github.com/whosonfirst/go-whosonfirst-spatial/database
 github.com/whosonfirst/go-whosonfirst-spatial/filter
 github.com/whosonfirst/go-whosonfirst-spatial/flags
 github.com/whosonfirst/go-whosonfirst-spatial/geo
-# github.com/whosonfirst/go-whosonfirst-spatial-hierarchy v0.0.0-20210430163833-aadfaa3e1f11
+# github.com/whosonfirst/go-whosonfirst-spatial-hierarchy v0.0.1
 ## explicit
 github.com/whosonfirst/go-whosonfirst-spatial-hierarchy
 # github.com/whosonfirst/go-whosonfirst-spr/v2 v2.0.0
