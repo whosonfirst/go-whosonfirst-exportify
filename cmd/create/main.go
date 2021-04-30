@@ -3,14 +3,15 @@ package main
 import (
 	"context"
 	_ "embed"
-	"flag"
 	"fmt"
+	"github.com/sfomuseum/go-flags/flagset"	
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-reader"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
 	"github.com/whosonfirst/go-whosonfirst-exportify"
+	"github.com/whosonfirst/go-whosonfirst-spatial-hierarchy"	
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
@@ -24,33 +25,35 @@ var stub []byte
 
 func main() {
 
-	source := flag.String("s", "", "A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.")
+	fs := flagset.NewFlagSet("create")
+	
+	source := fs.String("s", "", "A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.")
 
-	parent_reader_uri := flag.String("parent-reader-uri", "", "A valid whosonfirst/go-reader URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.")
-	writer_uri := flag.String("writer-uri", "", "A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.")
+	parent_reader_uri := fs.String("parent-reader-uri", "", "A valid whosonfirst/go-reader URI. If empty the value of the -s fs will be used in combination with the fs:// scheme.")
+	writer_uri := fs.String("writer-uri", "", "A valid whosonfirst/go-writer URI. If empty the value of the -s fs will be used in combination with the fs:// scheme.")
 
-	exporter_uri := flag.String("exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export URI.")
+	exporter_uri := fs.String("exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export URI.")
 
 	var str_properties multi.KeyValueString
-	flag.Var(&str_properties, "string-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.")
+	fs.Var(&str_properties, "string-property", "One or more {KEY}={VALUE} fss where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.")
 
 	var int_properties multi.KeyValueInt64
-	flag.Var(&int_properties, "int-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.")
+	fs.Var(&int_properties, "int-property", "One or more {KEY}={VALUE} fss where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.")
 
 	var float_properties multi.KeyValueFloat64
-	flag.Var(&float_properties, "float-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
+	fs.Var(&float_properties, "float-property", "One or more {KEY}={VALUE} fss where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
 
-	flag.Usage = func() {
+	fs.Usage = func() {
 
 		fmt.Fprintf(os.Stderr, "Create a new Who's On First record.\n\n")
 		fmt.Fprintf(os.Stderr, "Usage:\n\t %s [options] \n\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "For example:\n")
 		fmt.Fprintf(os.Stderr, "\t%s ...\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "Valid options are:\n")
-		flag.PrintDefaults()
+		fs.PrintDefaults()
 	}
 
-	flag.Parse()
+	flagset.Parse(fs)
 
 	if *parent_reader_uri == "" || *writer_uri == "" {
 
@@ -148,7 +151,11 @@ func main() {
 	}
 
 	// PIP stuff goes here
+	// https://github.com/whosonfirst/go-whosonfirst-spatial-hierarchy/blob/main/tool.go
 
+	var t *hierarchy.PointInPolygonHierarchyTool
+	log.Println(t)
+	
 	new_body, err := ex.Export(ctx, body)
 
 	if err != nil {
