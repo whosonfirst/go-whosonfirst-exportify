@@ -21,7 +21,7 @@ github.com/aaronland/go-uid-artisanal
 github.com/hashicorp/errwrap
 # github.com/hashicorp/go-multierror v0.0.0-20171204182908-b7773ae21874
 github.com/hashicorp/go-multierror
-# github.com/mmcloughlin/geohash v0.9.0
+# github.com/mmcloughlin/geohash v0.10.0
 github.com/mmcloughlin/geohash
 # github.com/natefinch/atomic v0.0.0-20200526193002-18c0533a5b09
 github.com/natefinch/atomic
@@ -69,12 +69,12 @@ github.com/whosonfirst/go-whosonfirst-crawl
 ## explicit
 github.com/whosonfirst/go-whosonfirst-export/v2
 github.com/whosonfirst/go-whosonfirst-export/v2/properties
-# github.com/whosonfirst/go-whosonfirst-flags v0.1.0
+# github.com/whosonfirst/go-whosonfirst-flags v0.4.2
 github.com/whosonfirst/go-whosonfirst-flags
 github.com/whosonfirst/go-whosonfirst-flags/existential
 # github.com/whosonfirst/go-whosonfirst-format v0.3.0
 github.com/whosonfirst/go-whosonfirst-format
-# github.com/whosonfirst/go-whosonfirst-geojson-v2 v0.15.1
+# github.com/whosonfirst/go-whosonfirst-geojson-v2 v0.16.3
 github.com/whosonfirst/go-whosonfirst-geojson-v2
 github.com/whosonfirst/go-whosonfirst-geojson-v2/feature
 github.com/whosonfirst/go-whosonfirst-geojson-v2/geometry
@@ -92,7 +92,7 @@ github.com/whosonfirst/go-whosonfirst-iterate/filters
 github.com/whosonfirst/go-whosonfirst-iterate/iterator
 # github.com/whosonfirst/go-whosonfirst-log v0.1.0
 github.com/whosonfirst/go-whosonfirst-log
-# github.com/whosonfirst/go-whosonfirst-placetypes v0.1.0
+# github.com/whosonfirst/go-whosonfirst-placetypes v0.3.0
 github.com/whosonfirst/go-whosonfirst-placetypes
 github.com/whosonfirst/go-whosonfirst-placetypes/placetypes
 # github.com/whosonfirst/go-whosonfirst-reader v0.0.2
@@ -101,11 +101,11 @@ github.com/whosonfirst/go-whosonfirst-reader
 # github.com/whosonfirst/go-whosonfirst-sources v0.1.0
 github.com/whosonfirst/go-whosonfirst-sources
 github.com/whosonfirst/go-whosonfirst-sources/sources
-# github.com/whosonfirst/go-whosonfirst-spr v0.1.0
-github.com/whosonfirst/go-whosonfirst-spr
+# github.com/whosonfirst/go-whosonfirst-spr/v2 v2.0.0
+github.com/whosonfirst/go-whosonfirst-spr/v2
 # github.com/whosonfirst/go-whosonfirst-uri v0.2.0
 github.com/whosonfirst/go-whosonfirst-uri
-# github.com/whosonfirst/go-whosonfirst-writer v0.2.1
+# github.com/whosonfirst/go-whosonfirst-writer v0.2.2
 ## explicit
 github.com/whosonfirst/go-whosonfirst-writer
 # github.com/whosonfirst/go-writer v0.4.1
@@ -116,5 +116,5 @@ github.com/whosonfirst/go-writer
 github.com/whosonfirst/go-writer-featurecollection
 # github.com/whosonfirst/walk v0.0.1
 github.com/whosonfirst/walk
-# github.com/whosonfirst/warning v0.1.0
+# github.com/whosonfirst/warning v0.1.1
 github.com/whosonfirst/warning

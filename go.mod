@@ -12,7 +12,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-export/v2 v2.3.0
 	github.com/whosonfirst/go-whosonfirst-iterate v1.1.1
 	github.com/whosonfirst/go-whosonfirst-reader v0.0.2
-	github.com/whosonfirst/go-whosonfirst-writer v0.2.1
+	github.com/whosonfirst/go-whosonfirst-writer v0.2.2
 	github.com/whosonfirst/go-writer v0.4.1
 	github.com/whosonfirst/go-writer-featurecollection v0.0.2
 )
