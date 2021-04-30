@@ -4,9 +4,8 @@ import (
 	"context"
 	"flag"
 	"github.com/sfomuseum/go-flags/multi"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
+	"github.com/whosonfirst/go-whosonfirst-exportify"
 	"github.com/whosonfirst/go-whosonfirst-iterate/emitter"
 	"github.com/whosonfirst/go-whosonfirst-iterate/iterator"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
@@ -61,106 +60,23 @@ func main() {
 			return err
 		}
 
-		changed := false
-
-		for _, p := range str_properties {
-
-			path := p.Key()
-			new_value := p.Value()
-
-			update := true
-
-			old_rsp := gjson.GetBytes(body, path)
-
-			if old_rsp.Exists() {
-
-				old_value := old_rsp.String()
-
-				if old_value == new_value {
-					update = false
-				}
-			}
-
-			if update {
-
-				new_body, err := sjson.SetBytes(body, path, new_value)
-
-				if err != nil {
-					return nil
-				}
-
-				body = new_body
-				changed = true
-			}
+		opts := &exportify.UpdateFeatureOptions{
+			StringProperties:  str_properties,
+			Int64Properties:   int_properties,
+			Float64Properties: float_properties,
 		}
 
-		for _, p := range int_properties {
+		new_body, changed, err := exportify.UpdateFeature(ctx, body, opts)
 
-			path := p.Key()
-			new_value := p.Value()
-
-			update := true
-
-			old_rsp := gjson.GetBytes(body, path)
-
-			if old_rsp.Exists() {
-
-				old_value := old_rsp.Int()
-
-				if old_value == new_value {
-					update = false
-				}
-			}
-
-			if update {
-
-				new_body, err := sjson.SetBytes(body, path, new_value)
-
-				if err != nil {
-					return nil
-				}
-
-				body = new_body
-				changed = true
-			}
-		}
-
-		for _, p := range float_properties {
-
-			path := p.Key()
-			new_value := p.Value()
-
-			update := true
-
-			old_rsp := gjson.GetBytes(body, path)
-
-			if old_rsp.Exists() {
-
-				old_value := old_rsp.Float()
-
-				if old_value == new_value {
-					update = false
-				}
-			}
-
-			if update {
-
-				new_body, err := sjson.SetBytes(body, path, new_value)
-
-				if err != nil {
-					return nil
-				}
-
-				body = new_body
-				changed = true
-			}
+		if err != nil {
+			return err
 		}
 
 		if !changed {
 			return nil
 		}
 
-		new_body, err := ex.Export(ctx, body)
+		new_body, err = ex.Export(ctx, new_body)
 
 		if err != nil {
 			return err
