@@ -2,6 +2,7 @@ package exportify
 
 import (
 	"context"
+	"github.com/paulmach/orb/geojson"
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -12,6 +13,7 @@ type UpdateFeatureOptions struct {
 	Int64Properties   multi.KeyValueInt64
 	Float64Properties multi.KeyValueFloat64
 	// JSONProperties multi.KeyValueString
+	Geometry *geojson.Geometry
 }
 
 func UpdateFeature(ctx context.Context, body []byte, opts *UpdateFeatureOptions) ([]byte, bool, error) {
@@ -157,6 +159,18 @@ func UpdateFeature(ctx context.Context, body []byte, opts *UpdateFeatureOptions)
 		}
 
 	*/
+
+	if opts.Geometry != nil {
+
+		new_body, err := sjson.SetBytes(body, "geometry", opts.Geometry)
+
+		if err != nil {
+			return nil, false, err
+		}
+
+		body = new_body
+		changed = true
+	}
 
 	return body, changed, nil
 }

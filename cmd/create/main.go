@@ -1,21 +1,25 @@
 package main
 
+// go run -mod vendor cmd/create/main.go -writer-uri stdout:// -geometry '{"type":"Point", "coordinates":[20.414944,42.032833]}' -string-property 'properties.src:geom=wikidata'
+
 import (
 	"context"
 	_ "embed"
 	"fmt"
-	"github.com/sfomuseum/go-flags/flagset"	
+	"github.com/paulmach/orb/geojson"
+	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-reader"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
 	"github.com/whosonfirst/go-whosonfirst-exportify"
-	"github.com/whosonfirst/go-whosonfirst-spatial-hierarchy"	
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	"github.com/whosonfirst/go-whosonfirst-spatial-hierarchy"
+	_ "github.com/whosonfirst/go-whosonfirst-spatial-sqlite"
 	"github.com/whosonfirst/go-whosonfirst-spatial/database"
-	"github.com/whosonfirst/go-whosonfirst-spatial/filter"	
+	"github.com/whosonfirst/go-whosonfirst-spatial/filter"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
 	"log"
 	"os"
@@ -28,7 +32,7 @@ var stub []byte
 func main() {
 
 	fs := flagset.NewFlagSet("create")
-	
+
 	source := fs.String("s", "", "A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.")
 
 	parent_reader_uri := fs.String("parent-reader-uri", "", "A valid whosonfirst/go-reader URI. If empty the value of the -s fs will be used in combination with the fs:// scheme.")
@@ -36,7 +40,7 @@ func main() {
 
 	exporter_uri := fs.String("exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export URI.")
 
-	spatial_database_uri := fs.String("spatial-database-uri", "", "A valid whosonfirst/go-whosonfirst-spatial/database URI.")	
+	spatial_database_uri := fs.String("spatial-database-uri", "", "A valid whosonfirst/go-whosonfirst-spatial/database URI.")
 
 	var str_properties multi.KeyValueString
 	fs.Var(&str_properties, "string-property", "One or more {KEY}={VALUE} fss where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.")
@@ -46,6 +50,10 @@ func main() {
 
 	var float_properties multi.KeyValueFloat64
 	fs.Var(&float_properties, "float-property", "One or more {KEY}={VALUE} fss where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
+
+	str_geom := fs.String("geometry", "", "A valid GeoJSON geometry")
+
+	resolve_hierarchy := fs.Bool("resolve-hierarchy", false, "...")
 
 	fs.Usage = func() {
 
@@ -103,22 +111,23 @@ func main() {
 		log.Fatalf("Failed create exporter for '%s', %v", *exporter_uri, err)
 	}
 
-	parent_r, err := reader.NewReader(ctx, *parent_reader_uri)
-
-	if err != nil {
-		log.Fatalf("Failed to create reader for '%s', %v", *parent_reader_uri, err)
-	}
-
 	wr, err := writer.NewWriter(ctx, *writer_uri)
 
 	if err != nil {
 		log.Fatalf("Failed to create writer for '%s', %v", *writer_uri, err)
 	}
 
+	geom, err := geojson.UnmarshalGeometry([]byte(*str_geom))
+
+	if err != nil {
+		log.Fatalf("Failed to unmarshal geometry, %v", err)
+	}
+
 	opts := &exportify.UpdateFeatureOptions{
 		StringProperties:  str_properties,
 		Int64Properties:   int_properties,
 		Float64Properties: float_properties,
+		Geometry:          geom,
 	}
 
 	body, _, err := exportify.UpdateFeature(ctx, stub, opts)
@@ -131,6 +140,12 @@ func main() {
 	parent_id := parent_rsp.Int()
 
 	if parent_id > 0 {
+
+		parent_r, err := reader.NewReader(ctx, *parent_reader_uri)
+
+		if err != nil {
+			log.Fatalf("Failed to create reader for '%s', %v", *parent_reader_uri, err)
+		}
 
 		parent_body, err := wof_reader.LoadBytesFromID(ctx, parent_r, parent_id)
 
@@ -155,33 +170,36 @@ func main() {
 	}
 
 	// START OF pip/hierarchy stuff
-	
-	spatial_db, err := database.NewSpatialDatabase(ctx, *spatial_database_uri)
 
-	if err != nil {
-		log.Fatalf("Failed to create new spatial database for '%s', %v", *spatial_database_uri, err)
+	if *resolve_hierarchy {
+
+		spatial_db, err := database.NewSpatialDatabase(ctx, *spatial_database_uri)
+
+		if err != nil {
+			log.Fatalf("Failed to create new spatial database for '%s', %v", *spatial_database_uri, err)
+		}
+
+		resolver, err := hierarchy.NewPointInPolygonHierarchyResolver(ctx, spatial_db, nil)
+
+		if err != nil {
+			log.Fatalf("Failed to create new hierarchy resolver, %v", err)
+		}
+
+		log.Println(resolver)
+
+		inputs := &filter.SPRInputs{}
+
+		rsp, err := resolver.PointInPolygon(ctx, inputs, body)
+
+		if err != nil {
+			log.Fatalf("Failed to do point in polygon operation, %v", err)
+		}
+
+		log.Println(rsp)
 	}
 
-	resolver, err := hierarchy.NewPointInPolygonHierarchyResolver(ctx, spatial_db, nil)
-
-	if err != nil {
-		log.Fatalf("Failed to create new hierarchy resolver, %v", err)
-	}
-	
-	log.Println(resolver)
-
-	inputs := &filter.SPRInputs{}
-	
-	rsp, err := resolver.PointInPolygon(ctx, inputs, body)
-
-	if err != nil {
-		log.Fatalf("Failed to do point in polygon operation, %v", err)
-	}
-
-	log.Println(rsp)
-	
 	// END OF pip/hierarchy stuff
-	
+
 	new_body, err := ex.Export(ctx, body)
 
 	if err != nil {
