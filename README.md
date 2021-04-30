@@ -16,12 +16,15 @@ At some point the various application might get separated out in to their own pa
 ## Tools
 
 ```
-$> make cli
+> make cli
 go build -mod vendor -o bin/assign-parent cmd/assign-parent/main.go
 go build -mod vendor -o bin/exportify cmd/exportify/main.go
+go build -mod vendor -o bin/create cmd/create/main.go
 go build -mod vendor -o bin/ensure-properties cmd/ensure-properties/main.go
 go build -mod vendor -o bin/deprecate-and-supersede cmd/deprecate-and-supersede/main.go
 go build -mod vendor -o bin/merge-feature-collection cmd/merge-feature-collection/main.go
+go build -mod vendor -o bin/supersede-with-parent cmd/supersede-with-parent/main.go
+go build -mod vendor -o bin/as-featurecollection cmd/as-featurecollection/main.go
 ```
 
 As of this writing these tools may contain duplicate, or at least common, code that would be well-served from being moved in to a package or library. That hasn't happened yet.
@@ -117,6 +120,116 @@ $> ./bin/assign-parent \
 	-reader-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
 	-parent-id 1477855937 \
 	-id 1477855939 -id 1477855941 -id 1477855943 -id 1477855945 -id 1477855947 -id 1477855949 1477855955
+```
+
+### create
+
+Create a new Who's On First record.
+
+```
+> ./bin/create -h
+Create a new Who's On First record.
+
+Usage:
+	 ./bin/create [options] 
+
+Valid options are:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export URI. (default "whosonfirst://")
+  -float-property value
+    	One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.
+  -geometry string
+    	A valid GeoJSON geometry
+  -int-property value
+    	One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.
+  -parent-reader-uri string
+    	A valid whosonfirst/go-reader URI. If empty the value of the -s fs will be used in combination with the fs:// scheme.
+  -resolve-hierarchy
+    	Attempt to resolve parent ID and hierarchy using point-in-polygon lookups. If true the -spatial-database-uri flag must also be set
+  -s string
+    	A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.
+  -spatial-database-uri string
+    	A valid whosonfirst/go-whosonfirst-spatial/database URI.
+  -string-property value
+    	One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI. If empty the value of the -s fs will be used in combination with the fs:// scheme.
+```
+
+_This tool should be considered "beta" still._
+
+For example:
+
+```
+$> bin/create \
+	-geometry '{"type":"Point", "coordinates":[20.414944,42.032833]}' \
+	-string-property 'properties.src:geom=wikidata' \
+	-string-property 'properties.wof:placetype=campus' \
+	-string-property 'properties.wof:placetype_alt=airport' \
+	-string-property 'properties.wof:repo=whosonfirst-data-admin-al' \
+	-string-property 'properties.wof:name=Kukës International Airport' \
+	-string-property 'properties.edtf:inception=2021-04-18' \
+	-string-property 'properties.edtf:cessation=..' \
+	-string-property 'properties.wof:concordances.icao:code=LAKU' \
+	-string-property 'properties.wof:concordances.wk:id=Q1431804' \
+	-int-property 'properties.mz:is_current=1' \
+	-resolve-hierarchy \
+	-spatial-database-uri 'sqlite://?dsn=/usr/local/data/al.db' \
+	-writer-uri stdout://
+
+{
+  "id": 1730032323,
+  "type": "Feature",
+  "properties": {
+    "date:inception_lower": "2021-04-18",
+    "date:inception_upper": "2021-04-18",
+    "edtf:cessation": "..",
+    "edtf:inception": "2021-04-18",
+    "geom:area": 0,
+    "geom:bbox": "20.414944,42.032833,20.414944,42.032833",
+    "geom:latitude": 42.032833,
+    "geom:longitude": 20.414944,
+    "src:geom": "wikidata",
+    "wof:belongsto": [
+      102191581,
+      85632405,
+      421186339,
+      85667797
+    ],
+    "wof:concordances": {
+      "icao:code": "LAKU"
+    },
+    "wof:country": "AL",
+    "wof:created": 1619808522,
+    "wof:geomhash": "792d95b83651dcc4aedeb0923d9c05f8",
+    "wof:hierarchy": [
+      {
+        "campus_id": 1730032323,
+        "continent_id": 102191581,
+        "country_id": 85632405,
+        "county_id": 421186339,
+        "region_id": 85667797
+      }
+    ],
+    "wof:id": 1730032323,
+    "wof:lastmodified": 1619808522,
+    "wof:name": "Kukës International Airport",
+    "wof:parent_id": 421186339,
+    "wof:placetype": "campus",
+    "wof:placetype_alt": "airport",
+    "wof:repo": "whosonfirst-data-admin-al",
+    "wof:superseded_by": [],
+    "wof:supersedes": []
+  },
+  "bbox": [
+    20.414944,
+    42.032833,
+    20.414944,
+    42.032833
+  ],
+  "geometry": {"coordinates":[20.414944,42.032833],"type":"Point"}
+}
+1730032323
 ```
 
 ### deprecate-and-supersede

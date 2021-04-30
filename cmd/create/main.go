@@ -43,24 +43,24 @@ func main() {
 	spatial_database_uri := fs.String("spatial-database-uri", "", "A valid whosonfirst/go-whosonfirst-spatial/database URI.")
 
 	var str_properties multi.KeyValueString
-	fs.Var(&str_properties, "string-property", "One or more {KEY}={VALUE} fss where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.")
+	fs.Var(&str_properties, "string-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.")
 
 	var int_properties multi.KeyValueInt64
-	fs.Var(&int_properties, "int-property", "One or more {KEY}={VALUE} fss where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.")
+	fs.Var(&int_properties, "int-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.")
 
 	var float_properties multi.KeyValueFloat64
-	fs.Var(&float_properties, "float-property", "One or more {KEY}={VALUE} fss where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
+	fs.Var(&float_properties, "float-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
 
 	str_geom := fs.String("geometry", "", "A valid GeoJSON geometry")
 
-	resolve_hierarchy := fs.Bool("resolve-hierarchy", false, "...")
+	resolve_hierarchy := fs.Bool("resolve-hierarchy", false, "Attempt to resolve parent ID and hierarchy using point-in-polygon lookups. If true the -spatial-database-uri flag must also be set")
 
 	fs.Usage = func() {
 
 		fmt.Fprintf(os.Stderr, "Create a new Who's On First record.\n\n")
 		fmt.Fprintf(os.Stderr, "Usage:\n\t %s [options] \n\n", os.Args[0])
-		fmt.Fprintf(os.Stderr, "For example:\n")
-		fmt.Fprintf(os.Stderr, "\t%s ...\n", os.Args[0])
+		// fmt.Fprintf(os.Stderr, "For example:\n")
+		// fmt.Fprintf(os.Stderr, "\t%s ...\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "Valid options are:\n")
 		fs.PrintDefaults()
 	}
@@ -185,17 +185,18 @@ func main() {
 			log.Fatalf("Failed to create new hierarchy resolver, %v", err)
 		}
 
-		log.Println(resolver)
-
 		inputs := &filter.SPRInputs{}
 
-		rsp, err := resolver.PointInPolygon(ctx, inputs, body)
+		results_cb := hierarchy.FirstButForgivingSPRResultsFunc
+		update_cb := hierarchy.DefaultPointInPolygonHierarchyResolverUpdateCallback()
+		
+		new_body, err := resolver.PointInPolygonAndUpdate(ctx, inputs, results_cb, update_cb, body)
 
 		if err != nil {
 			log.Fatalf("Failed to do point in polygon operation, %v", err)
 		}
 
-		log.Println(rsp)
+		body = new_body
 	}
 
 	// END OF pip/hierarchy stuff
@@ -206,11 +207,13 @@ func main() {
 		log.Fatalf("Failed to export new record, %v", err)
 	}
 
+	id_rsp := gjson.GetBytes(new_body, "properties.wof:id")
+	
 	err = wof_writer.WriteFeatureBytes(ctx, wr, new_body)
 
 	if err != nil {
 		log.Fatalf("Failed to write new record, %v", err)
 	}
 
-	log.Println("OK")
+	fmt.Printf("%d\n", id_rsp.Int())
 }
