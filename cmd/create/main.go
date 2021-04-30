@@ -6,10 +6,12 @@ import (
 	"flag"
 	"fmt"
 	"github.com/sfomuseum/go-flags/multi"
-	// "github.com/whosonfirst/go-reader"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
+	"github.com/whosonfirst/go-reader"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
 	"github.com/whosonfirst/go-whosonfirst-exportify"
-	// wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
+	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
 	"log"
@@ -24,7 +26,7 @@ func main() {
 
 	source := flag.String("s", "", "A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.")
 
-	reader_uri := flag.String("reader-uri", "", "A valid whosonfirst/go-reader URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.")
+	parent_reader_uri := flag.String("parent-reader-uri", "", "A valid whosonfirst/go-reader URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.")
 	writer_uri := flag.String("writer-uri", "", "A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.")
 
 	exporter_uri := flag.String("exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export URI.")
@@ -50,7 +52,7 @@ func main() {
 
 	flag.Parse()
 
-	if *reader_uri == "" || *writer_uri == "" {
+	if *parent_reader_uri == "" || *writer_uri == "" {
 
 		var path string
 
@@ -77,8 +79,8 @@ func main() {
 
 		abs_path := fmt.Sprintf("fs://%s/data", path)
 
-		if *reader_uri == "" {
-			*reader_uri = abs_path
+		if *parent_reader_uri == "" {
+			*parent_reader_uri = abs_path
 		}
 
 		if *writer_uri == "" {
@@ -94,13 +96,11 @@ func main() {
 		log.Fatalf("Failed create exporter for '%s', %v", *exporter_uri, err)
 	}
 
-	/*
-		r, err := reader.NewReader(ctx, *reader_uri)
+	parent_r, err := reader.NewReader(ctx, *parent_reader_uri)
 
-		if err != nil {
-			log.Fatalf("Failed to create reader for '%s', %v", *reader_uri, err)
-		}
-	*/
+	if err != nil {
+		log.Fatalf("Failed to create reader for '%s', %v", *parent_reader_uri, err)
+	}
 
 	wr, err := writer.NewWriter(ctx, *writer_uri)
 
@@ -118,6 +118,33 @@ func main() {
 
 	if err != nil {
 		log.Fatalf("Failed to update properties, %v", err)
+	}
+
+	parent_rsp := gjson.GetBytes(body, "properties.wof:parent_id")
+	parent_id := parent_rsp.Int()
+
+	if parent_id > 0 {
+
+		parent_body, err := wof_reader.LoadBytesFromID(ctx, parent_r, parent_id)
+
+		if err != nil {
+			log.Fatalf("Failed to load parent record (%d), %v", parent_id, err)
+		}
+
+		to_copy := []string{
+			"properties.wof:hierarchy",
+			"properties.wof:country",
+		}
+
+		for _, path := range to_copy {
+
+			rsp := gjson.GetBytes(parent_body, path)
+			body, err = sjson.SetBytes(body, path, rsp.Value())
+
+			if err != nil {
+				log.Fatalf("Failed to copy '%s' parent value, %v", path, err)
+			}
+		}
 	}
 
 	new_body, err := ex.Export(ctx, body)
