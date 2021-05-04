@@ -16,10 +16,11 @@ At some point the various application might get separated out in to their own pa
 ## Tools
 
 ```
-> make cli
+$> make cli
 go build -mod vendor -o bin/assign-parent cmd/assign-parent/main.go
 go build -mod vendor -o bin/exportify cmd/exportify/main.go
 go build -mod vendor -o bin/create cmd/create/main.go
+go build -mod vendor -o bin/deprecate cmd/deprecate/main.go
 go build -mod vendor -o bin/ensure-properties cmd/ensure-properties/main.go
 go build -mod vendor -o bin/deprecate-and-supersede cmd/deprecate-and-supersede/main.go
 go build -mod vendor -o bin/merge-feature-collection cmd/merge-feature-collection/main.go
@@ -127,7 +128,7 @@ $> ./bin/assign-parent \
 Create a new Who's On First record.
 
 ```
-> ./bin/create -h
+$> ./bin/create -h
 Create a new Who's On First record.
 
 Usage:
@@ -232,10 +233,78 @@ $> bin/create \
 1730032323
 ```
 
+### deprecate
+
+Deprecate one or more Who's On First IDs.
+
+```
+> ./bin/deprecate -h
+Deprecate one or more Who's On First IDs.
+
+Usage:
+	 ./bin/deprecate [options]
+
+For example:
+	./bin/deprecate -s . -i 1234
+	./bin/deprecate -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678
+
+Valid options are:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export URI. (default "whosonfirst://")
+  -i string
+    	A valid Who's On First ID.
+  -id value
+    	One or more Who's On First IDs. If left empty the value of the -i flag will be used.
+  -reader-uri string
+    	A valid whosonfirst/go-reader URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
+  -s string
+    	A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
+```
+
+For example:
+
+```
+$> ./bin/deprecate -s /usr/local/data/sfomuseum-data-collection -i 1511957049
+
+$> git diff
+diff --git a/data/151/195/704/9/1511957049.geojson b/data/151/195/704/9/1511957049.geojson
+index 916115027f..ec21ca2089 100644
+--- a/data/151/195/704/9/1511957049.geojson
++++ b/data/151/195/704/9/1511957049.geojson
+@@ -8,6 +8,7 @@
+     "date:inception_upper": "1960-01-01",
+     "edtf:cessation": "1960-12-31",
+     "edtf:date": "1960",
++    "edtf:deprecated": "2021-05-03",
+     "edtf:inception": "1960-01-01",
+     "geom:area": 0,
+     "geom:bbox": "-122.386155,37.616358,-122.386155,37.616358",
+@@ -18,7 +19,7 @@
+     "millsfield:collection_id": 1511214203,
+     "millsfield:subcategory_id": 1511213595,
+     "mz:hierarchy_label": 1,
+-    "mz:is_current": -1,
++    "mz:is_current": 0,
+     "sfomuseum:accession_number": "2012.147.452",
+     "sfomuseum:category": "Insignia",
+     "sfomuseum:collection": "Aviation Museum",
+@@ -65,7 +66,7 @@
+       }
+     ],
+     "wof:id": 1511957049,
+-    "wof:lastmodified": 1618962263,
++    "wof:lastmodified": 1620087808,
+     "wof:name": "flight officer cap badge: Iraq Petroleum Company",
+     "wof:parent_id": 1511214277,
+     "wof:placetype": "venue",
+```
+
 ### deprecate-and-supersede
 
 ```
-> ./bin/deprecate-and-supersede -h
+$> ./bin/deprecate-and-supersede -h
 Deprecate and supersede one or more Who's On First IDs.
 
 Usage:
