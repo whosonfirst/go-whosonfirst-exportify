@@ -513,6 +513,58 @@ In the example above we are:
 * Specifying that the lookup key is `properties.sfomuseum:map_id` - this value will be mapped to the corresponding record's `wof:id` property
 * Using the lookup key property in the data being merged to determine which WOF record (read by the `-reader-uri` flag) should be updated
 
+### rename-property
+
+Rename a property in one or more records. Currently this tool does not support renaming more than one property at a time.
+
+```
+$> ./bin/rename-property -h
+Usage of ./bin/rename-property:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export URI. (default "whosonfirst://")
+  -indexer-uri string
+    	A valid whosonfirst/go-whosonfirst-iterate/emitter URI. (default "repo://")
+  -new-property string
+    	The fully qualified path of the property to be (re)named.
+  -old-property string
+    	The fully qualified path of the property to rename.
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI. (default "null://")
+```
+
+For example:
+
+```
+$> ./bin/rename-property \
+	-writer-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
+	-old-property 'properties.wof:supsersedes' \
+	-new-property 'properties.wof:supersedes' \
+	/usr/local/data/sfomuseum-data-architecture
+	
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/981/373/7/1729813737.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/981/373/5/1729813735.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/981/373/3/1729813733.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/981/373/1/1729813731.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/981/373/9/1729813739.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/979/194/7/1729791947.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/979/194/9/1729791949.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/981/374/1/1729813741.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/979/194/3/1729791943.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/981/374/5/1729813745.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/981/374/7/1729813747.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/979/195/7/1729791957.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/979/195/3/1729791953.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/979/195/9/1729791959.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/979/195/5/1729791955.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/979/195/1/1729791951.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/979/196/1/1729791961.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/979/196/5/1729791965.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/979/196/9/1729791969.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/979/196/7/1729791967.geojson
+2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/994/578/5/1729945785.geojson
+2021/05/11 13:33:55 time to index paths (1) 180.656951ms
+```
+
 ### supersede-with-parent
 
 Supersede one or more WOF records with a known parent ID (and hierarchy).

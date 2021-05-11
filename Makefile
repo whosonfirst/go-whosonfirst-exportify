@@ -8,3 +8,4 @@ cli:
 	go build -mod vendor -o bin/merge-feature-collection cmd/merge-feature-collection/main.go
 	go build -mod vendor -o bin/supersede-with-parent cmd/supersede-with-parent/main.go
 	go build -mod vendor -o bin/as-featurecollection cmd/as-featurecollection/main.go
+	go build -mod vendor -o bin/rename-property cmd/rename-property/main.go
