@@ -189,7 +189,7 @@ func main() {
 
 		results_cb := hierarchy.FirstButForgivingSPRResultsFunc
 		update_cb := hierarchy.DefaultPointInPolygonHierarchyResolverUpdateCallback()
-		
+
 		new_body, err := resolver.PointInPolygonAndUpdate(ctx, inputs, results_cb, update_cb, body)
 
 		if err != nil {
@@ -208,7 +208,7 @@ func main() {
 	}
 
 	id_rsp := gjson.GetBytes(new_body, "properties.wof:id")
-	
+
 	err = wof_writer.WriteFeatureBytes(ctx, wr, new_body)
 
 	if err != nil {

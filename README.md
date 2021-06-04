@@ -89,6 +89,58 @@ $> ./bin/as-featurecollection \
 1729792699
 ```
 
+### assign-geometry
+
+Assign the geometry from a given record to one or more other records.
+
+```
+$> ./bin/assign-geometry -h
+Assign the geometry from a given record to one or more other records.
+
+Usage:
+	 ./bin/assign-geometry [options] target-id-(N) target-id-(N)
+
+For example:
+	./bin/assign-geometry -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -source-id 1234 5678
+
+Valid options are:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export URI (default "whosonfirst://")
+  -reader-uri string
+    	A valid whosonfirst/go-reader URI.
+  -source-id int
+    	A valid Who's On First ID.
+  -stdin
+    	Read target IDs from STDIN
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI. (default "stdout://")
+```
+
+_This tool can (and probably be should) be adapted in the general-purpose assign properties or geometry tool. Today it only handles geometries._
+
+For example:
+
+```
+$> /usr/local/whosonfirst/go-whosonfirst-travel/bin/wof-travel-id \
+	-supersedes \
+	-ids \
+	-source fs:///usr/local/data/sfomuseum-data-architecture/data \
+	1729813675 \
+	
+| bin/assign-geometry \
+	-stdin \
+	-reader-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
+	-writer-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
+	-source-id 1729813675
+```
+
+This is a fairly involved example, so here's a description of what's happening:
+
+* First we are using the `wof-travel-id` tool in the [go-whosonfirst-travel](https://github.com/whosonfirst/go-whosonfirst-travel) package to find all the records that, recursively, ID `1729813675` supersedes.
+* We are exporting that list as a line-separated list of IDs (having specified the `-ids` flag).
+* We are piping that output to the `assign-geometry` tool and reading the list of IDs from `STDIN` (having specified the `-stdin` flag).
+* For each of those IDs we are assigning the geometry from the record with the ID `1729813675` and writing those updates back to disk.
+
 ### assign-parent
 
 ```

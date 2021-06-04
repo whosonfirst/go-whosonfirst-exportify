@@ -7,7 +7,7 @@ import (
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/whosonfirst/go-reader"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	"github.com/whosonfirst/go-whosonfirst-exportify"	
+	"github.com/whosonfirst/go-whosonfirst-exportify"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	"github.com/whosonfirst/go-writer"
 	"log"
@@ -126,10 +126,10 @@ func deprecateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex expo
 	}
 
 	now := time.Now()
-	
+
 	to_update := map[string]interface{}{
 		"properties.edtf:deprecated": now.Format("2006-01-02"),
-		"properties.mz:is_current": 0,
+		"properties.mz:is_current":   0,
 	}
 
 	new_body, err := export.AssignProperties(ctx, body, to_update)
@@ -137,6 +137,6 @@ func deprecateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex expo
 	if err != nil {
 		return err
 	}
-	
+
 	return exportify.ExportWithWriter(ctx, ex, wr, new_body)
 }

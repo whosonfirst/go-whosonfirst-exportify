@@ -1,4 +1,5 @@
 cli:
+	go build -mod vendor -o bin/assign-geometry cmd/assign-geometry/main.go
 	go build -mod vendor -o bin/assign-parent cmd/assign-parent/main.go
 	go build -mod vendor -o bin/exportify cmd/exportify/main.go
 	go build -mod vendor -o bin/create cmd/create/main.go

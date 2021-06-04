@@ -4,13 +4,13 @@ import (
 	"context"
 	"flag"
 	_ "github.com/sfomuseum/go-flags/multi"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
 	"github.com/whosonfirst/go-whosonfirst-iterate/emitter"
 	"github.com/whosonfirst/go-whosonfirst-iterate/iterator"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"	
 	"io"
 	"io/ioutil"
 	"log"
@@ -23,7 +23,7 @@ func main() {
 	writer_uri := flag.String("writer-uri", "null://", "A valid whosonfirst/go-writer URI.")
 
 	old_property := flag.String("old-property", "", "The fully qualified path of the property to rename.")
-	new_property := flag.String("new-property", "", "The fully qualified path of the property to be (re)named.")	
+	new_property := flag.String("new-property", "", "The fully qualified path of the property to be (re)named.")
 
 	flag.Parse()
 
@@ -57,7 +57,7 @@ func main() {
 
 		old_rsp := gjson.GetBytes(body, *old_property)
 
-		if !old_rsp.Exists(){
+		if !old_rsp.Exists() {
 			return nil
 		}
 
@@ -67,12 +67,12 @@ func main() {
 			return err
 		}
 
-		body, err  = sjson.DeleteBytes(body, *old_property)
-		
+		body, err = sjson.DeleteBytes(body, *old_property)
+
 		if err != nil {
 			return err
 		}
-		
+
 		new_body, err := ex.Export(ctx, body)
 
 		if err != nil {
@@ -106,4 +106,3 @@ func main() {
 		log.Fatal(err)
 	}
 }
-
