@@ -7,6 +7,9 @@ import (
 	"bufio"
 	"context"
 	"flag"
+	"fmt"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-reader"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
@@ -15,9 +18,6 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
-	"fmt"
 )
 
 func main() {

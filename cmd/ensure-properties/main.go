@@ -8,6 +8,7 @@ import (
 	"github.com/whosonfirst/go-whosonfirst-exportify"
 	"github.com/whosonfirst/go-whosonfirst-iterate/emitter"
 	"github.com/whosonfirst/go-whosonfirst-iterate/iterator"
+	"github.com/whosonfirst/go-whosonfirst-uri"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
 	"io"
@@ -52,6 +53,17 @@ func main() {
 
 		if err != nil {
 			return err
+		}
+
+		_, uri_args, err := uri.ParseURI(path)
+
+		if err != nil {
+			return err
+		}
+
+		if uri_args.IsAlternate {
+			log.Printf("Alternate files (%s) are not supported yet, skipping\n", path)
+			return nil
 		}
 
 		body, err := ioutil.ReadAll(fh)
