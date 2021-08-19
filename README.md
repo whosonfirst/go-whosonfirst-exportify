@@ -15,6 +15,8 @@ At some point the various application might get separated out in to their own pa
 
 ## Tools
 
+> requires `go1.16` or later
+
 ```
 $> make cli
 go build -mod vendor -o bin/assign-parent cmd/assign-parent/main.go
