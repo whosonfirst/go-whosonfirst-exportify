@@ -10,6 +10,7 @@ import (
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -106,6 +107,19 @@ func main() {
 		log.Fatalf("Failed to create writer for '%s', %v", *writer_uri, err)
 	}
 
+	// please to be exposing reader.STDIN_SCHEME
+
+	if *reader_uri == "stdin://" {
+
+		err = exportStdin(ctx, r, wr, ex)
+
+		if err != nil {
+			log.Fatalf("Failed to export from STDIN, %v", err)
+		}
+
+		return
+	}
+
 	for _, id := range ids {
 
 		err := exportId(ctx, r, wr, ex, id)
@@ -116,6 +130,23 @@ func main() {
 	}
 }
 
+func exportStdin(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter) error {
+
+	fh, err := r.Read(ctx, "-")
+
+	if err != nil {
+		return err
+	}
+
+	body, err := io.ReadAll(fh)
+
+	if err != nil {
+		return err
+	}
+
+	return exportBytes(ctx, body, wr, ex)
+}
+
 func exportId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, id int64) error {
 
 	body, err := wof_reader.LoadBytesFromID(ctx, r, id)
@@ -123,6 +154,11 @@ func exportId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.
 	if err != nil {
 		return err
 	}
+
+	return exportBytes(ctx, body, wr, ex)
+}
+
+func exportBytes(ctx context.Context, body []byte, wr writer.Writer, ex export.Exporter) error {
 
 	new_body, err := ex.Export(ctx, body)
 
