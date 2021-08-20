@@ -74,7 +74,7 @@ github.com/twpayne/go-geom/encoding/geojson
 github.com/twpayne/go-geom/encoding/wkt
 # github.com/whosonfirst/go-ioutil v1.0.0
 github.com/whosonfirst/go-ioutil
-# github.com/whosonfirst/go-reader v0.8.0
+# github.com/whosonfirst/go-reader v0.8.1
 ## explicit
 github.com/whosonfirst/go-reader
 # github.com/whosonfirst/go-rfc-5646 v0.1.0

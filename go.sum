@@ -187,6 +187,8 @@ github.com/whosonfirst/go-reader v0.5.0 h1:nx+ai0F6JXouw+7Dln34dmYglw+3sQ6sG4JZG
 github.com/whosonfirst/go-reader v0.5.0/go.mod h1:4ou/wZUss2CDZp27QK5ySDc8p98GVWvUiqqmwEprjgk=
 github.com/whosonfirst/go-reader v0.8.0 h1:Jo0KdHIncPH9AonNPC8Q8Hlx2PT9TgsBe3o83uP+Ci8=
 github.com/whosonfirst/go-reader v0.8.0/go.mod h1:6byB+UfZFNLYFqgsC/EKxTnKY8ahNgGHhUJsTrv1Jig=
+github.com/whosonfirst/go-reader v0.8.1 h1:Z8YKT6Altu0lBnIuaO88S+dZWGooyfxJjFi5HyKmeH0=
+github.com/whosonfirst/go-reader v0.8.1/go.mod h1:6byB+UfZFNLYFqgsC/EKxTnKY8ahNgGHhUJsTrv1Jig=
 github.com/whosonfirst/go-rfc-5646 v0.1.0 h1:HNFPAem6v5De61PXLgbGzx9tfNOP83AAkVvm9WAddJY=
 github.com/whosonfirst/go-rfc-5646 v0.1.0/go.mod h1:JZj//FV9YeV3fkyOY/82V53EMLQXwRwNPuQIGs8BUmo=
 github.com/whosonfirst/go-sanitize v0.1.0 h1:ygSqCnakwdzH/m8UEa15zXGDsoo5/JJeRkgmAjXZrBU=
