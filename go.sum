@@ -241,6 +241,8 @@ github.com/whosonfirst/go-whosonfirst-export/v2 v2.3.0 h1:lgjoKIDSFu110++cQaqsQn
 github.com/whosonfirst/go-whosonfirst-export/v2 v2.3.0/go.mod h1:ec4uJ6eXFuGhD80THlh9kb5iZTCw6x8uNRdS/7Fl4BE=
 github.com/whosonfirst/go-whosonfirst-export/v2 v2.3.3 h1:/Crsp0wGjy9LddagzCKAwXiFHxj0uGapgRrafPNEpUc=
 github.com/whosonfirst/go-whosonfirst-export/v2 v2.3.3/go.mod h1:m3XQjv1LaVm5Kf5bdv1qWMosEQZKIfk/FX5kao1nxSg=
+github.com/whosonfirst/go-whosonfirst-export/v2 v2.3.4 h1:xQ3k23Xp5fmKcXTJJbYItLJniJ9Q0GeW2vm+OdzwvgA=
+github.com/whosonfirst/go-whosonfirst-export/v2 v2.3.4/go.mod h1:FR44unsidZRY4fn0tM0XlG1ONiMxx7JkwKYztDEFzR0=
 github.com/whosonfirst/go-whosonfirst-flags v0.1.0 h1:llb2wtsI2y+gHZCmWaamMCx4YDRE8ZXQRRYqC7qB4so=
 github.com/whosonfirst/go-whosonfirst-flags v0.1.0/go.mod h1:bovMiQphaVhqemXFmNVf9Ts0tqnWtzHRFMUSKX+zTE8=
 github.com/whosonfirst/go-whosonfirst-flags v0.2.0/go.mod h1:ECd0AJJZIlybmjTGB9z+CPz9pSiMTwxur7fPKmDnoqI=
@@ -252,6 +254,8 @@ github.com/whosonfirst/go-whosonfirst-format v0.3.0 h1:PEhduZdcTBYynvIQPARBTkEQ8
 github.com/whosonfirst/go-whosonfirst-format v0.3.0/go.mod h1:OVt+Nc3jg+XIcrOuWHPvA3Vz4eEJ6uBzwlFlIdw4+Ak=
 github.com/whosonfirst/go-whosonfirst-format v0.3.1 h1:Yw7z/0ziZWUsI3tG1xaMbrSaZlZM5EZcCoLqlN5N5WY=
 github.com/whosonfirst/go-whosonfirst-format v0.3.1/go.mod h1:eTEqWH2Mw6xf0AopaMM5WRlkotUioyioK2JlYbVlsl8=
+github.com/whosonfirst/go-whosonfirst-format v0.3.3 h1:QCZK6fygIYKT3oyOXpnlrsAOpIuOTEHhnIx8dr4kEEQ=
+github.com/whosonfirst/go-whosonfirst-format v0.3.3/go.mod h1:eTEqWH2Mw6xf0AopaMM5WRlkotUioyioK2JlYbVlsl8=
 github.com/whosonfirst/go-whosonfirst-geojson-v2 v0.14.0/go.mod h1:UkzipFE8gZC9NU1PLIE4DUwjFHOlafkoNxd2Ng0ZIjc=
 github.com/whosonfirst/go-whosonfirst-geojson-v2 v0.14.1 h1:Bp5gwvIZXkfGhS4Kv1Cs8R5PNo1EipISPOsDDPSrKQQ=
 github.com/whosonfirst/go-whosonfirst-geojson-v2 v0.14.1/go.mod h1:UkzipFE8gZC9NU1PLIE4DUwjFHOlafkoNxd2Ng0ZIjc=

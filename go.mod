@@ -9,7 +9,7 @@ require (
 	github.com/tidwall/gjson v1.8.1
 	github.com/tidwall/sjson v1.1.7
 	github.com/whosonfirst/go-reader v0.8.1
-	github.com/whosonfirst/go-whosonfirst-export/v2 v2.3.3
+	github.com/whosonfirst/go-whosonfirst-export/v2 v2.3.4
 	github.com/whosonfirst/go-whosonfirst-iterate v1.2.0
 	github.com/whosonfirst/go-whosonfirst-reader v0.3.0
 	github.com/whosonfirst/go-whosonfirst-spatial v0.0.56
