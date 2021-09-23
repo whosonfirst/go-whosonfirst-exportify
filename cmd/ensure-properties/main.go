@@ -7,6 +7,7 @@ import (
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
 	"github.com/whosonfirst/go-whosonfirst-exportify"
 	"github.com/whosonfirst/go-whosonfirst-iterate/emitter"
+	_ "github.com/whosonfirst/go-whosonfirst-iterate-reader"	
 	"github.com/whosonfirst/go-whosonfirst-iterate/iterator"
 	"github.com/whosonfirst/go-whosonfirst-uri"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"

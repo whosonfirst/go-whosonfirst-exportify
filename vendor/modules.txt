@@ -118,6 +118,9 @@ github.com/whosonfirst/go-whosonfirst-id
 github.com/whosonfirst/go-whosonfirst-iterate/emitter
 github.com/whosonfirst/go-whosonfirst-iterate/filters
 github.com/whosonfirst/go-whosonfirst-iterate/iterator
+# github.com/whosonfirst/go-whosonfirst-iterate-reader v0.0.0-20210923215558-a61d387f31cd
+## explicit
+github.com/whosonfirst/go-whosonfirst-iterate-reader
 # github.com/whosonfirst/go-whosonfirst-log v0.1.0
 github.com/whosonfirst/go-whosonfirst-log
 # github.com/whosonfirst/go-whosonfirst-names v0.1.0
