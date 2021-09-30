@@ -13,6 +13,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"github.com/tidwall/gjson"
 	"time"
 )
 
@@ -29,6 +30,9 @@ func main() {
 	var ids multi.MultiInt64
 	flag.Var(&ids, "id", "One or more Who's On First IDs. If left empty the value of the -i flag will be used.")
 
+	var superseded_by multi.MultiInt64
+	flag.Var(&superseded_by, "superseded-by", "Zero or more Who's On First IDs that the records being deprecated are superseded by.")
+	
 	flag.Usage = func() {
 
 		fmt.Fprintf(os.Stderr, "Deprecate one or more Who's On First IDs.\n\n")
@@ -109,7 +113,7 @@ func main() {
 
 	for _, id := range ids {
 
-		err := deprecateId(ctx, r, wr, ex, id)
+		err := deprecateId(ctx, r, wr, ex, id, superseded_by)
 
 		if err != nil {
 			log.Fatalf("Failed to deprecate record for '%d', %v", id, err)
@@ -117,7 +121,7 @@ func main() {
 	}
 }
 
-func deprecateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, id int64) error {
+func deprecateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, id int64, superseded_by multi.MultiInt64) error {
 
 	body, err := wof_reader.LoadBytesFromID(ctx, r, id)
 
@@ -132,6 +136,36 @@ func deprecateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex expo
 		"properties.mz:is_current":   0,
 	}
 
+	if len(superseded_by) > 0 {
+
+		tmp := make(map[int64]bool)
+
+		for _, id := range superseded_by {
+			tmp[id] = true
+		}
+		
+		rsp := gjson.GetBytes(body, "properties.wof:superseded_by")
+
+		for _, r := range rsp.Array(){
+			id := r.Int()
+			tmp[id] = true
+		}
+
+		new_list := make([]int64, 0)
+
+		for id, _ := range tmp {
+
+			switch id {
+			case 0, -1:
+				continue
+			default:
+				new_list = append(new_list, id)
+			}
+		}
+
+		to_update["properties.wof:superseded_by"] = new_list
+	}
+	
 	new_body, err := export.AssignProperties(ctx, body, to_update)
 
 	if err != nil {
