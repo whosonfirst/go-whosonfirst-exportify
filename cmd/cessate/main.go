@@ -4,6 +4,8 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/sfomuseum/go-edtf"
+	"github.com/sfomuseum/go-edtf/parser"
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/tidwall/gjson"
 	"github.com/whosonfirst/go-reader"
@@ -22,6 +24,8 @@ func main() {
 	source := flag.String("s", "", "A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.")
 	id := flag.String("i", "", "A valid Who's On First ID.")
 
+	date := flag.String("date", "", "A valid EDTF date. If empty then the current date will be used")
+
 	reader_uri := flag.String("reader-uri", "", "A valid whosonfirst/go-reader URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.")
 	writer_uri := flag.String("writer-uri", "", "A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.")
 
@@ -35,7 +39,7 @@ func main() {
 
 	flag.Usage = func() {
 
-		fmt.Fprintf(os.Stderr, "Deprecate one or more Who's On First IDs.\n\n")
+		fmt.Fprintf(os.Stderr, "\"Cessate\" one or more Who's On First IDs.\n\n")
 		fmt.Fprintf(os.Stderr, "Usage:\n\t %s [options]\n\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "For example:\n")
 		fmt.Fprintf(os.Stderr, "\t%s -s . -i 1234\n", os.Args[0])
@@ -111,17 +115,28 @@ func main() {
 		log.Fatalf("Failed to create writer for '%s', %v", *writer_uri, err)
 	}
 
+	if *date == "" {
+		now := time.Now()
+		*date = now.Format("2006-01-02")
+	}
+
+	edtf_dt, err := parser.ParseString(*date)
+
+	if err != nil {
+		log.Fatalf("Failed to parse date string, %v", err)
+	}
+
 	for _, id := range ids {
 
-		err := deprecateId(ctx, r, wr, ex, id, superseded_by)
+		err := cessateId(ctx, r, wr, ex, id, edtf_dt, superseded_by)
 
 		if err != nil {
-			log.Fatalf("Failed to deprecate record for '%d', %v", id, err)
+			log.Fatalf("Failed to cessate record for '%d', %v", id, err)
 		}
 	}
 }
 
-func deprecateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, id int64, superseded_by multi.MultiInt64) error {
+func cessateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, id int64, dt *edtf.EDTFDate, superseded_by multi.MultiInt64) error {
 
 	body, err := wof_reader.LoadBytesFromID(ctx, r, id)
 
@@ -129,11 +144,9 @@ func deprecateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex expo
 		return err
 	}
 
-	now := time.Now()
-
 	to_update := map[string]interface{}{
-		"properties.edtf:deprecated": now.Format("2006-01-02"),
-		"properties.mz:is_current":   0,
+		"properties.edtf:cessation": dt.EDTF,
+		"properties.mz:is_current":  0,
 	}
 
 	if len(superseded_by) > 0 {

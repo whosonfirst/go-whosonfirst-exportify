@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/aaronland/go-json-query v0.1.0
 	github.com/paulmach/orb v0.2.2
+	github.com/sfomuseum/go-edtf v0.2.4
 	github.com/sfomuseum/go-flags v0.8.2
 	github.com/tidwall/gjson v1.9.1
 	github.com/tidwall/sjson v1.2.2

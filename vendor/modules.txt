@@ -47,6 +47,7 @@ github.com/psanford/sqlite3vfs
 # github.com/psanford/sqlite3vfshttp v0.0.0-20210810192816-7ed3ddba507d
 github.com/psanford/sqlite3vfshttp
 # github.com/sfomuseum/go-edtf v0.2.4
+## explicit
 github.com/sfomuseum/go-edtf
 github.com/sfomuseum/go-edtf/calendar
 github.com/sfomuseum/go-edtf/common

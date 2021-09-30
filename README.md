@@ -177,6 +177,40 @@ $> ./bin/assign-parent \
 	-id 1477855939 -id 1477855941 -id 1477855943 -id 1477855945 -id 1477855947 -id 1477855949 1477855955
 ```
 
+### cessate
+
+"Cessate" one or more Who's On First IDs (assign an `edtf:cessation` property and assign `mz:is_current=0`).
+
+```
+> ./bin/cessate -h
+"Cessate" one or more Who's On First IDs.
+
+Usage:
+	 ./bin/cessate [options]
+
+For example:
+	./bin/cessate -s . -i 1234
+	./bin/cessate -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678
+
+Valid options are:
+  -date string
+    	A valid EDTF date. If empty then the current date will be used
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export URI. (default "whosonfirst://")
+  -i string
+    	A valid Who's On First ID.
+  -id value
+    	One or more Who's On First IDs. If left empty the value of the -i flag will be used.
+  -reader-uri string
+    	A valid whosonfirst/go-reader URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
+  -s string
+    	A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.
+  -superseded-by value
+    	Zero or more Who's On First IDs that the records being deprecated are superseded by.
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
+```
+
 ### create
 
 Create a new Who's On First record.

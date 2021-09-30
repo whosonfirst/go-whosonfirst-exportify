@@ -4,6 +4,7 @@ cli:
 	go build -mod vendor -o bin/exportify cmd/exportify/main.go
 	go build -mod vendor -o bin/create cmd/create/main.go
 	go build -mod vendor -o bin/deprecate cmd/deprecate/main.go
+	go build -mod vendor -o bin/cessate cmd/cessate/main.go
 	go build -mod vendor -o bin/ensure-properties cmd/ensure-properties/main.go
 	go build -mod vendor -o bin/deprecate-and-supersede cmd/deprecate-and-supersede/main.go
 	go build -mod vendor -o bin/merge-feature-collection cmd/merge-feature-collection/main.go
