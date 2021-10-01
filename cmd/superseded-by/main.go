@@ -137,26 +137,26 @@ func supersededById(ctx context.Context, r reader.Reader, wr writer.Writer, ex e
 	}
 
 	to_update := map[string]interface{}{
-		"properties.mz:is_current":  0,
+		"properties.mz:is_current": 0,
 	}
 
 	tmp := make(map[int64]bool)
-	
+
 	for _, id := range superseded_by {
 		tmp[id] = true
 	}
-	
+
 	rsp := gjson.GetBytes(body, "properties.wof:superseded_by")
-	
+
 	for _, r := range rsp.Array() {
 		id := r.Int()
 		tmp[id] = true
 	}
-	
+
 	new_list := make([]int64, 0)
-	
+
 	for id, _ := range tmp {
-		
+
 		switch id {
 		case 0, -1:
 			continue
@@ -164,7 +164,7 @@ func supersededById(ctx context.Context, r reader.Reader, wr writer.Writer, ex e
 			new_list = append(new_list, id)
 		}
 	}
-	
+
 	to_update["properties.wof:superseded_by"] = new_list
 
 	new_body, err := export.AssignProperties(ctx, body, to_update)
@@ -182,6 +182,8 @@ func supersededById(ctx context.Context, r reader.Reader, wr writer.Writer, ex e
 	return nil
 }
 
+// To do: Reconcile this with equivalent code in cmd/deprecate
+
 // supersedesId ensures that 'id' is present in the `wof:supersedes` property of all the records defined by 'superseded_by'.
 func supersedesId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, superseded_by multi.MultiInt64, id int64) error {
 
@@ -192,25 +194,23 @@ func supersedesId(ctx context.Context, r reader.Reader, wr writer.Writer, ex exp
 		if err != nil {
 			return fmt.Errorf("Failed to load record for %d, %w", sid, err)
 		}
-		
-		to_update := map[string]interface{}{
 
-		}
-		
+		to_update := map[string]interface{}{}
+
 		tmp := make(map[int64]bool)
 		tmp[id] = true
-	
+
 		rsp := gjson.GetBytes(body, "properties.wof:supersedes")
-		
+
 		for _, r := range rsp.Array() {
 			id := r.Int()
 			tmp[id] = true
 		}
-		
+
 		new_list := make([]int64, 0)
-		
+
 		for id, _ := range tmp {
-			
+
 			switch id {
 			case 0, -1:
 				continue
@@ -218,7 +218,7 @@ func supersedesId(ctx context.Context, r reader.Reader, wr writer.Writer, ex exp
 				new_list = append(new_list, id)
 			}
 		}
-	
+
 		to_update["properties.wof:supersedes"] = new_list
 
 		new_body, err := export.AssignProperties(ctx, body, to_update)
@@ -226,9 +226,9 @@ func supersedesId(ctx context.Context, r reader.Reader, wr writer.Writer, ex exp
 		if err != nil {
 			return fmt.Errorf("Failed to assign properties for %d, %w", sid, err)
 		}
-		
+
 		err = exportify.ExportWithWriter(ctx, ex, wr, new_body)
-		
+
 		if err != nil {
 			return fmt.Errorf("Failed to write data for %d", sid, err)
 		}

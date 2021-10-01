@@ -172,5 +172,76 @@ func deprecateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex expo
 		return err
 	}
 
-	return exportify.ExportWithWriter(ctx, ex, wr, new_body)
+	err = exportify.ExportWithWriter(ctx, ex, wr, new_body)
+
+	if err != nil {
+		return fmt.Errorf("Failed to write %d, %w", id, err)
+	}
+
+	if len(superseded_by) > 0 {
+
+		err = supersedesId(ctx, r, wr, ex, superseded_by, id)
+
+		if err != nil {
+			log.Fatalf("Failed to update wof:supersedes properties for superseding records, %v", err)
+		}
+	}
+
+	return nil
+}
+
+// To do: Reconcile this with equivalent code in cmd/superseded-by
+
+// supersedesId ensures that 'id' is present in the `wof:supersedes` property of all the records defined by 'superseded_by'.
+func supersedesId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, superseded_by multi.MultiInt64, id int64) error {
+
+	for _, sid := range superseded_by {
+
+		body, err := wof_reader.LoadBytesFromID(ctx, r, sid)
+
+		if err != nil {
+			return fmt.Errorf("Failed to load record for %d, %w", sid, err)
+		}
+
+		to_update := map[string]interface{}{}
+
+		tmp := make(map[int64]bool)
+		tmp[id] = true
+
+		rsp := gjson.GetBytes(body, "properties.wof:supersedes")
+
+		for _, r := range rsp.Array() {
+			id := r.Int()
+			tmp[id] = true
+		}
+
+		new_list := make([]int64, 0)
+
+		for id, _ := range tmp {
+
+			switch id {
+			case 0, -1:
+				continue
+			default:
+				new_list = append(new_list, id)
+			}
+		}
+
+		to_update["properties.wof:supersedes"] = new_list
+
+		new_body, err := export.AssignProperties(ctx, body, to_update)
+
+		if err != nil {
+			return fmt.Errorf("Failed to assign properties for %d, %w", sid, err)
+		}
+
+		err = exportify.ExportWithWriter(ctx, ex, wr, new_body)
+
+		if err != nil {
+			return fmt.Errorf("Failed to write data for %d", sid, err)
+		}
+
+	}
+
+	return nil
 }
