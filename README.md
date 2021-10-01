@@ -655,6 +655,37 @@ $> ./bin/rename-property \
 2021/05/11 13:33:55 time to index paths (1) 180.656951ms
 ```
 
+### supersede
+
+The `supersede` tool will update the `wof:superseded_by` and `wof:supersedes` properties for one or more sets of Who's On First records. Additionally it will assign the `mz:is_current=0` property for the records being superseded.
+
+```
+> ./bin/supersede -h
+"Supersede" one or more Who's On First IDs.
+
+Usage:
+	 ./bin/supersede [options]
+
+For example:
+	./bin/supersede -reader-uri fs:///usr/local/data/sfomuseum-data-enterprise/data -id 1159286017 -superseded-by 1159283849
+
+Valid options are:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export URI. (default "whosonfirst://")
+  -i string
+    	A valid Who's On First ID.
+  -id value
+    	One or more Who's On First IDs. If left empty the value of the -i flag will be used.
+  -reader-uri string
+    	A valid whosonfirst/go-reader URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
+  -s string
+    	A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.
+  -superseded-by value
+    	Zero or more Who's On First IDs that the records being deprecated are superseded by.
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
+```
+
 ### supersede-with-parent
 
 Supersede one or more WOF records with a known parent ID (and hierarchy).
