@@ -1,4 +1,4 @@
-// supersede will update the `wof:superseded_by` and `wof:supersedes` properties for one or more sets of Who's On First records.
+// superseded-by will update the `wof:superseded_by` and `wof:supersedes` properties for one or more sets of Who's On First records.
 // Additionally it will assign the `mz:is_current=0` property for the records being superseded.
 package main
 
@@ -32,14 +32,14 @@ func main() {
 	flag.Var(&ids, "id", "One or more Who's On First IDs. If left empty the value of the -i flag will be used.")
 
 	var superseded_by multi.MultiInt64
-	flag.Var(&superseded_by, "superseded-by", "Zero or more Who's On First IDs that the records being deprecated are superseded by.")
+	flag.Var(&superseded_by, "by", "Zero or more Who's On First IDs that the records being deprecated are superseded by.")
 
 	flag.Usage = func() {
 
 		fmt.Fprintf(os.Stderr, "\"Supersede\" one or more Who's On First IDs.\n\n")
 		fmt.Fprintf(os.Stderr, "Usage:\n\t %s [options]\n\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "For example:\n")
-		fmt.Fprintf(os.Stderr, "\t%s -reader-uri fs:///usr/local/data/sfomuseum-data-enterprise/data -id 1159286017 -superseded-by 1159283849\n\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "\t%s -reader-uri fs:///usr/local/data/sfomuseum-data-enterprise/data -id 1159286017 -by 1159283849\n\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "Valid options are:\n")
 		flag.PrintDefaults()
 	}
