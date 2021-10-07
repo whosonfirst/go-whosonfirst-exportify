@@ -16,6 +16,7 @@ github.com/aaronland/go-brooklynintegers-api v1.0.2/go.mod h1:JlR7i6vciy3W0aMnid
 github.com/aaronland/go-brooklynintegers-api v1.1.0 h1:eyoSZjn3Qiy79H+1rG/HtkEShNBZkPUWs4YKpFWkuD8=
 github.com/aaronland/go-brooklynintegers-api v1.1.0/go.mod h1:agceH8JW8PcdHGCyKEDmOntccB3m7xUKrUejHpxAs6U=
 github.com/aaronland/go-http-cache v0.0.1/go.mod h1:CvRIJ5/CDx9B5Y3NhoARDTjqWRM4lnABz2/QXejG8F4=
+github.com/aaronland/go-http-ping v1.0.0/go.mod h1:zU9CSFLh2XzPlrFgoyCysNED+DoLRioCKaa2Kl+O6DA=
 github.com/aaronland/go-http-server v0.0.5/go.mod h1:6dtsZDrQG0XvUOCL0eaHsUw+7gw3Xa/Nm+XofvkSw2w=
 github.com/aaronland/go-http-server v0.0.6/go.mod h1:6dtsZDrQG0XvUOCL0eaHsUw+7gw3Xa/Nm+XofvkSw2w=
 github.com/aaronland/go-json-query v0.0.2 h1:cKw/DnxtGaPsClb78ONgmXPOJkqHhaBMU2RTBbPoXos=
@@ -139,6 +140,7 @@ github.com/psanford/sqlite3vfshttp v0.0.0-20210810192816-7ed3ddba507d h1:KihA6nW
 github.com/psanford/sqlite3vfshttp v0.0.0-20210810192816-7ed3ddba507d/go.mod h1:hQKK0GFcSapdHKElLpXRFo7SUvriHB22EuK+OQIpkuU=
 github.com/psanford/sqlite3vfshttp v0.0.0-20210815150654-07be1ade312e h1:KH9aXyBtKhgoc3XM7nBS82sN1MLUiw+XJsLBvirBVpU=
 github.com/psanford/sqlite3vfshttp v0.0.0-20210815150654-07be1ade312e/go.mod h1:fgwmd0q/GmamdQOyXby4SM/m6mBk6aTde7uJ5sxkeUA=
+github.com/rs/cors v1.7.0/go.mod h1:gFx+x8UowdsKA9AchylcLynDq+nNFfI8FkUZdN/jGCU=
 github.com/sergi/go-diff v1.0.0/go.mod h1:0CfEIISq7TuYL3j771MWULgwwjU+GofnZX9QAmXWZgo=
 github.com/sfomuseum/go-edtf v0.2.2 h1:8n1UekTCU6fkgAf3bWqG5RyQxOd9hRhy4lg91aQ3kMk=
 github.com/sfomuseum/go-edtf v0.2.2/go.mod h1:1rP0EJZ/84j3HO80vGcnG2T9MFBDAFyTNtjrr8cv3T4=
@@ -159,6 +161,8 @@ github.com/sfomuseum/go-flags v0.8.2 h1:elSU3KWMo442d1YjXu5Y/bokxvkGV+OrgAHshHZa
 github.com/sfomuseum/go-flags v0.8.2/go.mod h1:ML3DTNbF9xnjExSdS/9FtVLjIUhRU5gm/ehzISv+t2w=
 github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.0-20210212000251-b549bd7322c4 h1:Nf8cGk822Psig41YM93fj6ns37vFwgGk9NKxkKU4HYc=
 github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.0-20210212000251-b549bd7322c4/go.mod h1:SfdpHOY//gr+AjjqizhzvdMtMSkpFcNmozTITztGhN8=
+github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.1 h1:ecjCnrzs1QhSi2R2jQem0y8/6oNrvmUgyM9kMKxZjtw=
+github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.1/go.mod h1:+JVebjhj6f3H3ESBlO1b5pkzS2ZxaqnpUyCHxA8/too=
 github.com/sirupsen/logrus v1.4.1/go.mod h1:ni0Sbl8bgC9z8RoU9G6nDWqqs/fq4eDPysMBDgk/93Q=
 github.com/sirupsen/logrus v1.4.2/go.mod h1:tLMulIdttU9McNUspp0xgXVQah82FyeX6MwdIuYE2rE=
 github.com/skelterjohn/geom v0.0.0-20180103142417-96f3e8a219c5 h1:qQF/q/+xaKD4CAVz3zfuvpij8U4ihSGIhHfOROI4NFc=
@@ -274,6 +278,8 @@ github.com/whosonfirst/go-whosonfirst-export/v2 v2.3.5 h1:vK+KcvyMKae/OYsbwAU5LC
 github.com/whosonfirst/go-whosonfirst-export/v2 v2.3.5/go.mod h1:O/2L+z5U6TGBRiKThePlJ5/3n/TZJ9Tcu3ZybW9WB7I=
 github.com/whosonfirst/go-whosonfirst-feature v0.0.12 h1:SNZdeOhQ4XXid4g4iJ5/H6y0tU4rOGn/41M/knVgFMM=
 github.com/whosonfirst/go-whosonfirst-feature v0.0.12/go.mod h1:NhUZ9XDyqQiOipFIBvbmixwfM6jtSzP2lX5dxcWX5uw=
+github.com/whosonfirst/go-whosonfirst-feature v0.0.13 h1:97oh/+s78YhDMRA+AUPCvphXzQVOZmMBNKXitPLADlI=
+github.com/whosonfirst/go-whosonfirst-feature v0.0.13/go.mod h1:NhUZ9XDyqQiOipFIBvbmixwfM6jtSzP2lX5dxcWX5uw=
 github.com/whosonfirst/go-whosonfirst-flags v0.1.0 h1:llb2wtsI2y+gHZCmWaamMCx4YDRE8ZXQRRYqC7qB4so=
 github.com/whosonfirst/go-whosonfirst-flags v0.1.0/go.mod h1:bovMiQphaVhqemXFmNVf9Ts0tqnWtzHRFMUSKX+zTE8=
 github.com/whosonfirst/go-whosonfirst-flags v0.2.0/go.mod h1:ECd0AJJZIlybmjTGB9z+CPz9pSiMTwxur7fPKmDnoqI=
@@ -351,6 +357,8 @@ github.com/whosonfirst/go-whosonfirst-spatial-hierarchy v0.0.1 h1:iunSI4XLDvUrVi
 github.com/whosonfirst/go-whosonfirst-spatial-hierarchy v0.0.1/go.mod h1:9V1J67yGA3AqgRxcRmvglpe3Fy6qVbdWmwgze1t7/34=
 github.com/whosonfirst/go-whosonfirst-spatial-hierarchy v0.0.2 h1:de+WbDa4U8w8N/c1LanxgVpdPp0RvNMB1Ph80UKQlLQ=
 github.com/whosonfirst/go-whosonfirst-spatial-hierarchy v0.0.2/go.mod h1:21V6pNiMOZSD3UdaNvqa8mYqB9UZBGvogmPewc3DfHA=
+github.com/whosonfirst/go-whosonfirst-spatial-hierarchy v0.0.3 h1:j+IATDvTtjXwrEeBiAktCBQnWwTN9etnJ8nlvx5lRg4=
+github.com/whosonfirst/go-whosonfirst-spatial-hierarchy v0.0.3/go.mod h1:Qcw+fgQ9T1UFwixPstue8kjoGcDVURDZ1FrCtQk9R0s=
 github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.0.38 h1:x7jsV9DKOHP2NhdrsnUdLakI4PdwSjY0aAMe6iHA5mM=
 github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.0.38/go.mod h1:VEHNyWHTUsM5GmxnMw7CntiD3mWni9hEFszQdfLdzqI=
 github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.0.39 h1:ifyd4h/2yt5rUKetNrJtCYzRhykv8AMmBDTlY0HG1Pc=
