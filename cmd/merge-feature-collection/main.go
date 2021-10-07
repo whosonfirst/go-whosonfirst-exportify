@@ -12,7 +12,7 @@ import (
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-reader"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	"github.com/whosonfirst/go-whosonfirst-iterate/iterator"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
@@ -91,7 +91,7 @@ func main() {
 			}
 		}
 
-		lookup_cb := func(ctx context.Context, fh io.ReadSeeker, args ...interface{}) error {
+		lookup_cb := func(ctx context.Context, path string, fh io.ReadSeeker, args ...interface{}) error {
 
 			body, err := ioutil.ReadAll(fh)
 

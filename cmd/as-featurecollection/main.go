@@ -12,8 +12,8 @@ import (
 	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/geojson"
 	"github.com/paulmach/orb/planar"
-	"github.com/whosonfirst/go-whosonfirst-iterate/emitter"
-	"github.com/whosonfirst/go-whosonfirst-iterate/iterator"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
 	"github.com/whosonfirst/go-writer"
 	"io"
 	"log"
@@ -27,7 +27,7 @@ const SCHEME_FEATURECOLLECTION string = "featurecollection://"
 func main() {
 
 	emitter_schemes := strings.Join(emitter.Schemes(), ",")
-	emitter_desc := fmt.Sprintf("A valid whosonfirst/go-whosonfirst-iterator/emitter URI. Supported emitter URI schemes are: %s", emitter_schemes)
+	emitter_desc := fmt.Sprintf("A valid whosonfirst/go-whosonfirst-iterator/v2 URI. Supported emitter URI schemes are: %s", emitter_schemes)
 
 	schemes := make([]string, 0)
 
@@ -85,7 +85,7 @@ func main() {
 
 	defer wr.Close(ctx)
 
-	iter_cb := func(ctx context.Context, fh io.ReadSeeker, args ...interface{}) error {
+	iter_cb := func(ctx context.Context, path string, fh io.ReadSeeker, args ...interface{}) error {
 
 		if *as_multipoints {
 

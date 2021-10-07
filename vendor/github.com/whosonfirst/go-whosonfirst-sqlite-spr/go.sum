@@ -1,6 +1,8 @@
 github.com/PuerkitoBio/goquery v1.5.1/go.mod h1:GsLWisAFVj4WgDibEWF4pvYnkVQBpKBKeU+7zCJoLcc=
 github.com/aaronland/go-sqlite v0.0.3 h1:pa8L74JdbkmONxqLqMqZFZtHpARHM46JmX1A/hZ44KU=
 github.com/aaronland/go-sqlite v0.0.3/go.mod h1:b/FfLh8xBZ1dhjyehPsFli46VhGqWAz2rKR4udvTHJw=
+github.com/aaronland/go-sqlite v0.0.5 h1:ak6Ee2AyXIcE+8ZInib2qy4k2NSDIQeZKiL9bEZW6S4=
+github.com/aaronland/go-sqlite v0.0.5/go.mod h1:91mdgKDJ1RXxvXH6RYvBhi2gqCX7TnRCCZThx1ZQx5M=
 github.com/andybalholm/cascadia v1.1.0/go.mod h1:GsXiBklL0woXo1j/WYWtSYYC4ouU9PqHO0sqidkEA4Y=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/go-ini/ini v1.42.0/go.mod h1:ByCAeIL28uOIIG0E3PJtZPDL8WnHpFKFOtgjp+3Ies8=
@@ -17,8 +19,13 @@ github.com/pkg/errors v0.8.0/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINE
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/psanford/sqlite3vfs v0.0.0-20210810192024-980beb1874e4 h1:Oun5zFH1CMQCKAS4hWzHX/SaysoOAhOiDqBkKj3n1/w=
 github.com/psanford/sqlite3vfs v0.0.0-20210810192024-980beb1874e4/go.mod h1:4CnLWpNEluUrLmUVLGEvkn0ZSEm9zdZmTtUlKRZp5Ag=
+github.com/psanford/sqlite3vfs v0.0.0-20210815004946-a82d70c653ce/go.mod h1:iW4cSew5PAb1sMZiTEkVJAIBNrepaB6jTYjeP47WtI0=
+github.com/psanford/sqlite3vfs v0.0.0-20210823054414-6197b9fad12f h1:QiyAANPBaECR1F2ejYGIn7zxvLrLPk7bDp2Q9Ha6f34=
+github.com/psanford/sqlite3vfs v0.0.0-20210823054414-6197b9fad12f/go.mod h1:iW4cSew5PAb1sMZiTEkVJAIBNrepaB6jTYjeP47WtI0=
 github.com/psanford/sqlite3vfshttp v0.0.0-20210810192816-7ed3ddba507d h1:KihA6nWlH32n8xWltDBwUWvjWk1vbclEm2TdVUr8g4U=
 github.com/psanford/sqlite3vfshttp v0.0.0-20210810192816-7ed3ddba507d/go.mod h1:hQKK0GFcSapdHKElLpXRFo7SUvriHB22EuK+OQIpkuU=
+github.com/psanford/sqlite3vfshttp v0.0.0-20210815150654-07be1ade312e h1:KH9aXyBtKhgoc3XM7nBS82sN1MLUiw+XJsLBvirBVpU=
+github.com/psanford/sqlite3vfshttp v0.0.0-20210815150654-07be1ade312e/go.mod h1:fgwmd0q/GmamdQOyXby4SM/m6mBk6aTde7uJ5sxkeUA=
 github.com/sfomuseum/go-edtf v0.2.2 h1:8n1UekTCU6fkgAf3bWqG5RyQxOd9hRhy4lg91aQ3kMk=
 github.com/sfomuseum/go-edtf v0.2.2/go.mod h1:1rP0EJZ/84j3HO80vGcnG2T9MFBDAFyTNtjrr8cv3T4=
 github.com/sfomuseum/go-edtf v0.2.3 h1:wpcpwl1RD9W/sXFDi4zpoIpQcIwIk8em9CGwa7YWv4g=

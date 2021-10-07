@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/whosonfirst/go-reader"
-	"github.com/whosonfirst/go-whosonfirst-iterate/emitter"
-	"github.com/whosonfirst/go-whosonfirst-iterate/filters"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/filters"
 	"github.com/whosonfirst/go-whosonfirst-uri"
 	"net/url"
 )
@@ -94,6 +94,5 @@ func (idx *ReaderEmitter) WalkURI(ctx context.Context, index_cb emitter.EmitterC
 		}
 	}
 
-	ctx = emitter.AssignPathContext(ctx, rel_path)
-	return index_cb(ctx, fh)
+	return index_cb(ctx, rel_path, fh)
 }

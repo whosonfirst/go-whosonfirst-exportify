@@ -7,8 +7,7 @@ import (
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	"github.com/whosonfirst/go-whosonfirst-iterate/emitter"
-	"github.com/whosonfirst/go-whosonfirst-iterate/iterator"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
 	"io"
@@ -18,7 +17,7 @@ import (
 
 func main() {
 
-	iterator_uri := flag.String("indexer-uri", "repo://", "A valid whosonfirst/go-whosonfirst-iterate/emitter URI.")
+	iterator_uri := flag.String("indexer-uri", "repo://", "A valid whosonfirst/go-whosonfirst-iterate/v2 URI.")
 	exporter_uri := flag.String("exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export URI.")
 	writer_uri := flag.String("writer-uri", "null://", "A valid whosonfirst/go-writer URI.")
 
@@ -41,13 +40,7 @@ func main() {
 		log.Fatalf("Failed to create writer for '%s', %v", *writer_uri, err)
 	}
 
-	cb := func(ctx context.Context, fh io.ReadSeeker, args ...interface{}) error {
-
-		path, err := emitter.PathForContext(ctx)
-
-		if err != nil {
-			return err
-		}
+	cb := func(ctx context.Context, path string, fh io.ReadSeeker, args ...interface{}) error {
 
 		body, err := ioutil.ReadAll(fh)
 
