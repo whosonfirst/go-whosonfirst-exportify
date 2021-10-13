@@ -91,6 +91,28 @@ $> ./bin/as-featurecollection \
 1729792699
 ```
 
+### as-json
+
+Export one or more WOF records as a line-separate JSON.
+
+```
+$> ./bin/as-jsonl -h
+Export one or more WOF records as a line-separate JSON
+
+Usage:
+	 ./bin/as-jsonl [options] path-(N) path-(N)
+
+For example:
+	./bin/as-jsonl -iterator-uri 'repo://?include=properties.mz:is_current=1' /usr/local/data/sfomuseum-data-publicart/
+Valid options are:
+  -as-multipoints
+    	Output geometries as a MultiPoint array
+  -iterator-uri string
+    	A valid whosonfirst/go-whosonfirst-iterator/v2 URI. Supported emitter URI schemes are: directory://,featurecollection://,file://,filelist://,geojsonl://,null://,repo:// (default "repo://")
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI. Supported writer URI schemes are: fs://, io://, null://, stdout:// (default "stdout://")
+```
+
 ### assign-geometry
 
 Assign the geometry from a given record to one or more other records.

@@ -22,7 +22,7 @@ import (
 	"strings"
 )
 
-const SCHEME_FEATURECOLLECTION string = "featurecollection://"
+const SCHEME_JSONL string = "jsonl://"
 
 func main() {
 
@@ -33,7 +33,7 @@ func main() {
 
 	for _, s := range writer.Schemes() {
 
-		if s == SCHEME_FEATURECOLLECTION {
+		if s == SCHEME_JSONL {
 			continue
 		}
 
@@ -50,7 +50,7 @@ func main() {
 
 	flag.Usage = func() {
 
-		fmt.Fprintf(os.Stderr, "Export one or more WOF records as a GeoJSON FeatureCollection\n\n")
+		fmt.Fprintf(os.Stderr, "Export one or more WOF records as a line-separate JSON\n\n")
 		fmt.Fprintf(os.Stderr, "Usage:\n\t %s [options] path-(N) path-(N)\n\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "For example:\n")
 		fmt.Fprintf(os.Stderr, "\t%s -iterator-uri 'repo://?include=properties.mz:is_current=1' /usr/local/data/sfomuseum-data-publicart/\n", os.Args[0])
@@ -62,7 +62,7 @@ func main() {
 
 	uris := flag.Args()
 
-	if strings.HasPrefix(*writer_uri, SCHEME_FEATURECOLLECTION) {
+	if strings.HasPrefix(*writer_uri, SCHEME_JSONL) {
 		log.Fatalf("Invalid -writer-uri")
 	}
 
