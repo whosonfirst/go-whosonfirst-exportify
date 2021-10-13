@@ -21,4 +21,5 @@ require (
 	github.com/whosonfirst/go-whosonfirst-writer v0.2.3
 	github.com/whosonfirst/go-writer v0.6.0
 	github.com/whosonfirst/go-writer-featurecollection v0.0.2
+	github.com/whosonfirst/go-writer-jsonl v0.0.1
 )
