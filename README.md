@@ -91,13 +91,13 @@ $> ./bin/as-featurecollection \
 1729792699
 ```
 
-### as-json
+### as-jsonl
 
-Export one or more WOF records as a line-separate JSON.
+Export one or more WOF records as a line-separated JSON.
 
 ```
 $> ./bin/as-jsonl -h
-Export one or more WOF records as a line-separate JSON
+Export one or more WOF records as a line-separated JSON
 
 Usage:
 	 ./bin/as-jsonl [options] path-(N) path-(N)
@@ -111,6 +111,18 @@ Valid options are:
     	A valid whosonfirst/go-whosonfirst-iterator/v2 URI. Supported emitter URI schemes are: directory://,featurecollection://,file://,filelist://,geojsonl://,null://,repo:// (default "repo://")
   -writer-uri string
     	A valid whosonfirst/go-writer URI. Supported writer URI schemes are: fs://, io://, null://, stdout:// (default "stdout://")
+```
+
+For example:
+
+```
+$> ./bin/as-jsonl \
+	-iterator-uri 'repo://?include=properties.wof:placetype=timezone' \
+	/usr/local/data/whosonfirst-data-admin-xy \
+| wc -l
+
+2021/10/14 09:54:07 time to index paths (1) 2.475059637s
+     376
 ```
 
 ### assign-geometry

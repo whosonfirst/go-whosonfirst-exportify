@@ -202,7 +202,61 @@ func (r *SQLiteSpatialDatabase) IndexFeature(ctx context.Context, body []byte) e
 }
 
 func (r *SQLiteSpatialDatabase) RemoveFeature(ctx context.Context, id string) error {
-	return fmt.Errorf("Not implemented.")
+
+	conn, err := r.db.Conn()
+
+	if err != nil {
+		return fmt.Errorf("Failed to establish database connection, %w", err)
+	}
+
+	tx, err := conn.Begin()
+
+	if err != nil {
+		return fmt.Errorf("Failed to create transaction, %w", err)
+	}
+
+	defer tx.Rollback()
+
+	tables := []sqlite.Table{
+		r.rtree_table,
+		r.spr_table,
+	}
+
+	if r.geojson_table != nil {
+		tables = append(tables, r.geojson_table)
+	}
+
+	for _, t := range tables {
+
+		var q string
+
+		switch t.Name() {
+		case "rtree":
+			q = fmt.Sprintf("DELETE FROM %s WHERE wof_id = ?", t.Name())
+		default:
+			q = fmt.Sprintf("DELETE FROM %s WHERE id = ?", t.Name())
+		}
+
+		stmt, err := tx.Prepare(q)
+
+		if err != nil {
+			return fmt.Errorf("Failed to create query statement for %s, %w", t.Name(), err)
+		}
+
+		_, err = stmt.ExecContext(ctx, id)
+
+		if err != nil {
+			return fmt.Errorf("Failed execute query statement for %s, %w", t.Name(), err)
+		}
+	}
+
+	err = tx.Commit()
+
+	if err != nil {
+		return fmt.Errorf("Failed to commit transaction, %w", err)
+	}
+
+	return nil
 }
 
 func (r *SQLiteSpatialDatabase) PointInPolygon(ctx context.Context, coord *orb.Point, filters ...spatial.Filter) (spr.StandardPlacesResults, error) {
@@ -378,8 +432,6 @@ func (r *SQLiteSpatialDatabase) getIntersectsByRect(ctx context.Context, rect *o
 
 	rows, err := conn.QueryContext(ctx, q, minx, maxx, miny, maxy)
 
-	// fmt.Println(q, minx, miny, maxx, maxy)
-
 	if err != nil {
 		return nil, fmt.Errorf("SQL query failed, %w", err)
 	}
@@ -517,8 +569,16 @@ func (r *SQLiteSpatialDatabase) inflateSpatialIndexWithChannels(ctx context.Cont
 	// ID
 
 	mu.Lock()
+	defer mu.Unlock()
+
+	// Check to see whether seen[feature_id] has been assigned by another process
+	// while waiting for mu to become available
+
+	if seen[feature_id] {
+		return
+	}
+
 	seen[feature_id] = true
-	mu.Unlock()
 
 	t4 := time.Now()
 
@@ -543,7 +603,7 @@ func (r *SQLiteSpatialDatabase) inflateSpatialIndexWithChannels(ctx context.Cont
 		err = filter.FilterSPR(f, s)
 
 		if err != nil {
-			r.Logger.Printf("SKIP %s because filter error %s", sp_id, err)
+			// r.Logger.Printf("SKIP %s because filter error %s", sp_id, err)
 			return
 		}
 	}
