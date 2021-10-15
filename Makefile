@@ -13,3 +13,4 @@ cli:
 	go build -mod vendor -o bin/as-featurecollection cmd/as-featurecollection/main.go
 	go build -mod vendor -o bin/as-jsonl cmd/as-jsonl/main.go
 	go build -mod vendor -o bin/rename-property cmd/rename-property/main.go
+	go build -mod vendor -o bin/remove-properties cmd/remove-properties/main.go
