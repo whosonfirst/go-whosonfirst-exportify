@@ -4,14 +4,15 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/sfomuseum/go-flags/multi"
-	"github.com/whosonfirst/go-reader"
-	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	"github.com/whosonfirst/go-whosonfirst-exportify"
-	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
-	"github.com/whosonfirst/go-writer"
 	"log"
 	"os"
+
+	"github.com/sfomuseum/go-flags/multi"
+	"github.com/whosonfirst/go-reader"
+	export "github.com/whosonfirst/go-whosonfirst-export/v2"
+	exportify "github.com/whosonfirst/go-whosonfirst-exportify"
+	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
+	"github.com/whosonfirst/go-writer"
 )
 
 func main() {
@@ -100,7 +101,7 @@ func main() {
 		err = exportify.ExportWithWriter(ctx, ex, wr, new_f)
 
 		if err != nil {
-			log.Fatalf("Failed to export new feature, %v", id, err)
+			log.Fatalf("Failed to export new feature '%d', %v", id, err)
 		}
 	}
 

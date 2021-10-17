@@ -3,16 +3,17 @@ package main
 import (
 	"context"
 	"flag"
-	_ "github.com/sfomuseum/go-flags/multi"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
-	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
-	"github.com/whosonfirst/go-writer"
 	"io"
 	"io/ioutil"
 	"log"
+
+	_ "github.com/sfomuseum/go-flags/multi"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
+	export "github.com/whosonfirst/go-whosonfirst-export/v2"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	"github.com/whosonfirst/go-writer"
 )
 
 func main() {

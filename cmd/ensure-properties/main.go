@@ -3,17 +3,18 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/sfomuseum/go-flags/multi"
-	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	"github.com/whosonfirst/go-whosonfirst-exportify"
-	_ "github.com/whosonfirst/go-whosonfirst-iterate-reader"
-	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
-	"github.com/whosonfirst/go-whosonfirst-uri"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
-	"github.com/whosonfirst/go-writer"
 	"io"
 	"io/ioutil"
 	"log"
+
+	"github.com/sfomuseum/go-flags/multi"
+	export "github.com/whosonfirst/go-whosonfirst-export/v2"
+	exportify "github.com/whosonfirst/go-whosonfirst-exportify"
+	_ "github.com/whosonfirst/go-whosonfirst-iterate-reader"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
+	uri "github.com/whosonfirst/go-whosonfirst-uri"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	"github.com/whosonfirst/go-writer"
 )
 
 func main() {

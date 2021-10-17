@@ -1,25 +1,23 @@
 package main
 
 import (
-	_ "github.com/whosonfirst/go-writer-jsonl"
-)
-
-import (
 	"bytes"
 	"context"
 	"flag"
 	"fmt"
+	"io"
+	"log"
+	"net/url"
+	"os"
+	"strings"
+
 	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/geojson"
 	"github.com/paulmach/orb/planar"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
 	"github.com/whosonfirst/go-writer"
-	"io"
-	"log"
-	"net/url"
-	"os"
-	"strings"
+	_ "github.com/whosonfirst/go-writer-jsonl"
 )
 
 const SCHEME_JSONL string = "jsonl://"
@@ -135,7 +133,7 @@ func main() {
 				geom = orb.MultiPoint(points)
 
 			default:
-				return fmt.Errorf("Unsupported geometry type %s", geom.GeoJSONType)
+				return fmt.Errorf("Unsupported geometry type %s", geom.GeoJSONType())
 			}
 
 			f.Geometry = geom
@@ -162,7 +160,7 @@ func main() {
 	err = iter.IterateURIs(ctx, uris...)
 
 	if err != nil {
-		log.Fatal("Failed to iterate URIs, %v", err)
+		log.Fatalf("Failed to iterate URIs, %v", err)
 	}
 
 }

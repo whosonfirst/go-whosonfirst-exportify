@@ -4,16 +4,17 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/sfomuseum/go-flags/multi"
-	_ "github.com/whosonfirst/go-whosonfirst-iterate-reader"
-	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
-	"github.com/whosonfirst/go-whosonfirst-uri"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
-	"github.com/whosonfirst/go-writer"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"	
 	"io"
 	"log"
+
+	"github.com/sfomuseum/go-flags/multi"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
+	_ "github.com/whosonfirst/go-whosonfirst-iterate-reader"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
+	uri "github.com/whosonfirst/go-whosonfirst-uri"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	"github.com/whosonfirst/go-writer"
 )
 
 func main() {
@@ -59,16 +60,16 @@ func main() {
 
 			rsp := gjson.GetBytes(body, path)
 
-			if !rsp.Exists(){
+			if !rsp.Exists() {
 				continue
 			}
 
 			var err error
-			
+
 			body, err = sjson.DeleteBytes(body, path)
-			
+
 			if err != nil {
-				return fmt.Errorf("Failed to delete %s, %w", path, err)
+				return fmt.Errorf("failed to delete %s, %w", path, err)
 			}
 
 			changed = true
@@ -77,7 +78,7 @@ func main() {
 		if !changed {
 			return nil
 		}
-		
+
 		err = wof_writer.WriteFeatureBytes(ctx, wr, body)
 
 		if err != nil {

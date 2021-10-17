@@ -4,18 +4,19 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/sfomuseum/go-flags/multi"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
-	"github.com/whosonfirst/go-reader"
-	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
-	"github.com/whosonfirst/go-writer"
 	"log"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/sfomuseum/go-flags/multi"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
+	"github.com/whosonfirst/go-reader"
+	export "github.com/whosonfirst/go-whosonfirst-export/v2"
+	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	"github.com/whosonfirst/go-writer"
 )
 
 func main() {
@@ -94,7 +95,7 @@ func main() {
 		err := ids.Set(*id)
 
 		if err != nil {
-			log.Fatalf("Failed to assign '%d' (-id) flag, %v", *id, err)
+			log.Fatalf("Failed to assign '%s' (-id) flag, %v", *id, err)
 		}
 	}
 
@@ -171,7 +172,7 @@ func replaceId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export
 	id_rsp := gjson.GetBytes(new_body, "properties.wof:id")
 
 	if !id_rsp.Exists() {
-		return -1, fmt.Errorf("Failed to derive new properties.wof:id property for record superseding '%d'", old_id)
+		return -1, fmt.Errorf("failed to derive new properties.wof:id property for record superseding '%d'", old_id)
 	}
 
 	new_id := id_rsp.Int()

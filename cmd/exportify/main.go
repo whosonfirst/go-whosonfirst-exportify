@@ -4,16 +4,17 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/sfomuseum/go-flags/multi"
-	"github.com/whosonfirst/go-reader"
-	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
-	"github.com/whosonfirst/go-writer"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/sfomuseum/go-flags/multi"
+	"github.com/whosonfirst/go-reader"
+	export "github.com/whosonfirst/go-whosonfirst-export/v2"
+	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	"github.com/whosonfirst/go-writer"
 )
 
 func main() {
@@ -83,7 +84,7 @@ func main() {
 		err := ids.Set(*id)
 
 		if err != nil {
-			log.Fatalf("Failed to assign '%d' (-id) flag, %v", *id, err)
+			log.Fatalf("Failed to assign '%s' (-id) flag, %v", *id, err)
 		}
 	}
 

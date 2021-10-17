@@ -4,19 +4,20 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
+	"os"
+	"path/filepath"
+	"time"
+
 	"github.com/sfomuseum/go-edtf"
 	"github.com/sfomuseum/go-edtf/parser"
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/tidwall/gjson"
 	"github.com/whosonfirst/go-reader"
-	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	"github.com/whosonfirst/go-whosonfirst-exportify"
+	export "github.com/whosonfirst/go-whosonfirst-export/v2"
+	exportify "github.com/whosonfirst/go-whosonfirst-exportify"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	"github.com/whosonfirst/go-writer"
-	"log"
-	"os"
-	"path/filepath"
-	"time"
 )
 
 func main() {
@@ -91,7 +92,7 @@ func main() {
 		err := ids.Set(*id)
 
 		if err != nil {
-			log.Fatalf("Failed to assign '%d' (-id) flag, %v", *id, err)
+			log.Fatalf("Failed to assign '%s' (-id) flag, %v", *id, err)
 		}
 	}
 
@@ -166,7 +167,7 @@ func cessateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export
 
 		new_list := make([]int64, 0)
 
-		for id, _ := range tmp {
+		for id := range tmp {
 
 			switch id {
 			case 0, -1:

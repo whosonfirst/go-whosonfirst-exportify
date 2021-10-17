@@ -6,16 +6,17 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/sfomuseum/go-flags/multi"
-	"github.com/tidwall/gjson"
-	"github.com/whosonfirst/go-reader"
-	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	"github.com/whosonfirst/go-whosonfirst-exportify"
-	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
-	"github.com/whosonfirst/go-writer"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/sfomuseum/go-flags/multi"
+	"github.com/tidwall/gjson"
+	"github.com/whosonfirst/go-reader"
+	export "github.com/whosonfirst/go-whosonfirst-export/v2"
+	exportify "github.com/whosonfirst/go-whosonfirst-exportify"
+	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
+	"github.com/whosonfirst/go-writer"
 )
 
 func main() {
@@ -87,7 +88,7 @@ func main() {
 		err := ids.Set(*id)
 
 		if err != nil {
-			log.Fatalf("Failed to assign '%d' (-id) flag, %v", *id, err)
+			log.Fatalf("Failed to assign '%s' (-id) flag, %v", *id, err)
 		}
 	}
 
@@ -155,7 +156,7 @@ func supersededById(ctx context.Context, r reader.Reader, wr writer.Writer, ex e
 
 	new_list := make([]int64, 0)
 
-	for id, _ := range tmp {
+	for id := range tmp {
 
 		switch id {
 		case 0, -1:
@@ -170,13 +171,13 @@ func supersededById(ctx context.Context, r reader.Reader, wr writer.Writer, ex e
 	new_body, err := export.AssignProperties(ctx, body, to_update)
 
 	if err != nil {
-		return fmt.Errorf("Failed to assign properties for %d, %w", id, err)
+		return fmt.Errorf("failed to assign properties for %d, %w", id, err)
 	}
 
 	err = exportify.ExportWithWriter(ctx, ex, wr, new_body)
 
 	if err != nil {
-		return fmt.Errorf("Failed to write data for %d", id, err)
+		return fmt.Errorf("failed to write data for %d, %v", id, err)
 	}
 
 	return nil
@@ -192,7 +193,7 @@ func supersedesId(ctx context.Context, r reader.Reader, wr writer.Writer, ex exp
 		body, err := wof_reader.LoadBytesFromID(ctx, r, sid)
 
 		if err != nil {
-			return fmt.Errorf("Failed to load record for %d, %w", sid, err)
+			return fmt.Errorf("failed to load record for %d, %w", sid, err)
 		}
 
 		to_update := map[string]interface{}{}
@@ -209,7 +210,7 @@ func supersedesId(ctx context.Context, r reader.Reader, wr writer.Writer, ex exp
 
 		new_list := make([]int64, 0)
 
-		for id, _ := range tmp {
+		for id := range tmp {
 
 			switch id {
 			case 0, -1:
@@ -224,13 +225,13 @@ func supersedesId(ctx context.Context, r reader.Reader, wr writer.Writer, ex exp
 		new_body, err := export.AssignProperties(ctx, body, to_update)
 
 		if err != nil {
-			return fmt.Errorf("Failed to assign properties for %d, %w", sid, err)
+			return fmt.Errorf("failed to assign properties for %d, %w", sid, err)
 		}
 
 		err = exportify.ExportWithWriter(ctx, ex, wr, new_body)
 
 		if err != nil {
-			return fmt.Errorf("Failed to write data for %d", sid, err)
+			return fmt.Errorf("failed to write data for %d, %v", sid, err)
 		}
 
 	}

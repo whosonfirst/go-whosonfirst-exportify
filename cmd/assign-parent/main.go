@@ -4,16 +4,17 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
+	"os"
+
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-reader"
-	"github.com/whosonfirst/go-whosonfirst-export/v2"
+	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
-	"log"
-	"os"
 )
 
 func main() {
