@@ -1,16 +1,17 @@
+.PHONY: cli
 cli:
-	go build -mod vendor -o bin/assign-geometry cmd/assign-geometry/main.go
-	go build -mod vendor -o bin/assign-parent cmd/assign-parent/main.go
-	go build -mod vendor -o bin/exportify cmd/exportify/main.go
-	go build -mod vendor -o bin/create cmd/create/main.go
-	go build -mod vendor -o bin/deprecate cmd/deprecate/main.go
-	go build -mod vendor -o bin/cessate cmd/cessate/main.go
-	go build -mod vendor -o bin/superseded-by cmd/superseded-by/main.go
-	go build -mod vendor -o bin/ensure-properties cmd/ensure-properties/main.go
-	go build -mod vendor -o bin/deprecate-and-supersede cmd/deprecate-and-supersede/main.go
-	go build -mod vendor -o bin/merge-feature-collection cmd/merge-feature-collection/main.go
-	go build -mod vendor -o bin/supersede-with-parent cmd/supersede-with-parent/main.go
-	go build -mod vendor -o bin/as-featurecollection cmd/as-featurecollection/main.go
-	go build -mod vendor -o bin/as-jsonl cmd/as-jsonl/main.go
-	go build -mod vendor -o bin/rename-property cmd/rename-property/main.go
-	go build -mod vendor -o bin/remove-properties cmd/remove-properties/main.go
+	go build -mod vendor -o bin/wof-assign-geometry cmd/wof-assign-geometry/main.go
+	go build -mod vendor -o bin/wof-assign-parent cmd/wof-assign-parent/main.go
+	go build -mod vendor -o bin/wof-exportify cmd/wof-exportify/main.go
+	go build -mod vendor -o bin/wof-create cmd/wof-create/main.go
+	go build -mod vendor -o bin/wof-deprecate cmd/wof-deprecate/main.go
+	go build -mod vendor -o bin/wof-cessate cmd/wof-cessate/main.go
+	go build -mod vendor -o bin/wof-superseded-by cmd/wof-superseded-by/main.go
+	go build -mod vendor -o bin/wof-ensure-properties cmd/wof-ensure-properties/main.go
+	go build -mod vendor -o bin/wof-deprecate-and-supersede cmd/wof-deprecate-and-supersede/main.go
+	go build -mod vendor -o bin/wof-merge-featurecollection cmd/wof-merge-featurecollection/main.go
+	go build -mod vendor -o bin/wof-supersede-with-parent cmd/wof-supersede-with-parent/main.go
+	go build -mod vendor -o bin/wof-as-featurecollection cmd/wof-as-featurecollection/main.go
+	go build -mod vendor -o bin/wof-as-jsonl cmd/wof-as-jsonl/main.go
+	go build -mod vendor -o bin/wof-rename-property cmd/wof-rename-property/main.go
+	go build -mod vendor -o bin/wof-remove-properties cmd/wof-remove-properties/main.go
