@@ -19,29 +19,35 @@ At some point the various application might get separated out in to their own pa
 
 ```
 $> make cli
-go build -mod vendor -o bin/assign-parent cmd/assign-parent/main.go
-go build -mod vendor -o bin/exportify cmd/exportify/main.go
-go build -mod vendor -o bin/create cmd/create/main.go
-go build -mod vendor -o bin/deprecate cmd/deprecate/main.go
-go build -mod vendor -o bin/ensure-properties cmd/ensure-properties/main.go
-go build -mod vendor -o bin/deprecate-and-supersede cmd/deprecate-and-supersede/main.go
-go build -mod vendor -o bin/merge-feature-collection cmd/merge-feature-collection/main.go
-go build -mod vendor -o bin/supersede-with-parent cmd/supersede-with-parent/main.go
-go build -mod vendor -o bin/as-featurecollection cmd/as-featurecollection/main.go
+go build -mod vendor -o bin/wof-assign-geometry cmd/wof-assign-geometry/main.go
+go build -mod vendor -o bin/wof-assign-parent cmd/wof-assign-parent/main.go
+go build -mod vendor -o bin/wof-exportify cmd/wof-exportify/main.go
+go build -mod vendor -o bin/wof-create cmd/wof-create/main.go
+go build -mod vendor -o bin/wof-deprecate cmd/wof-deprecate/main.go
+go build -mod vendor -o bin/wof-cessate cmd/wof-cessate/main.go
+go build -mod vendor -o bin/wof-superseded-by cmd/wof-superseded-by/main.go
+go build -mod vendor -o bin/wof-ensure-properties cmd/wof-ensure-properties/main.go
+go build -mod vendor -o bin/wof-deprecate-and-supersede cmd/wof-deprecate-and-supersede/main.go
+go build -mod vendor -o bin/wof-merge-featurecollection cmd/wof-merge-featurecollection/main.go
+go build -mod vendor -o bin/wof-supersede-with-parent cmd/wof-supersede-with-parent/main.go
+go build -mod vendor -o bin/wof-as-featurecollection cmd/wof-as-featurecollection/main.go
+go build -mod vendor -o bin/wof-as-jsonl cmd/wof-as-jsonl/main.go
+go build -mod vendor -o bin/wof-rename-property cmd/wof-rename-property/main.go
+go build -mod vendor -o bin/wof-remove-properties cmd/wof-remove-properties/main.go
 ```
 
 As of this writing these tools may contain duplicate, or at least common, code that would be well-served from being moved in to a package or library. That hasn't happened yet.
 
-### as-featurecollection
+### wof-as-featurecollection
 
 Export one or more WOF records as a GeoJSON FeatureCollection
 
 ```
-$> ./bin/as-featurecollection -h
+$> ./bin/wof-as-featurecollection -h
 Export one or more WOF records as a GeoJSON FeatureCollection
 
 Usage:
-	 ./bin/as-featurecollection [options] path-(N) path-(N)
+	 ./bin/wof-as-featurecollection [options] path-(N) path-(N)
 
 For example:
   -as-multipoints
@@ -57,7 +63,7 @@ Valid options are:
 For example:
 
 ```
-$> ./bin/as-featurecollection \
+$> ./bin/wof-as-featurecollection \
 	-iterator-uri 'repo://?include=properties.mz:is_current=1' \
 	/usr/local/data/sfomuseum-data-publicart/ \
 | jq '.features[]["properties"]["wof:parent_id"]' \
@@ -91,19 +97,19 @@ $> ./bin/as-featurecollection \
 1729792699
 ```
 
-### as-jsonl
+### wof-as-jsonl
 
 Export one or more WOF records as a line-separated JSON.
 
 ```
-$> ./bin/as-jsonl -h
+$> ./bin/wof-as-jsonl -h
 Export one or more WOF records as a line-separated JSON
 
 Usage:
-	 ./bin/as-jsonl [options] path-(N) path-(N)
+	 ./bin/wof-as-jsonl [options] path-(N) path-(N)
 
 For example:
-	./bin/as-jsonl -iterator-uri 'repo://?include=properties.mz:is_current=1' /usr/local/data/sfomuseum-data-publicart/
+	./bin/wof-as-jsonl -iterator-uri 'repo://?include=properties.mz:is_current=1' /usr/local/data/sfomuseum-data-publicart/
 Valid options are:
   -as-multipoints
     	Output geometries as a MultiPoint array
@@ -116,7 +122,7 @@ Valid options are:
 For example:
 
 ```
-$> ./bin/as-jsonl \
+$> ./bin/wof-as-jsonl \
 	-iterator-uri 'repo://?include=properties.wof:placetype=timezone' \
 	/usr/local/data/whosonfirst-data-admin-xy \
 | wc -l
@@ -130,14 +136,14 @@ $> ./bin/as-jsonl \
 Assign the geometry from a given record to one or more other records.
 
 ```
-$> ./bin/assign-geometry -h
+$> ./bin/wof-assign-geometry -h
 Assign the geometry from a given record to one or more other records.
 
 Usage:
-	 ./bin/assign-geometry [options] target-id-(N) target-id-(N)
+	 ./bin/wof-assign-geometry [options] target-id-(N) target-id-(N)
 
 For example:
-	./bin/assign-geometry -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -source-id 1234 5678
+	./bin/wof-assign-geometry -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -source-id 1234 5678
 
 Valid options are:
   -exporter-uri string
@@ -163,7 +169,7 @@ $> /usr/local/whosonfirst/go-whosonfirst-travel/bin/wof-travel-id \
 	-source fs:///usr/local/data/sfomuseum-data-architecture/data \
 	1729813675 \
 	
-| bin/assign-geometry \
+| bin/wof-assign-geometry \
 	-stdin \
 	-reader-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
 	-writer-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
@@ -174,17 +180,17 @@ This is a fairly involved example, so here's a description of what's happening:
 
 * First we are using the `wof-travel-id` tool in the [go-whosonfirst-travel](https://github.com/whosonfirst/go-whosonfirst-travel) package to find all the records that, recursively, ID `1729813675` supersedes.
 * We are exporting that list as a line-separated list of IDs (having specified the `-ids` flag).
-* We are piping that output to the `assign-geometry` tool and reading the list of IDs from `STDIN` (having specified the `-stdin` flag).
+* We are piping that output to the `wof-assign-geometry` tool and reading the list of IDs from `STDIN` (having specified the `-stdin` flag).
 * For each of those IDs we are assigning the geometry from the record with the ID `1729813675` and writing those updates back to disk.
 
 ### assign-parent
 
 ```
-$> ./bin/assign-parent -h
+$> ./bin/wof-assign-parent -h
 Assign the parent ID and its hierarchy to one or more WOF records
 
 Usage:
-	 ./bin/assign-parent [options] wof-id-(N) wof-id-(N)
+	 ./bin/wof-assign-parent [options] wof-id-(N) wof-id-(N)
 
 For example:
 Valid options are:
@@ -205,26 +211,26 @@ Valid options are:
 For example:
 
 ```
-$> ./bin/assign-parent \
+$> ./bin/wof-assign-parent \
 	-reader-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
 	-parent-id 1477855937 \
 	-id 1477855939 -id 1477855941 -id 1477855943 -id 1477855945 -id 1477855947 -id 1477855949 1477855955
 ```
 
-### cessate
+### wof-cessate
 
 "Cessate" one or more Who's On First IDs (assign an `edtf:cessation` property and assign `mz:is_current=0`).
 
 ```
-> ./bin/cessate -h
+> ./bin/wof-cessate -h
 "Cessate" one or more Who's On First IDs.
 
 Usage:
-	 ./bin/cessate [options]
+	 ./bin/wof-cessate [options]
 
 For example:
-	./bin/cessate -s . -i 1234
-	./bin/cessate -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678
+	./bin/wof-cessate -s . -i 1234
+	./bin/wof-cessate -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678
 
 Valid options are:
   -date string
@@ -245,16 +251,16 @@ Valid options are:
     	A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
 ```
 
-### create
+### wof-create
 
 Create a new Who's On First record.
 
 ```
-$> ./bin/create -h
+$> ./bin/wof-create -h
 Create a new Who's On First record.
 
 Usage:
-	 ./bin/create [options] 
+	 ./bin/wof-create [options] 
 
 Valid options are:
   -exporter-uri string
@@ -284,7 +290,7 @@ _This tool should be considered "beta" still._
 For example:
 
 ```
-$> bin/create \
+$> bin/wof-create \
 	-geometry '{"type":"Point", "coordinates":[20.414944,42.032833]}' \
 	-string-property 'properties.src:geom=wikidata' \
 	-string-property 'properties.wof:placetype=campus' \
@@ -355,20 +361,20 @@ $> bin/create \
 1730032323
 ```
 
-### deprecate
+### wof-deprecate
 
 Deprecate one or more Who's On First IDs.
 
 ```
-> ./bin/deprecate -h
+> ./bin/wof-deprecate -h
 Deprecate one or more Who's On First IDs.
 
 Usage:
-	 ./bin/deprecate [options]
+	 ./bin/wof-deprecate [options]
 
 For example:
-	./bin/deprecate -s . -i 1234
-	./bin/deprecate -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678
+	./bin/wof-deprecate -s . -i 1234
+	./bin/wof-deprecate -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678
 
 Valid options are:
   -exporter-uri string
@@ -390,7 +396,7 @@ Valid options are:
 For example:
 
 ```
-$> ./bin/deprecate -s /usr/local/data/sfomuseum-data-collection -i 1511957049
+$> ./bin/wof-deprecate -s /usr/local/data/sfomuseum-data-collection -i 1511957049
 
 $> git diff
 diff --git a/data/151/195/704/9/1511957049.geojson b/data/151/195/704/9/1511957049.geojson
@@ -425,18 +431,18 @@ index 916115027f..ec21ca2089 100644
      "wof:placetype": "venue",
 ```
 
-### deprecate-and-supersede
+### wof-deprecate-and-supersede
 
 ```
-$> ./bin/deprecate-and-supersede -h
+$> ./bin/wof-deprecate-and-supersede -h
 Deprecate and supersede one or more Who's On First IDs.
 
 Usage:
-	 ./bin/deprecate-and-supersede [options] wof-id-(N) wof-id-(N)
+	 ./bin/wof-deprecate-and-supersede [options] wof-id-(N) wof-id-(N)
 
 For example:
-	./bin/deprecate-and-supersede -s . -i 1234
-	./bin/deprecate-and-supersede -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678
+	./bin/wof-deprecate-and-supersede -s . -i 1234
+	./bin/wof-deprecate-and-supersede -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678
 
 Valid options are:
   -exporter-uri string
@@ -462,7 +468,7 @@ Valid options are:
 For example:
 
 ```
-$> ./bin/deprecate-and-supersede \
+$> ./bin/wof-deprecate-and-supersede \
 	-s /usr/local/data/sfomuseum-data-architecture \
 	-i 1477856003 \
 	-string-property 'properties.wof:placetype=arcade'
@@ -481,11 +487,11 @@ This tool will:
 * Set the `edtf:deprecate` property to be the current "YYYY-MM-DD" for the old WOF record.
 * Assign or update any properties defined by the `-{string|int|float}-properties` flags for the new WOF record.
 
-### ensure-properties
+### wof-ensure-properties
 
 ```
-> ./bin/ensure-properties -h
-Usage of ./bin/ensure-properties:
+> ./bin/wof-ensure-properties -h
+Usage of ./bin/wof-ensure-properties:
   -exporter-uri string
     	A valid whosonfirst/go-whosonfirst-export URI. (default "whosonfirst://")
   -float-property value
@@ -507,7 +513,7 @@ Usage of ./bin/ensure-properties:
 For example:
 
 ```
-$> ./bin/ensure-properties \
+$> ./bin/wof-ensure-properties \
 	-string-property 'properties.wof:repo=sfomuseum-data-architecture' \
 	-writer-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
 	/usr/local/data/sfomuseum-data-architecture
@@ -525,7 +531,7 @@ $> ./bin/ensure-properties \
 For example
 
 ```
-$> ./bin/ensure-properties \
+$> ./bin/wof-ensure-properties \
 	-writer-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
 	-query 'properties.mz:is_current=1' \
 	-query 'properties.sfomuseum:placetype=gallery' \
@@ -544,18 +550,18 @@ $> ./bin/ensure-properties \
 ...and so on
 ```
 
-### exportify
+### wof-exportify
 
 ```
-$> ./bin/exportify -h
+$> ./bin/wof-exportify -h
 Exportify one or more Who's On First IDs.
 
 Usage:
-	 ./bin/exportify [options] wof-id-(N) wof-id-(N)
+	 ./bin/wof-exportify [options] wof-id-(N) wof-id-(N)
 
 For example:
-	./bin/exportify -s . -i 1234
-	./bin/exportify -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678
+	./bin/wof-exportify -s . -i 1234
+	./bin/wof-exportify -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -id 5678
 
 Valid options are:
   -exporter-uri string
@@ -572,17 +578,17 @@ Valid options are:
     	A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
 ```
 
-### merge-feature-collection
+### wof-merge-featurecollection
 
 ```
-$> ./bin/merge-feature-collection -h
+$> ./bin/wof-merge-featurecollection -h
 Upate one or more Who's On First records with matching entries in a GeoJSON FeatureCollection file.
 
 Usage:
-	 ./bin/merge-feature-collection [options] path(N) path(N)
+	 ./bin/wof-merge-featurecollection [options] path(N) path(N)
 
 For example:
-	./bin/merge-feature-collection -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -writer-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -path geometry -path 'properties.example:property' /usr/local/data/updates.geojson
+	./bin/wof-merge-featurecollection -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -writer-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -path geometry -path 'properties.example:property' /usr/local/data/updates.geojson
 
 Valid options are:
   -exporter-uri string
@@ -608,7 +614,7 @@ Valid options are:
 For example:
 
 ```
-$> bin/merge-feature-collection \
+$> bin/wof-merge-featurecollection \
 	-reader-uri fs:///usr/local/data/sfomuseum-data-publicart/data \
 	-writer-uri fs:///usr/local/data/sfomuseum-data-publicart/data \
 	-path 'geometry' \
@@ -619,7 +625,7 @@ $> bin/merge-feature-collection \
 Here's a more complex example:
 
 ```
-$> ./bin/merge-feature-collection \
+$> ./bin/wof-merge-featurecollection \
 	-include 'properties.sfomuseum:placetype=gallery' \
 	-include 'properties.mz:is_current=1' \
 	-lookup-key 'properties.sfomuseum:map_id' \
@@ -637,13 +643,13 @@ In the example above we are:
 * Specifying that the lookup key is `properties.sfomuseum:map_id` - this value will be mapped to the corresponding record's `wof:id` property
 * Using the lookup key property in the data being merged to determine which WOF record (read by the `-reader-uri` flag) should be updated
 
-### rename-property
+### wof-rename-property
 
 Rename a property in one or more records. Currently this tool does not support renaming more than one property at a time.
 
 ```
-$> ./bin/rename-property -h
-Usage of ./bin/rename-property:
+$> ./bin/wof-rename-property -h
+Usage of ./bin/wof-rename-property:
   -exporter-uri string
     	A valid whosonfirst/go-whosonfirst-export URI. (default "whosonfirst://")
   -indexer-uri string
@@ -659,7 +665,7 @@ Usage of ./bin/rename-property:
 For example:
 
 ```
-$> ./bin/rename-property \
+$> ./bin/wof-rename-property \
 	-writer-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
 	-old-property 'properties.wof:supsersedes' \
 	-new-property 'properties.wof:supersedes' \
@@ -689,19 +695,19 @@ $> ./bin/rename-property \
 2021/05/11 13:33:55 time to index paths (1) 180.656951ms
 ```
 
-### supersede-with-parent
+### wof-supersede-with-parent
 
 Supersede one or more WOF records with a known parent ID (and hierarchy).
 
 ```
-$> ./bin/supersede-with-parent -h
+$> ./bin/wof-supersede-with-parent -h
 Supersede one or more WOF records with a known parent ID (and hierarchy)
 
 Usage:
-	 ./bin/supersede-with-parent [options]
+	 ./bin/wof-supersede-with-parent [options]
 
 For example:
-	./bin/supersede-with-parent -reader-uri fs:///usr/local/data/sfomuseum-data-architecture/data -parent-id 1477855937 -id 1477855955
+	./bin/wof-supersede-with-parent -reader-uri fs:///usr/local/data/sfomuseum-data-architecture/data -parent-id 1477855937 -id 1477855955
 
 Valid options are:
   -exporter-uri string
@@ -718,19 +724,19 @@ Valid options are:
     	A valid whosonfirst/go-writer URI. If empty the value of the -reader-uri flag will be assumed.
 ```	
 
-### superseded-by
+### wof-superseded-by
 
-The `superseded-by` tool will update the `wof:superseded_by` and `wof:supersedes` properties for one or more sets of Who's On First records. Additionally it will assign the `mz:is_current=0` property for the records being superseded.
+The `wof-superseded-by` tool will update the `wof:superseded_by` and `wof:supersedes` properties for one or more sets of Who's On First records. Additionally it will assign the `mz:is_current=0` property for the records being superseded.
 
 ```
-> ./bin/superseded-by -h
+> ./bin/wof-superseded-by -h
 "Supersede" one or more Who's On First IDs.
 
 Usage:
-	 ./bin/superseded-by [options]
+	 ./bin/wof-superseded-by [options]
 
 For example:
-	./bin/superseded-by -reader-uri fs:///usr/local/data/sfomuseum-data-enterprise/data -id 1159286017 -by 1159283849
+	./bin/wof-superseded-by -reader-uri fs:///usr/local/data/sfomuseum-data-enterprise/data -id 1159286017 -by 1159283849
 
 Valid options are:
   -exporter-uri string
