@@ -4,10 +4,10 @@ go 1.16
 
 require (
 	github.com/aaronland/go-json-query v0.1.1
-	github.com/paulmach/orb v0.2.2
+	github.com/paulmach/orb v0.3.0
 	github.com/sfomuseum/go-edtf v0.3.1
 	github.com/sfomuseum/go-flags v0.8.2
-	github.com/tidwall/gjson v1.9.4
+	github.com/tidwall/gjson v1.10.1
 	github.com/tidwall/sjson v1.2.2
 	github.com/whosonfirst/go-reader v0.9.0
 	github.com/whosonfirst/go-whosonfirst-export/v2 v2.4.0
