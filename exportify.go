@@ -2,7 +2,8 @@ package exportify
 
 import (
 	"context"
-	"github.com/whosonfirst/go-whosonfirst-export/v2"
+
+	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
 	"github.com/whosonfirst/go-writer"
 )

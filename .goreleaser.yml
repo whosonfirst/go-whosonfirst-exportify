@@ -1,0 +1,150 @@
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - id: wof-as-featurecollection
+    main: ./cmd/wof-as-featurecollection
+    binary: wof-as-featurecollection
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-as-jsonl
+    main: ./cmd/wof-as-jsonl
+    binary: wof-as-jsonl
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-assign-geometry
+    main: ./cmd/wof-assign-geometry
+    binary: wof-assign-geometry
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-assign-parent
+    main: ./cmd/wof-assign-parent
+    binary: wof-assign-parent
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-cessate
+    main: ./cmd/wof-cessate
+    binary: wof-cessate
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-deprecate
+    main: ./cmd/wof-deprecate
+    binary: wof-deprecate
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-deprecate-and-supersede
+    main: ./cmd/wof-deprecate-and-supersede
+    binary: wof-deprecate-and-supersede
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-ensure-properties
+    main: ./cmd/wof-ensure-properties
+    binary: wof-ensure-properties
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-exportify
+    main: ./cmd/wof-exportify
+    binary: wof-exportify
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-merge-featurecollection
+    main: ./cmd/wof-merge-featurecollection
+    binary: wof-merge-featurecollection
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-remove-properties
+    main: ./cmd/wof-remove-properties
+    binary: wof-remove-properties
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-rename-property
+    main: ./cmd/wof-rename-property
+    binary: wof-rename-property
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-supersede-with-parent
+    main: ./cmd/wof-supersede-with-parent
+    binary: wof-supersede-with-parent
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+  - id: wof-superseded-by
+    main: ./cmd/wof-superseded-by
+    binary: wof-superseded-by
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+universal_binaries:
+  - replace: true
+archives:
+  -
+    format: binary
+    replacements:
+      386: 32bit
+      amd64: 64bit
+      darwin: macos
+      all: universal
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
