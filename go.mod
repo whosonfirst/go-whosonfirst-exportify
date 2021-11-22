@@ -4,11 +4,11 @@ go 1.16
 
 require (
 	github.com/aaronland/go-json-query v0.1.1
-	github.com/paulmach/orb v0.3.0
+	github.com/paulmach/orb v0.4.0
 	github.com/sfomuseum/go-edtf v0.3.1
 	github.com/sfomuseum/go-flags v0.8.2
-	github.com/tidwall/gjson v1.10.1
-	github.com/tidwall/sjson v1.2.2
+	github.com/tidwall/gjson v1.11.0
+	github.com/tidwall/sjson v1.2.3
 	github.com/whosonfirst/go-reader v0.9.0
 	github.com/whosonfirst/go-whosonfirst-export/v2 v2.4.0
 	github.com/whosonfirst/go-whosonfirst-iterate-reader v0.0.1
@@ -19,7 +19,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.4.1
 	github.com/whosonfirst/go-whosonfirst-uri v1.1.0
 	github.com/whosonfirst/go-whosonfirst-writer v0.2.4
-	github.com/whosonfirst/go-writer v0.6.0
+	github.com/whosonfirst/go-writer v0.7.0
 	github.com/whosonfirst/go-writer-featurecollection v0.0.2
 	github.com/whosonfirst/go-writer-jsonl v0.0.1
 )
