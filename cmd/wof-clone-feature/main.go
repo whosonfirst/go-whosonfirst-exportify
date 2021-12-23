@@ -37,8 +37,8 @@ func main() {
 
 	src_id := flag.Int64("id", 0, "The feature being cloned.")
 
-	superseded := flag.Bool("superseded", false, "The new feature is superseded by the feature being cloned.")
-	supersedes := flag.Bool("supersedes", false, "The feature being cloned is superseded by the new feature.")
+	superseded := flag.Bool("superseded", false, "The feature being cloned is superseded by the new feature.")
+	supersedes := flag.Bool("supersedes", false, "The new feature is superseded by the feature being cloned.")
 
 	flag.Usage = func() {
 
@@ -222,4 +222,5 @@ func main() {
 
 	}
 
+	log.Printf("Created new record %d\n", new_id)
 }
