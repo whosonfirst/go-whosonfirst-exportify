@@ -146,11 +146,12 @@ func main() {
 	}
 
 	if *supersedes {
-		new_updates["properties.wof:supersedes"] = []int64{*src_id}
+		new_updates["properties.wof:superseded_by"] = []int64{*src_id}
+		new_updates["properties.mz:is_current"] = 0
 	}
 
 	if *superseded {
-		new_updates["properties.wof:superseded_by"] = []int64{*src_id}
+		new_updates["properties.wof:supersedes"] = []int64{*src_id}
 	}
 
 	new_body, err = export.AssignProperties(ctx, new_body, new_updates)
@@ -195,6 +196,7 @@ func main() {
 
 	if *superseded {
 		src_updates["properties.wof:superseded_by"] = []int64{new_id}
+		new_updates["properties.mz:is_current"] = 0
 	}
 
 	has_changed, src_body, err := export.AssignPropertiesIfChanged(ctx, src_body, src_updates)
