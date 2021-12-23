@@ -15,3 +15,4 @@ cli:
 	go build -mod vendor -o bin/wof-as-jsonl cmd/wof-as-jsonl/main.go
 	go build -mod vendor -o bin/wof-rename-property cmd/wof-rename-property/main.go
 	go build -mod vendor -o bin/wof-remove-properties cmd/wof-remove-properties/main.go
+	go build -mod vendor -o bin/wof-clone-feature cmd/wof-clone-feature/main.go

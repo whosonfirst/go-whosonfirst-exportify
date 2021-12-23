@@ -183,7 +183,7 @@ This is a fairly involved example, so here's a description of what's happening:
 * We are piping that output to the `wof-assign-geometry` tool and reading the list of IDs from `STDIN` (having specified the `-stdin` flag).
 * For each of those IDs we are assigning the geometry from the record with the ID `1729813675` and writing those updates back to disk.
 
-### assign-parent
+### wof-assign-parent
 
 ```
 $> ./bin/wof-assign-parent -h
@@ -250,6 +250,74 @@ Valid options are:
   -writer-uri string
     	A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
 ```
+
+### wof-clone-feature
+
+Clone and optionally supersede a Who's On First record.
+
+```
+$> ./bin/wof-clone-feature -h
+Clone and optionally supersede a Who's On First record.
+
+Usage:
+	 ./bin/wof-clone-feature [options]
+
+For example:
+	./bin/wof-clone-feature -s . -id 1234 -superseded
+	./bin/wof-clone-feature -reader-uri fs:///usr/local/data/whosonfirst-data-admin-ca/data -id 1234 -superseded
+
+Valid options are:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export URI. (default "whosonfirst://")
+  -float-property value
+    	One or more {KEY}={VALUE} properties to append to the new record where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.
+  -id int
+    	The feature being cloned.
+  -int-property value
+    	One or more {KEY}={VALUE} properties to append to the new record where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.
+  -reader-uri string
+    	A valid whosonfirst/go-reader URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
+  -s string
+    	A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.
+  -string-property value
+    	One or more {KEY}={VALUE} properties to append to the new record where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.
+  -superseded
+    	The new feature is superseded by the feature being cloned.
+  -supersedes
+    	The feature being cloned is superseded by the new feature.
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
+```
+
+Consider this passage from the Wikipedia entry for [O. R. Tambo International Airport](https://en.wikipedia.org/wiki/O._R._Tambo_International_Airport) (WOF ID [102546665](https://spelunker.whosonfirst.org/id/102546665/)):
+
+> It was originally known as Jan Smuts International Airport,[4] after the former South African Prime Minister of the same name. The airport was renamed Johannesburg International Airport in 1994 when the newly elected African National Congress (ANC) government implemented a policy of not naming airports after politicians. This policy was later reversed, and on 27 October 2006 the airport was renamed after anti-apartheid politician Oliver Reginald Tambo.[5]
+
+So given an initial record (`102546665`) we want to create two others. First we create the record for "Johannesburg International Airport", which is superseded by the record for "OR Tambo International Airport":
+
+```
+$> ./bin/wof-clone-feature \
+	-s /usr/local/data/whosonfirst-data-admin-za \
+	-id 102546665 \
+	-superseded \
+	-string-property 'properties.wof:name=Johannesburg International Airport' \
+	-string-property 'properties.edtf:inception=1994' \
+	-string-property 'properties.edtf:cessation=2006'
+```
+
+Which creates a new record with ID `1746875291`. Note that because this new record was _cloned_ it may still need to be manually updated to reflect its reality, for example `name:*_*` properties may need to be removed or changed.
+
+Next, we create a record for "Jan Smuts International Airport" which is cloned from the newly created record for "Johannesburg International Airport":
+
+```
+$> ./bin/wof-clone-feature \
+	-s /usr/local/data/whosonfirst-data-admin-za \
+	-id 1746875291 \
+	-supersedes \
+	-string-property 'properties.wof:name=Jan Smuts International Airport' \
+	-string-property 'properties.edtf:inception=1952' \
+	-string-property 'properties.edtf:cessation=1994'
+```	
 
 ### wof-create
 
