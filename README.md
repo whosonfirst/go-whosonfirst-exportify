@@ -256,7 +256,7 @@ Valid options are:
 Clone and optionally supersede a Who's On First record.
 
 ```
-$> ./bin/wof-clone-feature -h
+> ./bin/wof-clone-feature -h
 Clone and optionally supersede a Who's On First record.
 
 Usage:
@@ -284,7 +284,7 @@ Valid options are:
   -superseded
     	The new feature is superseded by the feature being cloned.
   -supersedes
-    	The feature being cloned is superseded by the new feature.
+    	The new feature supersedes the feature being cloned.
   -writer-uri string
     	A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
 ```

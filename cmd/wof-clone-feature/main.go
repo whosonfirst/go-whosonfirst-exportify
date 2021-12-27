@@ -37,8 +37,9 @@ func main() {
 
 	src_id := flag.Int64("id", 0, "The feature being cloned.")
 
-	superseded := flag.Bool("superseded", false, "The feature being cloned is superseded by the new feature.")
-	supersedes := flag.Bool("supersedes", false, "The new feature is superseded by the feature being cloned.")
+	supersedes := flag.Bool("supersedes", false, "The new feature supersedes the feature being cloned.")
+	superseded := flag.Bool("superseded", false, "The new feature is superseded by the feature being cloned.")
+
 
 	flag.Usage = func() {
 
@@ -146,12 +147,12 @@ func main() {
 	}
 
 	if *supersedes {
-		new_updates["properties.wof:superseded_by"] = []int64{*src_id}
-		new_updates["properties.mz:is_current"] = 0
+		new_updates["properties.wof:supersedes"] = []int64{*src_id}		
 	}
 
 	if *superseded {
-		new_updates["properties.wof:supersedes"] = []int64{*src_id}
+		new_updates["properties.wof:superseded_by"] = []int64{*src_id}
+		new_updates["properties.mz:is_current"] = 0
 	}
 
 	new_body, err = export.AssignProperties(ctx, new_body, new_updates)
@@ -191,12 +192,12 @@ func main() {
 	src_updates := make(map[string]interface{})
 
 	if *supersedes {
-		src_updates["properties.wof:supersedes"] = []int64{new_id}
-	}
-
-	if *superseded {
 		src_updates["properties.wof:superseded_by"] = []int64{new_id}
 		new_updates["properties.mz:is_current"] = 0
+	}
+
+	if *superseded {			
+		src_updates["properties.wof:supersedes"] = []int64{new_id}
 	}
 
 	has_changed, src_body, err := export.AssignPropertiesIfChanged(ctx, src_body, src_updates)
