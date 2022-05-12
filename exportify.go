@@ -18,7 +18,7 @@ func ExportWithWriter(ctx context.Context, ex export.Exporter, wr writer.Writer,
 		return err
 	}
 
-	err = wof_writer.WriteFeatureBytes(ctx, wr, body)
+	err = wof_writer.WriteBytes(ctx, wr, body)
 
 	if err != nil {
 		return err

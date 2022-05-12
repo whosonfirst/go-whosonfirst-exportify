@@ -9,12 +9,12 @@ import (
 	"github.com/tidwall/gjson"
 	"github.com/whosonfirst/go-reader"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	"github.com/whosonfirst/go-whosonfirst-geojson-v2/properties/whosonfirst"
+	"github.com/whosonfirst/go-whosonfirst-feature/properties"
 	"github.com/whosonfirst/go-whosonfirst-placetypes"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	"github.com/whosonfirst/go-whosonfirst-spatial/database"
-	"github.com/whosonfirst/go-whosonfirst-spatial/geo"	
 	"github.com/whosonfirst/go-whosonfirst-spatial/filter"
+	"github.com/whosonfirst/go-whosonfirst-spatial/geo"
 	"github.com/whosonfirst/go-whosonfirst-spr/v2"
 	"strconv"
 )
@@ -52,14 +52,14 @@ func DefaultPointInPolygonHierarchyResolverUpdateCallback() PointInPolygonHierar
 				return nil, err
 			}
 
-			parent_f, err := wof_reader.LoadFeatureFromID(ctx, r, parent_id)
+			parent_f, err := wof_reader.LoadBytes(ctx, r, parent_id)
 
 			if err != nil {
 				return nil, err
 			}
 
-			parent_hierarchy := whosonfirst.Hierarchies(parent_f)
-			parent_country := whosonfirst.Country(parent_f)
+			parent_hierarchy := properties.Hierarchies(parent_f)
+			parent_country := properties.Country(parent_f)
 
 			to_update = map[string]interface{}{
 				"properties.wof:parent_id": parent_id,
@@ -88,36 +88,37 @@ func NewPointInPolygonHierarchyResolver(ctx context.Context, spatial_db database
 }
 
 // PointInPolygonAndUpdate will ...
-func (t *PointInPolygonHierarchyResolver) PointInPolygonAndUpdate(ctx context.Context, inputs *filter.SPRInputs, results_cb FilterSPRResultsFunc, update_cb PointInPolygonHierarchyResolverUpdateCallback, body []byte) ([]byte, error) {
+func (t *PointInPolygonHierarchyResolver) PointInPolygonAndUpdate(ctx context.Context, inputs *filter.SPRInputs, results_cb FilterSPRResultsFunc, update_cb PointInPolygonHierarchyResolverUpdateCallback, body []byte) (bool, []byte, error) {
 
 	possible, err := t.PointInPolygon(ctx, inputs, body)
 
 	if err != nil {
-		return nil, err
+		return false, nil, fmt.Errorf("Failed to perform point in polygon operation, %w", err)
 	}
 
 	parent_spr, err := results_cb(ctx, t.Database, body, possible)
 
 	if err != nil {
-		return nil, err
+		return false, nil, fmt.Errorf("Results callback failed, %w", err)
 	}
 
 	to_assign, err := update_cb(ctx, t.Database, parent_spr)
 
 	if err != nil {
-		return nil, err
+		return false, nil, fmt.Errorf("Update callback failed, %w", err)
 	}
 
-	if to_assign != nil {
-
-		body, err = export.AssignProperties(ctx, body, to_assign)
-
-		if err != nil {
-			return nil, err
-		}
+	if to_assign == nil {
+		return false, body, nil
 	}
 
-	return body, nil
+	has_changed, body, err := export.AssignPropertiesIfChanged(ctx, body, to_assign)
+
+	if err != nil {
+		return false, nil, fmt.Errorf("Failed to assign properties, %w", err)
+	}
+
+	return has_changed, body, nil
 }
 
 // PointInPolygon will perform a point-in-polygon (reverse geocoding) operation for 'body' using zero or more 'inputs' as query filters.
@@ -163,7 +164,7 @@ func (t *PointInPolygonHierarchyResolver) PointInPolygon(ctx context.Context, in
 		coord, err := geo.NewCoordinate(lon, lat)
 
 		if err != nil {
-			return nil, fmt.Errorf("Failed to create new coordinate, %w", err) 
+			return nil, fmt.Errorf("Failed to create new coordinate, %w", err)
 		}
 
 		inputs.Placetypes = []string{a.Name}
@@ -301,7 +302,7 @@ func (t *PointInPolygonHierarchyResolver) PointInPolygonCentroid(ctx context.Con
 		}
 
 	default:
-		return nil, fmt.Errorf("Unsupported type '%s'", t)
+		return nil, fmt.Errorf("Unsupported type '%v'", t)
 	}
 
 	pt := candidate.Geometry.(orb.Point)

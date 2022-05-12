@@ -131,7 +131,7 @@ func main() {
 // supersededById ensures that all the IDs in 'superseded_by' are present in the `wof:superseded_by` property of the record defined by 'id'.
 func supersededById(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, id int64, superseded_by multi.MultiInt64) error {
 
-	body, err := wof_reader.LoadBytesFromID(ctx, r, id)
+	body, err := wof_reader.LoadBytes(ctx, r, id)
 
 	if err != nil {
 		return err
@@ -190,7 +190,7 @@ func supersedesId(ctx context.Context, r reader.Reader, wr writer.Writer, ex exp
 
 	for _, sid := range superseded_by {
 
-		body, err := wof_reader.LoadBytesFromID(ctx, r, sid)
+		body, err := wof_reader.LoadBytes(ctx, r, sid)
 
 		if err != nil {
 			return fmt.Errorf("failed to load record for %d, %w", sid, err)

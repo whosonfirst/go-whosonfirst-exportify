@@ -225,7 +225,7 @@ func main() {
 				wof_id = id_rsp.Int()
 			}
 
-			wof_f, err := wof_reader.LoadBytesFromID(ctx, r, wof_id)
+			wof_f, err := wof_reader.LoadBytes(ctx, r, wof_id)
 
 			if err != nil {
 				log.Printf("Failed to load '%d', %v. Skipping", wof_id, err)
@@ -275,7 +275,7 @@ func main() {
 				log.Fatalf("Failed to export new record for '%d', %v", wof_id, err)
 			}
 
-			err = wof_writer.WriteFeatureBytes(ctx, wr, wof_f)
+			err = wof_writer.WriteBytes(ctx, wr, wof_f)
 
 			if err != nil {
 				log.Fatalf("Failed to write record for '%d', %v", wof_id, err)

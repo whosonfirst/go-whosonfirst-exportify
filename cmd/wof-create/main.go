@@ -148,7 +148,7 @@ func main() {
 			log.Fatalf("Failed to create reader for '%s', %v", *parent_reader_uri, err)
 		}
 
-		parent_body, err := wof_reader.LoadBytesFromID(ctx, parent_r, parent_id)
+		parent_body, err := wof_reader.LoadBytes(ctx, parent_r, parent_id)
 
 		if err != nil {
 			log.Fatalf("Failed to load parent record (%d), %v", parent_id, err)
@@ -191,7 +191,7 @@ func main() {
 		results_cb := hierarchy.FirstButForgivingSPRResultsFunc
 		update_cb := hierarchy.DefaultPointInPolygonHierarchyResolverUpdateCallback()
 
-		new_body, err := resolver.PointInPolygonAndUpdate(ctx, inputs, results_cb, update_cb, body)
+		_, new_body, err := resolver.PointInPolygonAndUpdate(ctx, inputs, results_cb, update_cb, body)
 
 		if err != nil {
 			log.Fatalf("Failed to do point in polygon operation, %v", err)
@@ -210,7 +210,7 @@ func main() {
 
 	id_rsp := gjson.GetBytes(new_body, "properties.wof:id")
 
-	err = wof_writer.WriteFeatureBytes(ctx, wr, new_body)
+	err = wof_writer.WriteBytes(ctx, wr, new_body)
 
 	if err != nil {
 		log.Fatalf("Failed to write new record, %v", err)

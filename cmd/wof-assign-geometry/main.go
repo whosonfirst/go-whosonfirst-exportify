@@ -97,7 +97,7 @@ func main() {
 		log.Fatalf("Failed to create new exporter for '%s', %v", *exporter_uri, err)
 	}
 
-	source_body, err := wof_reader.LoadBytesFromID(ctx, r, *source_id)
+	source_body, err := wof_reader.LoadBytes(ctx, r, *source_id)
 
 	if err != nil {
 		log.Fatalf("Failed to load source '%d'", *source_id)
@@ -113,7 +113,7 @@ func main() {
 
 	for _, id := range target_ids {
 
-		target_body, err := wof_reader.LoadBytesFromID(ctx, r, id)
+		target_body, err := wof_reader.LoadBytes(ctx, r, id)
 
 		if err != nil {
 			log.Fatalf("Failed to load target '%d'", id)
@@ -131,7 +131,7 @@ func main() {
 			log.Fatalf("Failed to export target '%d', %v", id, err)
 		}
 
-		err = wof_writer.WriteFeatureBytes(ctx, wr, new_body)
+		err = wof_writer.WriteBytes(ctx, wr, new_body)
 
 		if err != nil {
 			log.Fatalf("Failed to write target '%d', %v", id, err)

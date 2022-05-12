@@ -116,7 +116,7 @@ func main() {
 
 	// Load the record being cloned
 
-	src_body, err := wof_reader.LoadBytesFromID(ctx, r, *src_id)
+	src_body, err := wof_reader.LoadBytes(ctx, r, *src_id)
 
 	if err != nil {
 		log.Fatalf("Failed to load record, %v", err)
@@ -181,7 +181,7 @@ func main() {
 		log.Fatalf("Failed to export new record, %v", err)
 	}
 
-	err = wof_writer.WriteFeatureBytes(ctx, wr, new_body)
+	err = wof_writer.WriteBytes(ctx, wr, new_body)
 
 	if err != nil {
 		log.Fatalf("Failed to write new record, %v", err)
@@ -215,7 +215,7 @@ func main() {
 
 		}
 
-		err = wof_writer.WriteFeatureBytes(ctx, wr, src_body)
+		err = wof_writer.WriteBytes(ctx, wr, src_body)
 
 		if err != nil {
 			log.Fatalf("Failed to write updated source record, %v", err)

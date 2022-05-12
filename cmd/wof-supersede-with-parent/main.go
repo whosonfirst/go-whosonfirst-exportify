@@ -76,11 +76,11 @@ func main() {
 
 	// Parent stuff we only need to set up once
 
-	parent_f, err := wof_reader.LoadBytesFromID(ctx, parent_r, *parent_id)
+	parent_f, err := wof_reader.LoadBytes(ctx, parent_r, *parent_id)
 
 	for _, id := range ids {
 
-		f, err := wof_reader.LoadBytesFromID(ctx, r, id)
+		f, err := wof_reader.LoadBytes(ctx, r, id)
 
 		if err != nil {
 			log.Fatalf("Failed to load '%d', %v", id, err)

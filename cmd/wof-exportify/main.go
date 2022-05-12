@@ -150,7 +150,7 @@ func exportStdin(ctx context.Context, r reader.Reader, wr writer.Writer, ex expo
 
 func exportId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, id int64) error {
 
-	body, err := wof_reader.LoadBytesFromID(ctx, r, id)
+	body, err := wof_reader.LoadBytes(ctx, r, id)
 
 	if err != nil {
 		return err
@@ -167,7 +167,7 @@ func exportBytes(ctx context.Context, body []byte, wr writer.Writer, ex export.E
 		return err
 	}
 
-	err = wof_writer.WriteFeatureBytes(ctx, wr, new_body)
+	err = wof_writer.WriteBytes(ctx, wr, new_body)
 
 	if err != nil {
 		return err

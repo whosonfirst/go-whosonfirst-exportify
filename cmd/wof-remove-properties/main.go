@@ -79,7 +79,7 @@ func main() {
 			return nil
 		}
 
-		err = wof_writer.WriteFeatureBytes(ctx, wr, body)
+		err = wof_writer.WriteBytes(ctx, wr, body)
 
 		if err != nil {
 			return err

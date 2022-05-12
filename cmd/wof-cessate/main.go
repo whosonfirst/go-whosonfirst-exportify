@@ -139,7 +139,7 @@ func main() {
 
 func cessateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, id int64, dt *edtf.EDTFDate, superseded_by multi.MultiInt64) error {
 
-	body, err := wof_reader.LoadBytesFromID(ctx, r, id)
+	body, err := wof_reader.LoadBytes(ctx, r, id)
 
 	if err != nil {
 		return err

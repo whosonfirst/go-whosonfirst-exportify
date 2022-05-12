@@ -78,7 +78,7 @@ func main() {
 
 	// Parent stuff we only need to set up once
 
-	parent_f, err := wof_reader.LoadBytesFromID(ctx, parent_r, *parent_id)
+	parent_f, err := wof_reader.LoadBytes(ctx, parent_r, *parent_id)
 
 	if err != nil {
 		log.Fatalf("Failed to load '%d', %v", *parent_id, err)
@@ -101,7 +101,7 @@ func main() {
 
 	for _, id := range ids {
 
-		f, err := wof_reader.LoadBytesFromID(ctx, r, id)
+		f, err := wof_reader.LoadBytes(ctx, r, id)
 
 		if err != nil {
 			log.Fatalf("Failed to load '%d', %v", id, err)
@@ -122,7 +122,7 @@ func main() {
 			log.Fatalf("Failed to export '%d', %v", id, err)
 		}
 
-		err = wof_writer.WriteFeatureBytes(ctx, wr, f)
+		err = wof_writer.WriteBytes(ctx, wr, f)
 
 		if err != nil {
 			log.Fatalf("Failed to write '%d', %v", id, err)

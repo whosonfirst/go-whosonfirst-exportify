@@ -2,6 +2,10 @@
 
 Common methods for writing Who's On First documents.
 
+## Documentation
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/whosonfirst/go-whosonfirst-writer.svg)](https://pkg.go.dev/github.com/whosonfirst/go-whosonfirst-writer)
+
 ## Examples
 
 _Note that error handling has been removed for the sake of brevity._
@@ -12,9 +16,10 @@ _Note that error handling has been removed for the sake of brevity._
 import (
 	"context"
 	"flag"
-	"github.com/whosonfirst/go-writer"	
-	"github.com/whosonfirst/go-whosonfirst-geojson-v2/feature"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"	
+	"github.com/paulmach/orb/geojson"
+	"io"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	"github.com/whosonfirst/go-writer"			
 )
 
 func main() {
@@ -26,14 +31,15 @@ func main() {
 	
 	for _, feature_path := range flag.Args() {
 	
-		fh, _ := os.Open(feature_path)
-		f, _ := feature.LoadWOFFeatureFromReader(fh)
+		r, _ := os.Open(feature_path)
+		body, _ := io.ReadAll(r)		    
+		f, _ := geojson.UnmarshalFeature(body)
 
 		wof_writer.WriteFeature(ctx, wr, f)
 	}
 ```
 
-### WriteFeatureBytes
+### WriteBytes
 
 ```
 import (
@@ -41,7 +47,7 @@ import (
 	"flag"
 	"github.com/whosonfirst/go-writer"	
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
-	"io/ioutil"
+	"io"
 )
 
 func main() {
@@ -54,9 +60,9 @@ func main() {
 	for _, feature_path := range flag.Args() {
 	
 		fh, _ := os.Open(feature_path)
-		body, _ := ioutil.ReadAll(fh)
+		body, _ := io.ReadAll(fh)
 		
-		wof_writer.WriteFeatureBytes(ctx, wr, body)
+		wof_writer.WriteBytes(ctx, wr, body)
 	}
 ```
 

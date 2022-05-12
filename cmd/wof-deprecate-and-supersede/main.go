@@ -147,7 +147,7 @@ func main() {
 
 func replaceId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, old_id int64, props ...multi.KeyValueFlag) (int64, error) {
 
-	old_body, err := wof_reader.LoadBytesFromID(ctx, r, old_id)
+	old_body, err := wof_reader.LoadBytes(ctx, r, old_id)
 
 	if err != nil {
 		return -1, err
@@ -234,13 +234,13 @@ func replaceId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export
 		return -1, err
 	}
 
-	err = wof_writer.WriteFeatureBytes(ctx, wr, old_body)
+	err = wof_writer.WriteBytes(ctx, wr, old_body)
 
 	if err != nil {
 		return -1, err
 	}
 
-	err = wof_writer.WriteFeatureBytes(ctx, wr, new_body)
+	err = wof_writer.WriteBytes(ctx, wr, new_body)
 
 	if err != nil {
 		return -1, err
