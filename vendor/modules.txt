@@ -39,14 +39,14 @@ github.com/mattn/go-sqlite3
 github.com/natefinch/atomic
 # github.com/patrickmn/go-cache v2.1.0+incompatible
 github.com/patrickmn/go-cache
-# github.com/paulmach/orb v0.7.0
+# github.com/paulmach/orb v0.7.1
 ## explicit
 github.com/paulmach/orb
 github.com/paulmach/orb/encoding/wkt
 github.com/paulmach/orb/geojson
 github.com/paulmach/orb/internal/length
 github.com/paulmach/orb/planar
-# github.com/sfomuseum/go-edtf v1.0.0
+# github.com/sfomuseum/go-edtf v1.1.1
 ## explicit
 github.com/sfomuseum/go-edtf
 github.com/sfomuseum/go-edtf/calendar
@@ -57,7 +57,7 @@ github.com/sfomuseum/go-edtf/level2
 github.com/sfomuseum/go-edtf/parser
 github.com/sfomuseum/go-edtf/re
 github.com/sfomuseum/go-edtf/tests
-# github.com/sfomuseum/go-flags v0.8.2
+# github.com/sfomuseum/go-flags v0.8.3
 ## explicit
 github.com/sfomuseum/go-flags/flagset
 github.com/sfomuseum/go-flags/lookup
@@ -103,10 +103,10 @@ github.com/whosonfirst/go-whosonfirst-flags/placetypes
 github.com/whosonfirst/go-whosonfirst-format
 # github.com/whosonfirst/go-whosonfirst-id v0.0.4
 github.com/whosonfirst/go-whosonfirst-id
-# github.com/whosonfirst/go-whosonfirst-iterate-reader v0.0.1
+# github.com/whosonfirst/go-whosonfirst-iterate-reader v1.0.0
 ## explicit
 github.com/whosonfirst/go-whosonfirst-iterate-reader
-# github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.0.2
+# github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.1.0
 ## explicit
 github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter
 github.com/whosonfirst/go-whosonfirst-iterate/v2/filters
@@ -152,6 +152,9 @@ github.com/whosonfirst/go-whosonfirst-uri
 # github.com/whosonfirst/go-whosonfirst-writer v1.0.0
 ## explicit
 github.com/whosonfirst/go-whosonfirst-writer
+# github.com/whosonfirst/go-whosonfirst-writer/v2 v2.0.0
+## explicit
+github.com/whosonfirst/go-whosonfirst-writer/v2
 # github.com/whosonfirst/go-writer v1.0.1
 ## explicit
 github.com/whosonfirst/go-writer

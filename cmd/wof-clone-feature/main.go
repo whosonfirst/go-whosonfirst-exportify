@@ -40,7 +40,6 @@ func main() {
 	supersedes := flag.Bool("supersedes", false, "The new feature supersedes the feature being cloned.")
 	superseded := flag.Bool("superseded", false, "The new feature is superseded by the feature being cloned.")
 
-
 	flag.Usage = func() {
 
 		fmt.Fprintf(os.Stderr, "Clone and optionally supersede a Who's On First record.\n\n")
@@ -147,7 +146,7 @@ func main() {
 	}
 
 	if *supersedes {
-		new_updates["properties.wof:supersedes"] = []int64{*src_id}		
+		new_updates["properties.wof:supersedes"] = []int64{*src_id}
 	}
 
 	if *superseded {
@@ -196,7 +195,7 @@ func main() {
 		new_updates["properties.mz:is_current"] = 0
 	}
 
-	if *superseded {			
+	if *superseded {
 		src_updates["properties.wof:supersedes"] = []int64{new_id}
 	}
 
