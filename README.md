@@ -19,21 +19,21 @@ At some point the various application might get separated out in to their own pa
 
 ```
 $> make cli
-go build -mod vendor -o bin/wof-assign-geometry cmd/wof-assign-geometry/main.go
-go build -mod vendor -o bin/wof-assign-parent cmd/wof-assign-parent/main.go
-go build -mod vendor -o bin/wof-exportify cmd/wof-exportify/main.go
-go build -mod vendor -o bin/wof-create cmd/wof-create/main.go
-go build -mod vendor -o bin/wof-deprecate cmd/wof-deprecate/main.go
-go build -mod vendor -o bin/wof-cessate cmd/wof-cessate/main.go
-go build -mod vendor -o bin/wof-superseded-by cmd/wof-superseded-by/main.go
-go build -mod vendor -o bin/wof-ensure-properties cmd/wof-ensure-properties/main.go
-go build -mod vendor -o bin/wof-deprecate-and-supersede cmd/wof-deprecate-and-supersede/main.go
-go build -mod vendor -o bin/wof-merge-featurecollection cmd/wof-merge-featurecollection/main.go
-go build -mod vendor -o bin/wof-supersede-with-parent cmd/wof-supersede-with-parent/main.go
-go build -mod vendor -o bin/wof-as-featurecollection cmd/wof-as-featurecollection/main.go
-go build -mod vendor -o bin/wof-as-jsonl cmd/wof-as-jsonl/main.go
-go build -mod vendor -o bin/wof-rename-property cmd/wof-rename-property/main.go
-go build -mod vendor -o bin/wof-remove-properties cmd/wof-remove-properties/main.go
+go build -o bin/wof-assign-geometry cmd/wof-assign-geometry/main.go
+go build -o bin/wof-assign-parent cmd/wof-assign-parent/main.go
+go build -o bin/wof-exportify cmd/wof-exportify/main.go
+go build -o bin/wof-create cmd/wof-create/main.go
+go build -o bin/wof-deprecate cmd/wof-deprecate/main.go
+go build -o bin/wof-cessate cmd/wof-cessate/main.go
+go build -o bin/wof-superseded-by cmd/wof-superseded-by/main.go
+go build -o bin/wof-ensure-properties cmd/wof-ensure-properties/main.go
+go build -o bin/wof-deprecate-and-supersede cmd/wof-deprecate-and-supersede/main.go
+go build -o bin/wof-merge-featurecollection cmd/wof-merge-featurecollection/main.go
+go build -o bin/wof-supersede-with-parent cmd/wof-supersede-with-parent/main.go
+go build -o bin/wof-as-featurecollection cmd/wof-as-featurecollection/main.go
+go build -o bin/wof-as-jsonl cmd/wof-as-jsonl/main.go
+go build -o bin/wof-rename-property cmd/wof-rename-property/main.go
+go build -o bin/wof-remove-properties cmd/wof-remove-properties/main.go
 ```
 
 As of this writing these tools may contain duplicate, or at least common, code that would be well-served from being moved in to a package or library. That hasn't happened yet.
@@ -168,7 +168,7 @@ $> /usr/local/whosonfirst/go-whosonfirst-travel/bin/wof-travel-id \
 	-ids \
 	-source fs:///usr/local/data/sfomuseum-data-architecture/data \
 	1729813675 \
-	
+
 | bin/wof-assign-geometry \
 	-stdin \
 	-reader-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
@@ -317,7 +317,7 @@ $> ./bin/wof-clone-feature \
 	-string-property 'properties.wof:name=Jan Smuts International Airport' \
 	-string-property 'properties.edtf:inception=1952' \
 	-string-property 'properties.edtf:cessation=1994'
-```	
+```
 
 ### wof-create
 
@@ -328,7 +328,7 @@ $> ./bin/wof-create -h
 Create a new Who's On First record.
 
 Usage:
-	 ./bin/wof-create [options] 
+	 ./bin/wof-create [options]
 
 Valid options are:
   -exporter-uri string
@@ -540,7 +540,7 @@ $> ./bin/wof-deprecate-and-supersede \
 	-s /usr/local/data/sfomuseum-data-architecture \
 	-i 1477856003 \
 	-string-property 'properties.wof:placetype=arcade'
-	
+
 2021/02/09 13:49:58 1477856003 replaced by 1729791935
 ```
 
@@ -585,7 +585,7 @@ $> ./bin/wof-ensure-properties \
 	-string-property 'properties.wof:repo=sfomuseum-data-architecture' \
 	-writer-uri fs:///usr/local/data/sfomuseum-data-architecture/data \
 	/usr/local/data/sfomuseum-data-architecture
-	
+
 2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/140/5/1729771405.geojson
 2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/140/9/1729771409.geojson
 2021/02/05 14:43:51 Updated /usr/local/data/sfomuseum-data-architecture/data/172/977/140/3/1729771403.geojson
@@ -738,7 +738,7 @@ $> ./bin/wof-rename-property \
 	-old-property 'properties.wof:supsersedes' \
 	-new-property 'properties.wof:supersedes' \
 	/usr/local/data/sfomuseum-data-architecture
-	
+
 2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/981/373/7/1729813737.geojson
 2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/981/373/5/1729813735.geojson
 2021/05/11 13:33:55 Updated /usr/local/data/sfomuseum-data-architecture/data/172/981/373/3/1729813733.geojson
@@ -790,7 +790,7 @@ Valid options are:
     	A valid whosonfirst/go-reader URI.
   -writer-uri string
     	A valid whosonfirst/go-writer URI. If empty the value of the -reader-uri flag will be assumed.
-```	
+```
 
 ### wof-superseded-by
 
