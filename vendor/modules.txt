@@ -85,6 +85,9 @@ github.com/whosonfirst/go-rfc-5646
 github.com/whosonfirst/go-sanitize
 # github.com/whosonfirst/go-whosonfirst-crawl v0.2.1
 github.com/whosonfirst/go-whosonfirst-crawl
+# github.com/whosonfirst/go-whosonfirst-edtf v0.3.1
+## explicit
+github.com/whosonfirst/go-whosonfirst-edtf
 # github.com/whosonfirst/go-whosonfirst-export/v2 v2.4.5
 ## explicit
 github.com/whosonfirst/go-whosonfirst-export/v2

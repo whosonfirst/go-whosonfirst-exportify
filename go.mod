@@ -10,6 +10,7 @@ require (
 	github.com/tidwall/gjson v1.14.1
 	github.com/tidwall/sjson v1.2.4
 	github.com/whosonfirst/go-reader v1.0.1
+	github.com/whosonfirst/go-whosonfirst-edtf v0.3.1
 	github.com/whosonfirst/go-whosonfirst-export/v2 v2.4.5
 	github.com/whosonfirst/go-whosonfirst-iterate-reader v1.0.0
 	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.1.0

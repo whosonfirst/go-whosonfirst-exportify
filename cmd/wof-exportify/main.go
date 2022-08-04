@@ -11,6 +11,7 @@ import (
 
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/whosonfirst/go-reader"
+	edtf "github.com/whosonfirst/go-whosonfirst-edtf"
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
@@ -160,6 +161,16 @@ func exportId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.
 }
 
 func exportBytes(ctx context.Context, body []byte, wr writer.Writer, ex export.Exporter) error {
+
+	changed, body, err := edtf.UpdateBytes(body)
+
+	if err != nil {
+		return fmt.Errorf("Failed to apply EDTF updates to %d, %w", err)
+	}
+
+	if !changed {
+		return nil
+	}
 
 	new_body, err := ex.Export(ctx, body)
 
