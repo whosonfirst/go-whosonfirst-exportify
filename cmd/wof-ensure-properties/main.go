@@ -13,7 +13,7 @@ import (
 	_ "github.com/whosonfirst/go-whosonfirst-iterate-reader"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
 	uri "github.com/whosonfirst/go-whosonfirst-uri"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v2"
 	"github.com/whosonfirst/go-writer/v2"
 )
 
@@ -89,7 +89,7 @@ func main() {
 			return err
 		}
 
-		err = wof_writer.WriteBytes(ctx, wr, new_body)
+		_, err = wof_writer.WriteBytes(ctx, wr, new_body)
 
 		if err != nil {
 			return err

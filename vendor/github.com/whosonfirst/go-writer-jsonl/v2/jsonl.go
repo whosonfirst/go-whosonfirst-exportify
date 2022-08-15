@@ -6,11 +6,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/whosonfirst/go-writer"
+	"github.com/whosonfirst/go-writer/v2"
 	"io"
-	_ "log"
+	"log"
 	"net/url"
-	_ "os"
 	"sync"
 	"sync/atomic"
 )
@@ -104,7 +103,14 @@ func (jsonl_wr *JSONLWriter) WriterURI(ctx context.Context, str_uri string) stri
 	return str_uri
 }
 
-func (jsonl_wr *JSONLWriter) Close(ctx context.Context) error {
+func (jsonl_wr *JSONLWriter) Flush(ctx context.Context) error {
+	return nil
+}
 
+func (jsonl_wr *JSONLWriter) Close(ctx context.Context) error {
+	return nil
+}
+
+func (jsonl_wr *JSONLWriter) SetLogger(ctx context.Context, logger *log.Logger) error {
 	return nil
 }

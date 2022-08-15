@@ -21,7 +21,7 @@ import (
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v2"
 	"github.com/whosonfirst/go-writer/v2"
 )
 
@@ -275,7 +275,7 @@ func main() {
 				log.Fatalf("Failed to export new record for '%d', %v", wof_id, err)
 			}
 
-			err = wof_writer.WriteBytes(ctx, wr, wof_f)
+			_, err = wof_writer.WriteBytes(ctx, wr, wof_f)
 
 			if err != nil {
 				log.Fatalf("Failed to write record for '%d', %v", wof_id, err)

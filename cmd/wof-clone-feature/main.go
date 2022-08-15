@@ -10,7 +10,7 @@ import (
 	"github.com/whosonfirst/go-reader"
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v2"
 	"github.com/whosonfirst/go-writer/v2"
 	"log"
 	"os"
@@ -180,7 +180,7 @@ func main() {
 		log.Fatalf("Failed to export new record, %v", err)
 	}
 
-	err = wof_writer.WriteBytes(ctx, wr, new_body)
+	_, err = wof_writer.WriteBytes(ctx, wr, new_body)
 
 	if err != nil {
 		log.Fatalf("Failed to write new record, %v", err)
@@ -214,7 +214,7 @@ func main() {
 
 		}
 
-		err = wof_writer.WriteBytes(ctx, wr, src_body)
+		_, err = wof_writer.WriteBytes(ctx, wr, src_body)
 
 		if err != nil {
 			log.Fatalf("Failed to write updated source record, %v", err)

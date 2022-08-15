@@ -18,11 +18,9 @@ require (
 	github.com/whosonfirst/go-whosonfirst-spatial-hierarchy v0.2.0
 	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.5.2
 	github.com/whosonfirst/go-whosonfirst-uri v1.2.0
-	github.com/whosonfirst/go-whosonfirst-writer v1.0.0
-	github.com/whosonfirst/go-whosonfirst-writer/v2 v2.0.2
-	github.com/whosonfirst/go-writer v1.0.1
-	github.com/whosonfirst/go-writer-featurecollection v0.0.2
-	github.com/whosonfirst/go-writer-jsonl v0.0.1
+	github.com/whosonfirst/go-whosonfirst-writer/v2 v2.1.0
+	github.com/whosonfirst/go-writer-featurecollection/v2 v2.0.0
+	github.com/whosonfirst/go-writer-jsonl/v2 v2.0.0
 	github.com/whosonfirst/go-writer/v2 v2.0.0
 )
 

@@ -13,7 +13,7 @@ import (
 	"github.com/whosonfirst/go-reader"
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v2"
 	"github.com/whosonfirst/go-writer/v2"
 )
 
@@ -122,7 +122,7 @@ func main() {
 			log.Fatalf("Failed to export '%d', %v", id, err)
 		}
 
-		err = wof_writer.WriteBytes(ctx, wr, f)
+		_, err = wof_writer.WriteBytes(ctx, wr, f)
 
 		if err != nil {
 			log.Fatalf("Failed to write '%d', %v", id, err)

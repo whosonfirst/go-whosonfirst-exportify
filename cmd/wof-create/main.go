@@ -23,7 +23,7 @@ import (
 	_ "github.com/whosonfirst/go-whosonfirst-spatial-sqlite"
 	"github.com/whosonfirst/go-whosonfirst-spatial/database"
 	"github.com/whosonfirst/go-whosonfirst-spatial/filter"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v2"
 	"github.com/whosonfirst/go-writer/v2"
 )
 
@@ -210,7 +210,7 @@ func main() {
 
 	id_rsp := gjson.GetBytes(new_body, "properties.wof:id")
 
-	err = wof_writer.WriteBytes(ctx, wr, new_body)
+	_, err = wof_writer.WriteBytes(ctx, wr, new_body)
 
 	if err != nil {
 		log.Fatalf("Failed to write new record, %v", err)

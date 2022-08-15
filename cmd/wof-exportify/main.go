@@ -13,7 +13,7 @@ import (
 	"github.com/whosonfirst/go-reader"
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v2"
 	"github.com/whosonfirst/go-writer/v2"
 )
 
@@ -167,7 +167,7 @@ func exportBytes(ctx context.Context, body []byte, wr writer.Writer, ex export.E
 		return err
 	}
 
-	err = wof_writer.WriteBytes(ctx, wr, new_body)
+	_, err = wof_writer.WriteBytes(ctx, wr, new_body)
 
 	if err != nil {
 		return err

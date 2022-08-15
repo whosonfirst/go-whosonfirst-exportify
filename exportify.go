@@ -6,7 +6,7 @@ import (
 
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v2"
-	"github.com/whosonfirst/go-writer"
+	"github.com/whosonfirst/go-writer/v2"
 )
 
 func ExportWithWriter(ctx context.Context, ex export.Exporter, wr writer.Writer, body []byte) error {
