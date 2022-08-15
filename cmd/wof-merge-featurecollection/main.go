@@ -22,7 +22,7 @@ import (
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
-	"github.com/whosonfirst/go-writer"
+	"github.com/whosonfirst/go-writer/v2"
 )
 
 func open(ctx context.Context, path string) ([]byte, error) {

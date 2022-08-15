@@ -11,7 +11,7 @@ import (
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
-	"github.com/whosonfirst/go-writer"
+	"github.com/whosonfirst/go-writer/v2"
 	"log"
 	"os"
 	"path/filepath"

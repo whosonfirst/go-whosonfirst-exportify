@@ -14,7 +14,7 @@ import (
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
 	uri "github.com/whosonfirst/go-whosonfirst-uri"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer"
-	"github.com/whosonfirst/go-writer"
+	"github.com/whosonfirst/go-writer/v2"
 )
 
 func main() {
