@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/paulmach/orb/geojson"
-	"github.com/whosonfirst/go-writer/v2"
+	"github.com/whosonfirst/go-writer/v3"
 	"io"
 	"log"
 	"net/url"
@@ -57,6 +57,25 @@ func NewFeatureCollectionWriter(ctx context.Context, uri string) (writer.Writer,
 
 	fc := &FeatureCollectionWriter{
 		writer: wr,
+		mu:     mu,
+		count:  int64(0),
+	}
+
+	return fc, nil
+}
+
+func NewFeatureCollectionWriterWithWriter(ctx context.Context, wr io.Writer) (writer.Writer, error) {
+
+	io_wr, err := writer.NewIOWriterWithWriter(ctx, wr)
+
+	if err != nil {
+		return nil, fmt.Errorf("Failed to create new IOWriter, %w", err)
+	}
+
+	mu := new(sync.RWMutex)
+
+	fc := &FeatureCollectionWriter{
+		writer: io_wr,
 		mu:     mu,
 		count:  int64(0),
 	}

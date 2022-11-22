@@ -20,11 +20,12 @@ import (
 	exportify "github.com/whosonfirst/go-whosonfirst-exportify"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	hierarchy "github.com/whosonfirst/go-whosonfirst-spatial-hierarchy"
+	hierarchy_filter "github.com/whosonfirst/go-whosonfirst-spatial-hierarchy/filter"	
 	_ "github.com/whosonfirst/go-whosonfirst-spatial-sqlite"
 	"github.com/whosonfirst/go-whosonfirst-spatial/database"
 	"github.com/whosonfirst/go-whosonfirst-spatial/filter"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v2"
-	"github.com/whosonfirst/go-writer/v2"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v3"
+	"github.com/whosonfirst/go-writer/v3"
 )
 
 //go:embed stub.geojson
@@ -188,7 +189,7 @@ func main() {
 
 		inputs := &filter.SPRInputs{}
 
-		results_cb := hierarchy.FirstButForgivingSPRResultsFunc
+		results_cb := hierarchy_filter.FirstButForgivingSPRResultsFunc
 		update_cb := hierarchy.DefaultPointInPolygonHierarchyResolverUpdateCallback()
 
 		_, new_body, err := resolver.PointInPolygonAndUpdate(ctx, inputs, results_cb, update_cb, body)

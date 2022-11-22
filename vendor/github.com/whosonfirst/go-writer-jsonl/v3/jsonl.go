@@ -6,7 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/whosonfirst/go-writer/v2"
+	"github.com/whosonfirst/go-writer/v3"
 	"io"
 	"log"
 	"net/url"

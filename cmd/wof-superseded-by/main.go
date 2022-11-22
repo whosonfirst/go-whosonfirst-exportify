@@ -16,7 +16,7 @@ import (
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	exportify "github.com/whosonfirst/go-whosonfirst-exportify"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
-	"github.com/whosonfirst/go-writer/v2"
+	"github.com/whosonfirst/go-writer/v3"
 )
 
 func main() {
