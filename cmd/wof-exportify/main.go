@@ -8,13 +8,13 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-
+	
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/whosonfirst/go-reader"
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v2"
-	"github.com/whosonfirst/go-writer/v2"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v3"
+	"github.com/whosonfirst/go-writer/v3"
 )
 
 func main() {
@@ -88,6 +88,11 @@ func main() {
 		}
 	}
 
+	for _, str_id := range flag.Args(){
+
+		ids.Set(str_id)
+	}
+	
 	ctx := context.Background()
 
 	ex, err := export.NewExporter(ctx, *exporter_uri)

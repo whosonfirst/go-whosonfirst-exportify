@@ -1,4 +1,4 @@
-# go-writer-json
+# go-writer-jsonl
 
 JSONL output handler for the go-writer Writer interface. 
 

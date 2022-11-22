@@ -12,8 +12,8 @@ import (
 	"github.com/tidwall/sjson"
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v2"
-	"github.com/whosonfirst/go-writer/v2"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v3"
+	"github.com/whosonfirst/go-writer/v3"
 )
 
 func main() {
