@@ -10,16 +10,16 @@ require (
 	github.com/tidwall/gjson v1.14.4
 	github.com/tidwall/sjson v1.2.5
 	github.com/whosonfirst/go-reader v1.0.2
-	github.com/whosonfirst/go-whosonfirst-export/v2 v2.6.1
+	github.com/whosonfirst/go-whosonfirst-export/v2 v2.7.0
 	github.com/whosonfirst/go-whosonfirst-iterate-reader v1.0.0
 	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.3.1
 	github.com/whosonfirst/go-whosonfirst-reader v1.0.1
 	github.com/whosonfirst/go-whosonfirst-spatial v0.5.4
-	github.com/whosonfirst/go-whosonfirst-spatial-hierarchy v0.3.3
+	github.com/whosonfirst/go-whosonfirst-spatial-hierarchy v0.4.0
 	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.6.4
 	github.com/whosonfirst/go-whosonfirst-uri v1.2.0
 	github.com/whosonfirst/go-whosonfirst-writer/v3 v3.0.0
-	github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.0
+	github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.1
 	github.com/whosonfirst/go-writer-jsonl/v3 v3.0.1
 	github.com/whosonfirst/go-writer/v3 v3.1.0
 )
@@ -57,7 +57,7 @@ require (
 	github.com/whosonfirst/go-rfc-5646 v0.1.0 // indirect
 	github.com/whosonfirst/go-sanitize v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-crawl v0.2.1 // indirect
-	github.com/whosonfirst/go-whosonfirst-feature v0.0.25 // indirect
+	github.com/whosonfirst/go-whosonfirst-feature v0.0.26 // indirect
 	github.com/whosonfirst/go-whosonfirst-flags v0.4.4 // indirect
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1 // indirect
 	github.com/whosonfirst/go-whosonfirst-id v1.2.0 // indirect

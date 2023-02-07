@@ -20,7 +20,7 @@ import (
 	exportify "github.com/whosonfirst/go-whosonfirst-exportify"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
 	hierarchy "github.com/whosonfirst/go-whosonfirst-spatial-hierarchy"
-	hierarchy_filter "github.com/whosonfirst/go-whosonfirst-spatial-hierarchy/filter"	
+	hierarchy_filter "github.com/whosonfirst/go-whosonfirst-spatial-hierarchy/filter"
 	_ "github.com/whosonfirst/go-whosonfirst-spatial-sqlite"
 	"github.com/whosonfirst/go-whosonfirst-spatial/database"
 	"github.com/whosonfirst/go-whosonfirst-spatial/filter"

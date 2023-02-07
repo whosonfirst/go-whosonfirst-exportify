@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	
+
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/whosonfirst/go-reader"
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
@@ -88,11 +88,11 @@ func main() {
 		}
 	}
 
-	for _, str_id := range flag.Args(){
+	for _, str_id := range flag.Args() {
 
 		ids.Set(str_id)
 	}
-	
+
 	ctx := context.Background()
 
 	ex, err := export.NewExporter(ctx, *exporter_uri)
