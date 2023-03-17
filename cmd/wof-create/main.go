@@ -181,7 +181,11 @@ func main() {
 			log.Fatalf("Failed to create new spatial database for '%s', %v", *spatial_database_uri, err)
 		}
 
-		resolver, err := hierarchy.NewPointInPolygonHierarchyResolver(ctx, spatial_db, nil)
+		resolver_opts := &hierarchy.PointInPolygonHierarchyResolverOptions{
+			Database: spatial_db,
+		}
+
+		resolver, err := hierarchy.NewPointInPolygonHierarchyResolver(ctx, resolver_opts)
 
 		if err != nil {
 			log.Fatalf("Failed to create new hierarchy resolver, %v", err)

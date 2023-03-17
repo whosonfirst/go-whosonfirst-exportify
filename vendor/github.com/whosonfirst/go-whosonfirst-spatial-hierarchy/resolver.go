@@ -3,6 +3,11 @@ package hierarchy
 import (
 	"context"
 	"fmt"
+	"io"
+	"log"
+	"strconv"
+
+	aa_log "github.com/aaronland/go-log/v2"
 	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/geojson"
 	"github.com/sfomuseum/go-sfomuseum-mapshaper"
@@ -17,8 +22,21 @@ import (
 	"github.com/whosonfirst/go-whosonfirst-spatial/filter"
 	"github.com/whosonfirst/go-whosonfirst-spatial/geo"
 	"github.com/whosonfirst/go-whosonfirst-spr/v2"
-	"strconv"
 )
+
+type PointInPolygonHierarchyResolverOptions struct {
+	// Database is the `database.SpatialDatabase` instance used to perform point-in-polygon requests.
+	Database database.SpatialDatabase
+	// Mapshaper is an optional `mapshaper.Client` instance used to derive centroids used in point-in-polygon requests.
+	Mapshaper *mapshaper.Client
+	// PlacetypesDefinition is an optional `go-whosonfirst-placetypes.Definition` instance used to resolve custom or bespoke placetypes.
+	PlacetypesDefinition placetypes.Definition
+	// Logger is an optional `log.Logger` instance for logging feedback.
+	Logger *log.Logger
+	// SkipPlacetypeFilter is an optional boolean flag to signal whether or not point-in-polygon operations should be performed using
+	// the list of known ancestors for a given placetype. Default is false.
+	SkipPlacetypeFilter bool
+}
 
 // PointInPolygonHierarchyResolver provides methods for constructing a hierarchy of ancestors
 // for a given point, following rules established by the Who's On First project.
@@ -27,9 +45,16 @@ type PointInPolygonHierarchyResolver struct {
 	Database database.SpatialDatabase
 	// Mapshaper is an optional `mapshaper.Client` instance used to derive centroids used in point-in-polygon requests.
 	Mapshaper *mapshaper.Client
+	// PlacetypesDefinition is an optional `go-whosonfirst-placetypes.Definition` instance used to resolve custom or bespoke placetypes.
+	PlacetypesDefinition placetypes.Definition
+	// Logger is a `log.Logger` instance for logging feedback. The default logger sends all messages to `io.Discard`.
+	Logger *log.Logger
 	// reader is the `reader.Reader` instance used to retrieve ancestor records. By default it is the same as `Database` but can be assigned
 	// explicitly using the `SetReader` method.
 	reader reader.Reader
+	// skip_placetype_filter is an optional boolean flag to signal whether or not point-in-polygon operations should be performed using
+	// the list of known ancestors for a given placetype. Default is false.
+	skip_placetype_filter bool
 }
 
 // PointInPolygonHierarchyResolverUpdateCallback is a function definition for a custom callback to convert 'spr' in to a dictionary of properties
@@ -83,12 +108,39 @@ func DefaultPointInPolygonHierarchyResolverUpdateCallback() PointInPolygonHierar
 // NewPointInPolygonHierarchyResolver returns a `PointInPolygonHierarchyResolver` instance for 'spatial_db' and 'ms_client'.
 // The former is used to perform point in polygon operations and the latter is used to determine a "reverse geocoding" centroid
 // to use for point-in-polygon operations.
-func NewPointInPolygonHierarchyResolver(ctx context.Context, spatial_db database.SpatialDatabase, ms_client *mapshaper.Client) (*PointInPolygonHierarchyResolver, error) {
+func NewPointInPolygonHierarchyResolver(ctx context.Context, opts *PointInPolygonHierarchyResolverOptions) (*PointInPolygonHierarchyResolver, error) {
+
+	var logger *log.Logger
+	var pt_def placetypes.Definition
+
+	if opts.Logger != nil {
+		logger = opts.Logger
+	} else {
+		logger = log.New(io.Discard, "", 0)
+	}
+
+	if opts.PlacetypesDefinition == nil {
+
+		def, err := placetypes.NewDefinition(ctx, "whosonfirst://")
+
+		if err != nil {
+			return nil, fmt.Errorf("Failed to create whosonfirst:// placetypes definition, %w", err)
+		}
+
+		pt_def = def
+
+	} else {
+
+		pt_def = opts.PlacetypesDefinition
+	}
 
 	t := &PointInPolygonHierarchyResolver{
-		Database:  spatial_db,
-		Mapshaper: ms_client,
-		reader:    spatial_db,
+		Database:              opts.Database,
+		Mapshaper:             opts.Mapshaper,
+		PlacetypesDefinition:  pt_def,
+		Logger:                logger,
+		reader:                opts.Database,
+		skip_placetype_filter: opts.SkipPlacetypeFilter,
 	}
 
 	return t, nil
@@ -134,29 +186,10 @@ func (t *PointInPolygonHierarchyResolver) PointInPolygonAndUpdate(ctx context.Co
 }
 
 // PointInPolygon will perform a point-in-polygon (reverse geocoding) operation for 'body' using zero or more 'inputs' as query filters.
+// This is known to not work as expected if the `wof:placetype` property is "common". There needs to be a way to a) retrieve placetypes
+// using a custom WOFPlacetypeSpecification (go-whosonfirst-placetypes v0.6.0+) and b) specify an alternate property to retrieve placetypes
+// from if `wof:placetype=custom`.
 func (t *PointInPolygonHierarchyResolver) PointInPolygon(ctx context.Context, inputs *filter.SPRInputs, body []byte) ([]spr.StandardPlacesResult, error) {
-
-	pt_rsp := gjson.GetBytes(body, "properties.wof:placetype")
-
-	if !pt_rsp.Exists() {
-		return nil, fmt.Errorf("Missing 'wof:placetype' property")
-	}
-
-	pt_str := pt_rsp.String()
-
-	pt, err := placetypes.GetPlacetypeByName(pt_str)
-
-	if err != nil {
-		return nil, fmt.Errorf("Failed to create new placetype for '%s', %v", pt_str, err)
-	}
-
-	roles := []string{
-		"common",
-		"optional",
-		"common_optional",
-	}
-
-	ancestors := placetypes.AncestorsForRoles(pt, roles)
 
 	centroid, err := t.PointInPolygonCentroid(ctx, body)
 
@@ -167,25 +200,80 @@ func (t *PointInPolygonHierarchyResolver) PointInPolygon(ctx context.Context, in
 	lon := centroid.X()
 	lat := centroid.Y()
 
-	// Start PIP-ing the list of ancestors - stop at the first match
+	coord, err := geo.NewCoordinate(lon, lat)
 
-	possible := make([]spr.StandardPlacesResult, 0)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to create new coordinate, %w", err)
+	}
 
-	for _, a := range ancestors {
-
-		coord, err := geo.NewCoordinate(lon, lat)
-
-		if err != nil {
-			return nil, fmt.Errorf("Failed to create new coordinate, %w", err)
-		}
-
-		inputs.Placetypes = []string{a.Name}
+	if t.skip_placetype_filter {
 
 		spr_filter, err := filter.NewSPRFilterFromInputs(inputs)
 
 		if err != nil {
 			return nil, fmt.Errorf("Failed to create SPR filter from input, %v", err)
 		}
+
+		aa_log.Debug(t.Logger, "Perform point in polygon at %f, %f with no placetype filter\n", lat, lon)
+
+		rsp, err := t.Database.PointInPolygon(ctx, coord, spr_filter)
+
+		if err != nil {
+			return nil, fmt.Errorf("Failed to point in polygon for %v, %v", coord, err)
+		}
+
+		// This should never happen...
+
+		if rsp == nil {
+			return nil, fmt.Errorf("Failed to point in polygon for %v, null response", coord)
+		}
+
+		possible := rsp.Results()
+		return possible, nil
+	}
+
+	// Start PIP-ing the list of ancestors - stop at the first match
+
+	possible := make([]spr.StandardPlacesResult, 0)
+
+	pt_def := t.PlacetypesDefinition
+	pt_spec := pt_def.Specification()
+	pt_prop := pt_def.Property()
+	pt_uri := pt_def.URI()
+
+	pt_path := fmt.Sprintf("properties.%s", pt_prop)
+
+	pt_rsp := gjson.GetBytes(body, pt_path)
+
+	if !pt_rsp.Exists() {
+		return nil, fmt.Errorf("Missing %s property", pt_path)
+	}
+
+	pt_str := pt_rsp.String()
+
+	pt, err := pt_spec.GetPlacetypeByName(pt_str)
+
+	if err != nil {
+		return nil, fmt.Errorf("Failed to create new placetype for '%s', %v", pt_str, err)
+	}
+
+	roles := placetypes.AllRoles()
+
+	ancestors := pt_spec.AncestorsForRoles(pt, roles)
+
+	for _, a := range ancestors {
+
+		pt_name := fmt.Sprintf("%s#%s", a.Name, pt_uri)
+
+		inputs.Placetypes = []string{pt_name}
+
+		spr_filter, err := filter.NewSPRFilterFromInputs(inputs)
+
+		if err != nil {
+			return nil, fmt.Errorf("Failed to create SPR filter from input, %v", err)
+		}
+
+		aa_log.Debug(t.Logger, "Perform point in polygon at %f, %f for %s\n", lat, lon, pt_name)
 
 		rsp, err := t.Database.PointInPolygon(ctx, coord, spr_filter)
 
@@ -200,8 +288,11 @@ func (t *PointInPolygonHierarchyResolver) PointInPolygon(ctx context.Context, in
 		}
 
 		results := rsp.Results()
+		count := len(results)
 
-		if len(results) == 0 {
+		aa_log.Debug(t.Logger, "Point in polygon results at %f, %f for %s: %d\n", lat, lon, pt_name, count)
+
+		if count == 0 {
 			continue
 		}
 

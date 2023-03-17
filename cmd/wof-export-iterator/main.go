@@ -63,7 +63,7 @@ func main() {
 		if !has_changed {
 			return nil
 		}
-		
+
 		buf_wr.Flush()
 		br := bytes.NewReader(buf.Bytes())
 
