@@ -15,28 +15,68 @@ At some point the various application might get separated out in to their own pa
 
 ## Tools
 
-> requires `go1.16` or later
-
 ```
 $> make cli
-go build -mod vendor -o bin/wof-assign-geometry cmd/wof-assign-geometry/main.go
-go build -mod vendor -o bin/wof-assign-parent cmd/wof-assign-parent/main.go
-go build -mod vendor -o bin/wof-exportify cmd/wof-exportify/main.go
-go build -mod vendor -o bin/wof-create cmd/wof-create/main.go
-go build -mod vendor -o bin/wof-deprecate cmd/wof-deprecate/main.go
-go build -mod vendor -o bin/wof-cessate cmd/wof-cessate/main.go
-go build -mod vendor -o bin/wof-superseded-by cmd/wof-superseded-by/main.go
-go build -mod vendor -o bin/wof-ensure-properties cmd/wof-ensure-properties/main.go
-go build -mod vendor -o bin/wof-deprecate-and-supersede cmd/wof-deprecate-and-supersede/main.go
-go build -mod vendor -o bin/wof-merge-featurecollection cmd/wof-merge-featurecollection/main.go
-go build -mod vendor -o bin/wof-supersede-with-parent cmd/wof-supersede-with-parent/main.go
-go build -mod vendor -o bin/wof-as-featurecollection cmd/wof-as-featurecollection/main.go
-go build -mod vendor -o bin/wof-as-jsonl cmd/wof-as-jsonl/main.go
-go build -mod vendor -o bin/wof-rename-property cmd/wof-rename-property/main.go
-go build -mod vendor -o bin/wof-remove-properties cmd/wof-remove-properties/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-assign-geometry cmd/wof-assign-geometry/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-assign-parent cmd/wof-assign-parent/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-exportify cmd/wof-exportify/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-create cmd/wof-create/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-deprecate cmd/wof-deprecate/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-cessate cmd/wof-cessate/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-superseded-by cmd/wof-superseded-by/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-ensure-properties cmd/wof-ensure-properties/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-deprecate-and-supersede cmd/wof-deprecate-and-supersede/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-merge-featurecollection cmd/wof-merge-featurecollection/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-supersede-with-parent cmd/wof-supersede-with-parent/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-as-featurecollection cmd/wof-as-featurecollection/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-as-csv cmd/wof-as-csv/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-as-jsonl cmd/wof-as-jsonl/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-rename-property cmd/wof-rename-property/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-remove-properties cmd/wof-remove-properties/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-clone-feature cmd/wof-clone-feature/main.go
 ```
 
 As of this writing these tools may contain duplicate, or at least common, code that would be well-served from being moved in to a package or library. That hasn't happened yet.
+
+### wof-as-csv
+
+Export one or more WOF records as a CSV document written to `STDOUT`.
+
+```
+$> ./bin/wof-as-csv -h
+Export one or more WOF records as a CSV document written to STDOUT
+
+Usage:
+	 ./bin/wof-as-csv [options] path-(N) path-(N)
+
+For example:
+	./bin/wof-as-csv -field wof:id -field wof:name -field centroid -iterator-uri 'repo://?include=properties.mz:is_current=1' /usr/local/data/sfomuseum-data-publicart/
+Valid options are:
+  -field value
+    	One or more relative 'properties.FIELDNAME' paths to include the CSV output. If the fieldname is 'path' the filename of the current record will be included. If the fieldname is 'centroid' the primary centroid of the current record will be derived and included as 'latitude' and 'longitude' columns.
+  -iterator-uri string
+    	 (default "repo://")
+```
+
+For example:
+
+```
+$> ./bin/wof-as-csv  \
+	-field wof:id \
+	-field centroid \
+	-field wof:name \
+	-iterator-uri 'repo://?include=properties.sfomuseum:placetype=boardingarea&include=properties.mz:is_current=1' \
+	/usr/local/data/sfomuseum-data-architecture/
+	
+wof:id,latitude,longitude,wof:name
+1763588233,37.615069504933075,-122.38306184920478,Boarding Area C
+1763588177,37.612307411494186,-122.38518056697221,Boarding Area B
+1763588335,37.61888020848815,-122.38446905789152,Boarding Area E
+1763588433,37.617858008730636,-122.39137174044615,Boarding Area G
+1763588125,37.61734905835808,-122.38196681238652,Boarding Area D
+1763588271,37.62010253190792,-122.38804674158527,Boarding Area F
+1763588371,37.61289407736701,-122.38934858141738,Boarding Area A
+```
 
 ### wof-as-featurecollection
 
