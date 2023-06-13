@@ -3,8 +3,8 @@ module github.com/whosonfirst/go-whosonfirst-exportify
 go 1.18
 
 require (
-	github.com/aaronland/go-json-query v0.1.3
-	github.com/paulmach/orb v0.9.0
+	github.com/aaronland/go-json-query v0.1.4
+	github.com/paulmach/orb v0.9.2
 	github.com/sfomuseum/go-edtf v1.1.1
 	github.com/sfomuseum/go-flags v0.10.0
 	github.com/tidwall/gjson v1.14.4
@@ -12,9 +12,9 @@ require (
 	github.com/whosonfirst/go-reader v1.0.2
 	github.com/whosonfirst/go-whosonfirst-export/v2 v2.7.0
 	github.com/whosonfirst/go-whosonfirst-iterate-reader v1.0.0
-	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.3.1
+	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.3.4
 	github.com/whosonfirst/go-whosonfirst-reader v1.0.1
-	github.com/whosonfirst/go-whosonfirst-spatial v0.5.6
+	github.com/whosonfirst/go-whosonfirst-spatial v0.5.7
 	github.com/whosonfirst/go-whosonfirst-spatial-hierarchy v0.6.0
 	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.6.5
 	github.com/whosonfirst/go-whosonfirst-uri v1.3.0
@@ -58,7 +58,7 @@ require (
 	github.com/whosonfirst/go-ioutil v1.0.2 // indirect
 	github.com/whosonfirst/go-rfc-5646 v0.1.0 // indirect
 	github.com/whosonfirst/go-sanitize v0.1.0 // indirect
-	github.com/whosonfirst/go-whosonfirst-crawl v0.2.1 // indirect
+	github.com/whosonfirst/go-whosonfirst-crawl v0.2.2 // indirect
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.26 // indirect
 	github.com/whosonfirst/go-whosonfirst-flags v0.5.1 // indirect
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1 // indirect
@@ -69,8 +69,8 @@ require (
 	github.com/whosonfirst/go-whosonfirst-spr/v2 v2.3.6 // indirect
 	github.com/whosonfirst/go-whosonfirst-sqlite-features/v2 v2.0.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-sqlite-spr/v2 v2.0.0 // indirect
-	github.com/whosonfirst/walk v0.0.1 // indirect
-	go.mongodb.org/mongo-driver v1.11.1 // indirect
+	github.com/whosonfirst/walk v0.0.2 // indirect
+	go.mongodb.org/mongo-driver v1.11.4 // indirect
 	go.uber.org/ratelimit v0.2.0 // indirect
 	golang.org/x/mod v0.3.0 // indirect
 	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
