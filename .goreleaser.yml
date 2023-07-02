@@ -47,6 +47,15 @@ builds:
       - linux
       - windows
       - darwin
+  - id: wof-create-record
+    main: ./cmd/wof-create-record
+    binary: wof-create-record
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
   - id: wof-deprecate
     main: ./cmd/wof-deprecate
     binary: wof-deprecate
@@ -131,20 +140,19 @@ builds:
 universal_binaries:
   - replace: true
 archives:
-  -
-    format: binary
+  - format: binary
     replacements:
       386: 32bit
       amd64: 64bit
       darwin: macos
       all: universal
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
   name_template: "{{ incpatch .Tag }}-next"
 changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+      - "^docs:"
+      - "^test:"
