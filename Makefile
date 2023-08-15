@@ -7,6 +7,7 @@ cli:
 	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-assign-parent cmd/wof-assign-parent/main.go
 	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-exportify cmd/wof-exportify/main.go
 	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-create cmd/wof-create/main.go
+	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-create-record cmd/wof-create-record/main.go
 	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-deprecate cmd/wof-deprecate/main.go
 	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-cessate cmd/wof-cessate/main.go
 	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-superseded-by cmd/wof-superseded-by/main.go
