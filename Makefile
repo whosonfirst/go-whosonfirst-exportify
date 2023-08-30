@@ -14,6 +14,7 @@ cli:
 	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-ensure-properties cmd/wof-ensure-properties/main.go
 	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-deprecate-and-supersede cmd/wof-deprecate-and-supersede/main.go
 	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-merge-featurecollection cmd/wof-merge-featurecollection/main.go
+	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-merge-csv cmd/wof-merge-csv/main.go
 	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-supersede-with-parent cmd/wof-supersede-with-parent/main.go
 	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-as-featurecollection cmd/wof-as-featurecollection/main.go
 	go build -mod $(GOMOD) -ldflags="-s -w" -o bin/wof-as-csv cmd/wof-as-csv/main.go

@@ -26,6 +26,7 @@ go build -mod vendor -ldflags="-s -w" -o bin/wof-cessate cmd/wof-cessate/main.go
 go build -mod vendor -ldflags="-s -w" -o bin/wof-superseded-by cmd/wof-superseded-by/main.go
 go build -mod vendor -ldflags="-s -w" -o bin/wof-ensure-properties cmd/wof-ensure-properties/main.go
 go build -mod vendor -ldflags="-s -w" -o bin/wof-deprecate-and-supersede cmd/wof-deprecate-and-supersede/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/wof-merge-csv cmd/wof-merge-csv/main.go
 go build -mod vendor -ldflags="-s -w" -o bin/wof-merge-featurecollection cmd/wof-merge-featurecollection/main.go
 go build -mod vendor -ldflags="-s -w" -o bin/wof-supersede-with-parent cmd/wof-supersede-with-parent/main.go
 go build -mod vendor -ldflags="-s -w" -o bin/wof-as-featurecollection cmd/wof-as-featurecollection/main.go
@@ -684,6 +685,35 @@ Valid options are:
     	A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.
   -writer-uri string
     	A valid whosonfirst/go-writer URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
+```
+
+### wof-merge-csv
+
+```
+$> ./bin/wof-merge-csv -h
+Upate one or more Who's On First records with matching entries in a CSV file.
+
+Usage:
+	 ./bin/wof-merge-csv [options] path(N) path(N)
+
+For example:
+	./bin/wof-merge-csv -reader-uri repo:///usr/local/data/sfomuseum-data-architecture -writer-uri repo:///usr/local/data/sfomuseum-data-architecture -int-field sfo:level galleries-with-level.csv
+
+Valid options are:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export URI (default "whosonfirst://")
+  -int-field value
+    	Zero or more fields in a CSV row to assign to a WOF record as int values.
+  -int64-field value
+    	Zero or more fields in a CSV row to assign to a WOF record as int64 values.
+  -lookup-key string
+    	The column in a CSV row to use to lookup a corresponding Who's On First record. (default "wof:id")
+  -reader-uri string
+    	A valid whosonfirst/go-reader URI
+  -string-field value
+    	Zero or more fields in a CSV row to assign to a WOF record as string values.
+  -writer-uri string
+    	A valid whosonfirst/go-writer URI
 ```
 
 ### wof-merge-featurecollection
