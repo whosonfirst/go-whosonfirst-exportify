@@ -10,7 +10,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
-
+	
 	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/geojson"
 	"github.com/paulmach/orb/planar"
@@ -18,6 +18,9 @@ import (
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
 	_ "github.com/whosonfirst/go-writer-jsonl/v3"
 	"github.com/whosonfirst/go-writer/v3"
+	"github.com/sfomuseum/go-flags/multi"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"	
 )
 
 const SCHEME_JSONL string = "jsonl://"
@@ -46,6 +49,9 @@ func main() {
 
 	as_multipoints := flag.Bool("as-multipoints", false, "Output geometries as a MultiPoint array")
 
+	var properties multi.MultiString
+	flag.Var(&properties, "property", "...")
+	
 	flag.Usage = func() {
 
 		fmt.Fprintf(os.Stderr, "Export one or more WOF records as a line-separate JSON\n\n")
@@ -83,11 +89,11 @@ func main() {
 
 	defer wr.Close(ctx)
 
-	iter_cb := func(ctx context.Context, path string, fh io.ReadSeeker, args ...interface{}) error {
+	iter_cb := func(ctx context.Context, path string, r io.ReadSeeker, args ...interface{}) error {
 
 		if *as_multipoints {
 
-			body, err := io.ReadAll(fh)
+			body, err := io.ReadAll(r)
 
 			if err != nil {
 				return err
@@ -144,10 +150,43 @@ func main() {
 				return err
 			}
 
-			fh = bytes.NewReader(body)
+			r = bytes.NewReader(body)
 		}
 
-		_, err := wr.Write(ctx, "", fh)
+		if len(properties) > 0 {
+
+			body, err := io.ReadAll(r)
+
+			if err != nil {
+				return err
+			}
+			
+			new_body := []byte(`{}`)
+
+			for _, prop_path := range properties {
+
+				path_parts := strings.Split(prop_path, ".")
+				new_path := path_parts[ len(path_parts) - 1]
+				
+				rsp := gjson.GetBytes(body, prop_path)
+
+				if !rsp.Exists(){
+					// return fmt.Errorf("Body for %s missing '%s' property", path, prop_path)
+					return nil
+				}
+
+				new_body, err = sjson.SetBytes(new_body, new_path, rsp.Value())
+
+				if err != nil {
+					return fmt.Errorf("Failed to set '%s' property derived from %s, %w", prop_path, path, err)
+				}
+			}
+
+			r = bytes.NewReader(new_body)
+
+		}
+		
+		_, err := wr.Write(ctx, "", r)
 		return err
 	}
 
