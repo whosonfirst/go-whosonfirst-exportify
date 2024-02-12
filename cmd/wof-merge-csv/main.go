@@ -33,7 +33,7 @@ func main() {
 
 	var int64_fields multi.MultiString
 	flag.Var(&int64_fields, "int64-field", "Zero or more fields in a CSV row to assign to a WOF record as int64 values.")
-	
+
 	exporter_uri := flag.String("exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export URI")
 
 	flag.Usage = func() {

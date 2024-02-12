@@ -10,7 +10,7 @@ import (
 	"github.com/aaronland/go-roster"
 	"github.com/whosonfirst/go-reader"
 	"github.com/whosonfirst/go-whosonfirst-spatial"
-	"github.com/whosonfirst/go-writer/v3"	
+	"github.com/whosonfirst/go-writer/v3"
 )
 
 type SpatialDatabase interface {

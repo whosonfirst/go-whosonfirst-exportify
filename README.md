@@ -286,6 +286,8 @@ Valid options are:
     	A valid whosonfirst/go-reader URI. If empty the value of the -s flag will be used in combination with the fs:// scheme.
   -s string
     	A valid path to the root directory of the Who's On First data repository. If empty (and -reader-uri or -writer-uri are empty) the current working directory will be used and appended with a 'data' subdirectory.
+  -supersede-with-copy
+    	Supersede this record with a copy of itself.	
   -superseded-by value
     	Zero or more Who's On First IDs that the records being deprecated are superseded by.
   -writer-uri string

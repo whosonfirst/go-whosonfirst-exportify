@@ -7,16 +7,19 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"slices"
 	"time"
 
 	"github.com/sfomuseum/go-edtf"
 	"github.com/sfomuseum/go-edtf/parser"
 	"github.com/sfomuseum/go-flags/multi"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-reader"
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	exportify "github.com/whosonfirst/go-whosonfirst-exportify"
 	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v3"
 	"github.com/whosonfirst/go-writer/v3"
 )
 
@@ -37,6 +40,8 @@ func main() {
 
 	var superseded_by multi.MultiInt64
 	flag.Var(&superseded_by, "superseded-by", "Zero or more Who's On First IDs that the records being deprecated are superseded by.")
+
+	supersede_with_copy := flag.Bool("supersede-with-copy", false, "Supersede this record with a copy of itself.")
 
 	flag.Usage = func() {
 
@@ -127,9 +132,13 @@ func main() {
 		log.Fatalf("Failed to parse date string, %v", err)
 	}
 
+	if *supersede_with_copy && len(superseded_by) > 0 {
+		log.Fatalf("Both superseded-with-copy and superseded-by have been set, only one is applicable.")
+	}
+
 	for _, id := range ids {
 
-		err := cessateId(ctx, r, wr, ex, id, edtf_dt, superseded_by)
+		err := cessateId(ctx, r, wr, ex, id, edtf_dt, superseded_by, *supersede_with_copy)
 
 		if err != nil {
 			log.Fatalf("Failed to cessate record for '%d', %v", id, err)
@@ -137,7 +146,9 @@ func main() {
 	}
 }
 
-func cessateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, id int64, dt *edtf.EDTFDate, superseded_by multi.MultiInt64) error {
+// All of these options should be moved in to an Options struct...
+
+func cessateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export.Exporter, id int64, dt *edtf.EDTFDate, superseded_by multi.MultiInt64, supersede_with_copy bool) error {
 
 	body, err := wof_reader.LoadBytes(ctx, r, id)
 
@@ -148,6 +159,57 @@ func cessateId(ctx context.Context, r reader.Reader, wr writer.Writer, ex export
 	to_update := map[string]interface{}{
 		"properties.edtf:cessation": dt.EDTF,
 		"properties.mz:is_current":  0,
+	}
+
+	if supersede_with_copy {
+
+		new_body := slices.Clone(body)
+
+		new_body, err := sjson.DeleteBytes(new_body, "properties.wof:id")
+
+		if err != nil {
+			return fmt.Errorf("Failed to delete wof:id from clone, %w", err)
+		}
+
+		// Something something something allow additional properties to be set with cli flags something something something
+
+		new_updates := map[string]interface{}{
+			"properties.edtf:inception": dt.EDTF,
+			"properties.edtf:cessation": "..",
+			"properties.mz:is_current":  0,
+			"properties:wof:supersedes": []int64{
+				id,
+			},
+		}
+
+		new_body, err = export.AssignProperties(ctx, new_body, new_updates)
+
+		if err != nil {
+			return fmt.Errorf("Failed to asign properties to copy, %w", err)
+		}
+
+		new_body, err = ex.Export(ctx, new_body)
+
+		if err != nil {
+			return fmt.Errorf("Failed to export copy, %v", err)
+		}
+
+		id_rsp := gjson.GetBytes(new_body, "properties.wof:id")
+		new_id := id_rsp.Int()
+
+		if new_id == 0 {
+			return fmt.Errorf("Failed to derive new ID from copy, %w", err)
+		}
+
+		_, err = wof_writer.WriteBytes(ctx, wr, new_body)
+
+		if err != nil {
+			return fmt.Errorf("Failed to write new record for copy, %v", err)
+		}
+
+		superseded_by = []int64{
+			new_id,
+		}
 	}
 
 	if len(superseded_by) > 0 {
