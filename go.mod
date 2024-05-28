@@ -11,7 +11,7 @@ require (
 	github.com/tidwall/gjson v1.17.1
 	github.com/tidwall/sjson v1.2.5
 	github.com/whosonfirst/go-reader v1.0.2
-	github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.0
+	github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.1
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.27
 	github.com/whosonfirst/go-whosonfirst-iterate-reader v1.0.0
 	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.1
@@ -19,7 +19,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-spatial v0.9.0
 	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.8.0
 	github.com/whosonfirst/go-whosonfirst-uri v1.3.0
-	github.com/whosonfirst/go-whosonfirst-writer/v3 v3.1.2
+	github.com/whosonfirst/go-whosonfirst-writer/v3 v3.1.3
 	github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.2
 	github.com/whosonfirst/go-writer-jsonl/v3 v3.0.1
 	github.com/whosonfirst/go-writer/v3 v3.1.1
