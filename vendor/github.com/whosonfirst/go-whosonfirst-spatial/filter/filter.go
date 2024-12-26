@@ -16,10 +16,12 @@ func FilterSPR(filters spatial.Filter, s spr.StandardPlacesResult) error {
 
 	var ok bool
 
+	slog.Debug("Create placetype flag for SPR filtering", "placetype", s.Placetype())
+
 	pf, err := placetypes.NewPlacetypeFlag(s.Placetype())
 
 	if err != nil {
-		slog.Warn("Unable to parse placetype, skipping placetype filters", "id", s.Id(), s.Placetype(), "error", err)
+		slog.Warn("Unable to parse placetype, skipping placetype filters", "id", s.Id(), "placetype", s.Placetype(), "error", err)
 	} else {
 
 		ok = filters.HasPlacetypes(pf)

@@ -16,6 +16,7 @@ import (
 	"github.com/paulmach/orb/planar"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
+	_ "github.com/whosonfirst/go-whosonfirst-iterate-git/v2"	
 	_ "github.com/whosonfirst/go-writer-featurecollection/v3"
 	"github.com/whosonfirst/go-writer/v3"
 )
