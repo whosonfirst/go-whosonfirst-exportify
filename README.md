@@ -81,6 +81,8 @@ wof:id,latitude,longitude,wof:name
 
 ### wof-as-featurecollection
 
+**THIS TOOL IS DEPRECATED and is no longer being updated. It has been replaced by https://github.com/whosonfirst/wof-cli/tree/main?tab=readme-ov-file#wof-emit**
+
 Export one or more WOF records as a GeoJSON FeatureCollection
 
 ```
@@ -139,6 +141,8 @@ $> ./bin/wof-as-featurecollection \
 ```
 
 ### wof-as-jsonl
+
+**THIS TOOL IS DEPRECATED and is no longer being updated. It has been replaced by https://github.com/whosonfirst/wof-cli/tree/main?tab=readme-ov-file#wof-emit**
 
 Export one or more WOF records as a line-separated JSON.
 
@@ -600,7 +604,7 @@ This tool will:
 
 ### wof-ensure-properties
 
-**This tool is deprecated and is no longer being updated. It has been replaced by https://github.com/whosonfirst/wof-cli/tree/main?tab=readme-ov-file#wof-ensure-property**
+**THIS TOOL IS DEPRECATED and is no longer being updated. It has been replaced by https://github.com/whosonfirst/wof-cli/tree/main?tab=readme-ov-file#wof-ensure-property**
 
 ```
 > ./bin/wof-ensure-properties -h
@@ -664,6 +668,8 @@ $> ./bin/wof-ensure-properties \
 ```
 
 ### wof-exportify
+
+**THIS TOOL IS DEPRECATED and is no longer being updated. It has been replaced by https://github.com/whosonfirst/wof-cli/tree/main?tab=readme-ov-file#wof-export**
 
 ```
 $> ./bin/wof-exportify -h
