@@ -845,6 +845,8 @@ $> ./bin/wof-rename-property \
 
 ### wof-supersede-with-parent
 
+**THIS TOOL IS DEPRECATED and is no longer being updated. It has been replaced by https://github.com/whosonfirst/wof-cli/tree/main?tab=readme-ov-file#wof-supersede**
+
 Supersede one or more WOF records with a known parent ID (and hierarchy).
 
 ```
