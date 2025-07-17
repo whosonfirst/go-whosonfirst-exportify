@@ -178,6 +178,8 @@ $> ./bin/wof-as-jsonl \
 
 ### assign-geometry
 
+**THIS TOOL IS DEPRECATED and is no longer being updated. It has been replaced by https://github.com/whosonfirst/wof-cli/tree/main?tab=readme-ov-file#wof-geometry**
+
 Assign the geometry from a given record to one or more other records.
 
 ```
