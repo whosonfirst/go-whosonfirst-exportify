@@ -4,7 +4,7 @@ Tools (written in Go) for exporting Who's On First (WOF) records.
 
 ## Important
 
-This is work in progress. Documentation is incomplete.
+This package is deprecated. Short of really serious bugs it is no longer being updated and its functionality is gradually being moved in to the [whosonfirst/wof-cli](https://github.com/whosonfirst/wof-cli) package.
 
 ## go-whosonfirst-exportify versus go-whosonfirst-export
 
@@ -599,6 +599,8 @@ This tool will:
 * Assign or update any properties defined by the `-{string|int|float}-properties` flags for the new WOF record.
 
 ### wof-ensure-properties
+
+**This tool is deprecated and is no longer being updated. It has been replaced by https://github.com/whosonfirst/wof-cli/tree/main?tab=readme-ov-file#wof-ensure-property**
 
 ```
 > ./bin/wof-ensure-properties -h

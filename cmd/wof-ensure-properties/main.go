@@ -6,7 +6,8 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-
+	"log/slog"
+	
 	"github.com/sfomuseum/go-flags/multi"
 	export "github.com/whosonfirst/go-whosonfirst-export/v2"
 	exportify "github.com/whosonfirst/go-whosonfirst-exportify"
@@ -34,6 +35,8 @@ func main() {
 
 	flag.Parse()
 
+	slog.Warn("This tool is deprecated and is no longer being updated. It has been replaced by https://github.com/whosonfirst/wof-cli/tree/main?tab=readme-ov-file#wof-ensure-property")
+	
 	ctx := context.Background()
 
 	ex, err := export.NewExporter(ctx, *exporter_uri)
